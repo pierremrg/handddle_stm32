@@ -61,20 +61,22 @@ For internal messages, only the ACK message is defined for the moment.
 - If a message is received, but not recognized as a `command` nor as an `information` message, a general ACK `NOK` is sent with the internal message ID. The general ACK has the following structure :    
 
 | Internal Messages |Identifier| Length | UID      | Msg Type | Information Type | Length |    | Padding      |
-|-------------------|----|----|----|--------|----------|----------|------------------|--------|----|----|--------------|
-| NOK               | 0101 | 0010   | C0C0C0C0 | 00       | 00               | 0001   | 00 | (7 bytes) |
+|-------------------|----------|--------|----------|----------|------------------|--------|----|--------------|
+| NOK               | 0101     | 0010   | C0C0C0C0 | 00       | 00               | 0001   | 00 | (7 bytes)    |
+
 - If a message is received and recognized as a `command` or as an `information` message, but no command or information type matches, then the `command` or `information` ID is used on the ACK `NOK` message sent by the SMT32 :
 
-| Internal Messages |  | Length | UID      | Msg Type | Information Type | Length |    | Padding      |
-|-------------------|----|----|----|--------|----------|----------|------------------|--------|----|----|--------------|
-| NOK Cmd           | 0101 | 0010   | C0C0C0C0 | 00       | 01               | 0001   | 00 | (7 bytes) |
-| NOK Info          | 0101 | 0010   | C0C0C0C0 | 00       | 05               | 0001   | 00 | (7 bytes) |
+| Internal Messages |Identifier| Length | UID      | Msg Type | Information Type | Length |    | Padding      |
+|-------------------|----------|--------|----------|----------|------------------|--------|----|--------------|
+| NOK Cmd           | 0101     | 0010   | C0C0C0C0 | 00       | 01               | 0001   | 00 | (7 bytes)    |
+| NOK Info          | 0101     | 0010   | C0C0C0C0 | 00       | 05               | 0001   | 00 | (7 bytes)    |
+
 - If a message is received and recognized as a `command` or as an `information` message and matches a `command` or `information` type, the the ACK OK (`command` or `information` type) is sent :
 
-| Internal Messages |     | Length | UID      | Msg Type | Information Type | Length |     | Padding      |
-|-------------------|----|----|----|--------|----------|----------|------------------|--------|----|----|--------------|
-| ACK Cmd           | 0101 | 0010   | C0C0C0C0 | 00       | 01               | 0001   | 01 | (7 bytes) |
-| ACK Info          | 0101 | 0010   | C0C0C0C0 | 00       | 05               | 0001   | 01 | (7 bytes) |
+| Internal Messages |Identifier| Length | UID      | Msg Type | Information Type | Length |     | Padding      |
+|-------------------|----------|--------|----------|----------|------------------|--------|-----|--------------|
+| ACK Cmd           | 0101     | 0010   | C0C0C0C0 | 00       | 01               | 0001   | 01 | (7 bytes)     |
+| ACK Info          | 0101     | 0010   | C0C0C0C0 | 00       | 05               | 0001   | 01 | (7 bytes)     |
   
   
 **Attention** this means that the ACK OK is sent if a command/information is recognized, and **not** if the command or information was taken into account. Further development is needed on the SmartFarm functions to enable this behavior (return a success/fail status).
@@ -89,8 +91,8 @@ For internal messages, only the ACK message is defined for the moment.
 ### Main messages
 
 | Main message ID | 01          | 02       | 03                   | 04         | 05                 | 06         | 07        | 08    | 09        | 10             |
-|--------------------|-------------|----------|----------------------|------------|--------------------|------------|-----------|-------|-----------|----------------|
-|                    | Temperature | Humidity | Temperature/Humidity | Current EE |  Current Printer   |Door state  | Pollution | Sound | Led color  | Printing_State |
+|-----------------|-------------|----------|----------------------|------------|--------------------|------------|-----------|-------|-----------|----------------|
+|                 | Temperature | Humidity | Temperature/Humidity | Current EE |  Current Printer   |Door state  | Pollution | Sound | Led color | Printing_State |
 
 ### Secondary messages
 | Secondary message ID | 01            | 02            | 03               | 04                           | 05       | 06          | 07           |
@@ -119,7 +121,7 @@ _".." cases stand for the values of the message._
 
 ### Commands
 |      Commands       | Identifier | Length | UID      | Msg Type | Cmd Type | Length |      | Padding       |
-|---------------------|----|----|----|--------|----------|----------|----------|--------|----|------------------|
+|---------------------|------------|--------|----------|----------|----------|--------|------|---------------|
 | Cmd ACK             | 0101 | 0010   | C0C0C0C0 | 01       | 00       | 0001   | .. | (7 bytes)  |
 | Cmd ON/OFF          | 0101 | 0010   | C0C0C0C0 | 01       | 01       | 0001   | .. | (7 bytes)  |
 | Cmd Door Open/Close | 0101 | 0010   | C0C0C0C0 | 01       | 02       | 0001   | .. | (7 bytes)  |
@@ -132,7 +134,7 @@ _".." cases stand for the values of the message._
 
 ### Main Messages
 | Main Messages       |  Identifier   | Length | UID      | Msg Type | Main Msg Type | Length |    | Padding     |
-|---------------------|----|----|----|--------|----------|----------|---------------|--------|----|----|----|----|----|----|-------------|
+|---------------------|---------------|----------|----------|---------------|--------|--------|----|-------------|
 | Temperature         | 0101 | 0010   | C0C0C0C0 | 02       | 01            | 0002   | .. .. | (6 bytes)        |
 | Humidity            | 0101 | 0010   | C0C0C0C0 | 02       | 02            | 0002   | .. .. | (6 bytes)       |
 | Temperature Humidiy | 0101 | 0010   | C0C0C0C0 | 02       | 03            | 0004   | .. .. .. .. | (4 bytes)        |
@@ -151,7 +153,7 @@ _".." cases stand for the values of the message._
 
 ### Secondary Messages
 | Secondary Messages           |  Identifier | Length | UID      | Msg Type | Secondary Msg Type | Length |   | Padding      |
-|------------------------------|----|----|----|--------|----------|----------|--------------------|--------|----|----|--------------|
+|------------------------------|-------------|--------|----------|----------|--------------------|--------|---|--------------|
 | Tachy extraction             | 0101 | 0010   | C0C0C0C0 | 03       | 01                 | 0002   | .. .. | (6 bytes) |
 | Tachy heating                | 0101 | 0010   | C0C0C0C0 | 03       | 02                 | 0002   | .. .. | (6 bytes) |
 | Rack Temperature             | 0101 | 0010   | C0C0C0C0 | 03       | 03                 | 0002   | .. .. | (6 bytes) |
@@ -165,7 +167,7 @@ _".." cases stand for the values of the message._
 In order to facilitate the management of error messages by the Jetson script and to keep the same structure, error messages will have a length of 1 (the byte content will be ignored).
 
 | Error Messages          | Identifier  | Length | UID      | Msg Type | Second Msg Type | Length | Padding      |
-|-------------------------|----|----|----|--------|----------|----------|--------|------------|--------------|
+|-------------------------|-----|--------|----------|----------|--------|------------|--------------|
 | Tachy extraction        | 0101 | 0010   | C0C0C0C0 | 04     | 01   | 0001       | (7 bytes) |
 | Heater                  | 0101 | 0010   | C0C0C0C0 | 04     | 02   | 0001       | (7 bytes) |
 | Environment Temperature | 0101 | 0010   | C0C0C0C0 | 04     | 03   | 0001       | (7 bytes) |
@@ -176,7 +178,7 @@ In order to facilitate the management of error messages by the Jetson script and
 ### Information Messages
 
 | Information Messages | Identifier | Length | UID      | Msg Type | Information Type | Length |  | Padding    |
-|----------------------|----|----|----|--------|----------|----------|------------------|--------|----|----|----|----|----|----|------------|
+|----------------------|------------|--------|----------|----------|------------------|--------|--|------------|
 | Ack                  | 0101 | 0010   | C0C0C0C0 | 05       | 00               | 0001   | .. | (7 bytes)      |
 | Day/Night            | 0101 | 0010   | C0C0C0C0 | 05       | 01               | 0001   | .. | (7 bytes)        |
 | Temperature manual mode | 0101 | 0010   | C0C0C0C0 | 05       | 02               | 0001   | .. | (7 bytes)      |
