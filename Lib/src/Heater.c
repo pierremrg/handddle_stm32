@@ -25,7 +25,7 @@ float temperature_C_heater;
 void set_heater_pwm (int *ptr_dutycycle)
 {
 	HAL_TIM_PWM_Start(&htim8, TIM_CHANNEL_3);
-	htim8.Instance->CCR3 = *ptr_dutycycle; //PWM Rate might change
+	htim8.Instance->CCR3 = *ptr_dutycycle; // PWM Rate might change
 }
 
 void set_heater(int *ON_off_heater)

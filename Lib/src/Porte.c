@@ -3,8 +3,6 @@
 #include "../../Core/Inc/main.h"
 #include "../../Transport/Msg_gen/Main_msg_gen/main_msg_gen.h"
 
-#define CLOSED 0
-#define OPEN 1
 #define ERROR_CPT_1 2
 #define ERROR_CPT_2 3
 
@@ -67,15 +65,12 @@ int get_door_state()
 }
 
 
-void set_unlock(uint8_t ptr_door_state)
+void set_unlock(uint8_t desired_door_state)
 {
-	if (ptr_door_state)
-	{
-		if(get_door_state() == CLOSED)
-			HAL_GPIO_WritePin(GPIOC, CMD_PORTE_Pin, GPIO_PIN_SET); //Door is unlocked
-	}
+	if(desired_door_state == OPEN)
+		HAL_GPIO_WritePin(GPIOC, CMD_PORTE_Pin, GPIO_PIN_SET); // Door is unlocked
 	else
-		HAL_GPIO_WritePin(GPIOC, CMD_PORTE_Pin, GPIO_PIN_RESET); //Door is locked
+		HAL_GPIO_WritePin(GPIOC, CMD_PORTE_Pin, GPIO_PIN_RESET); // Door is locked
 }
 
 void send_door_state()

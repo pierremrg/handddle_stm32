@@ -1,5 +1,6 @@
 #include "../../Core/Inc/main.h"
 #include "../../Transport/Msg_gen/Main_msg_gen/main_msg_gen.h"
+#include "../inc/Lights.h"
 
 extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim3;

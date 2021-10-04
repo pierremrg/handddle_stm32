@@ -5,6 +5,7 @@
 
 #include "sec_msg_gen.h"
 #include "../../include/msg_types.h"
+#include "../../uid.h"
 
 HAL_StatusTypeDef send_sec_msg_tachy_extract(uint16_t tachy_extract,UART_HandleTypeDef * uart ){
 	uint8_t Tx_msg_tachy_extract[MSG_SIZE + 1] = {

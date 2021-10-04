@@ -133,7 +133,7 @@ uint16_t relay_state = true;
 int buzzer_wait = 0;
 int cpt_buzzer_counter = 0;
 uint16_t state_buzzer = 0; // TODO Define buzzer states
-	
+
 // Light Variable
 int light;
 
@@ -201,6 +201,8 @@ int main(void)
 
 	// Start Timers
 	HAL_TIM_Base_Start_IT(&htim7);
+	HAL_TIM_Base_Start_IT(&htim8);
+	HAL_TIM_Base_Start_IT(&htim4);
 
 	// Start UART reception
 	HAL_UART_Receive_IT(&huart2, Rx_buffer, MSG_SIZE);
@@ -215,6 +217,8 @@ int main(void)
 	/* Infinite loop */
 	while(true)
 	{
+		set_lights(0);
+
 		if(system_is_active == SYSTEM_ACTIVE)
 		{
 			/* Consequences of the interruption */
@@ -279,17 +283,17 @@ int main(void)
 //		  else
 //		  {
 			current_breakdown = 0;
-			if(CMD_Relay == 1) //Lors de la production série, il faudra changer cette ligne pour if(CMD_Relay == 0)
+			if(CMD_Relay == false) //Lors de la production série, il faudra changer cette ligne pour if(CMD_Relay == 0)
 			{
 				cycle(&state);
-				int activation_relay = 1 ;
+				int activation_relay = true;
 				set_shutdown_printer(&activation_relay);
 			}
 			else
 			{
-				int activation_relay = 0 ;
+				int activation_relay = false;
 				set_shutdown_printer(&activation_relay);
-				}
+			}
 //		  }
 		}
 		else

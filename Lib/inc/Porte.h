@@ -3,6 +3,9 @@
 
 #include <stdint.h>
 
+#define CLOSED 0
+#define OPEN 1
+
 /**
   * @brief  This function is used for the detection of the doors states & the latches states.
   * @note 	We are using 2 different sensors to lock the door.

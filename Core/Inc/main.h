@@ -121,7 +121,7 @@ void Error_Handler(void);
 #define SHTC3_SCL2_Pin GPIO_PIN_10
 #define SHTC3_SCL2_GPIO_Port GPIOB
 
-#define HEATER_TEMPERATURE_Pin GPIO_PIN_1
+#define HEATER_TEMPERATURE_Pin GPIO_PIN_8
 #define HEATER_TEMPERATURE_GPIO_Port GPIOB
 
 #define HEATER_TACHY_Pin GPIO_PIN_6
@@ -130,7 +130,7 @@ void Error_Handler(void);
 #define HEATER_Pin GPIO_PIN_9
 #define HEATER_GPIO_Port GPIOB
 
-#define HEATER_PWM_Pin GPIO_PIN_8
+#define HEATER_PWM_Pin GPIO_PIN_1
 #define HEATER_PWM_GPIO_Port GPIOC
 
 #define RELAY_Pin GPIO_PIN_9

@@ -1,5 +1,14 @@
 #include "../../Core/Inc/main.h"
 #include "../../Transport/Msg_gen/Main_msg_gen/main_msg_gen.h"
+#include "../inc/States.h"
+#include "../inc/Lights.h"
+#include "../inc/ELN_temperature.h"
+#include "../inc/Heater.h"
+#include "../inc/Pollution.h"
+#include "../inc/Buzzer.h"
+#include "../inc/Porte.h"
+#include "../inc/Cooling.h"
+#include "../inc/Temp_Humi.h"
 
 #define DELTA 1.0 // desired_temperature Delta -- X-1 < X < X+1
 #define REACHED_COUNTER_BUZZER 6 // Eq à 10 sec -- 60 pour 10 min
@@ -64,6 +73,7 @@ extern volatile int delay_counter;
 
 void cycle(int *state)
 {
+	return;
 	switch (*state)
 	{
 

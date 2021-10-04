@@ -5,6 +5,7 @@
 
 #include "info_msg_parser.h"
 #include "../../include/msg_types.h"
+#include "../../uid.h"
 
 extern uint8_t manual_mode_filtration;
 extern int manual_mode_temperature;

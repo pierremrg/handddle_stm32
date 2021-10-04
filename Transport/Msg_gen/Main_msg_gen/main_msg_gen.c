@@ -5,6 +5,7 @@
 
 #include "main_msg_gen.h"
 #include "../../include/msg_types.h"
+#include "../../uid.h"
 
 HAL_StatusTypeDef send_main_msg_temp(double temp,UART_HandleTypeDef * uart ){
 	uint8_t Tx_msg_temp[MSG_SIZE + 1] = {

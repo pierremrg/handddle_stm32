@@ -5,6 +5,7 @@
 
 #include "cmd_msg_parser.h"
 #include "../../include/msg_types.h"
+#include "../../uid.h"
 
 
 extern TIM_HandleTypeDef htim2;
@@ -55,38 +56,42 @@ void send_cmd_nok(UART_HandleTypeDef * uart){
 void parser_cmd_on_off(uint8_t * rx_buff,UART_HandleTypeDef * uart){
 	system_is_active = rx_buff[POS_DATA];
 
+
+
 	// Calling the function that will use the payload for the door command
 	// power_on_off_cmd_received(rx_buff[4]);
 }
 
 void parser_cmd_door(uint8_t *rx_buff, UART_HandleTypeDef * uart){
 	req_opening_door = rx_buff[POS_DATA];
+	set_unlock(req_opening_door);
 }
 
 void parser_cmd_forcing_door(uint8_t *rx_buff, UART_HandleTypeDef * uart){
 	cmd_door_state = rx_buff[POS_DATA];
-
-	// Calling the function that will use the payload for the door command
 	set_unlock(cmd_door_state);
 }
 
 void parser_cmd_temp(uint8_t *rx_buff,UART_HandleTypeDef * uart){
 	// Compute the temperature value
-	if (manual_mode_temperature)
-	{
-		 desired_temperature_manual = rx_buff[POS_DATA]; // Attention uint8_t to float
-	}
-	else
-	{
-		if(rx_buff[POS_DATA] == AUTO_VALUE)
-		{
-			desired_temperature = get_temp_humi_SHT40();
-		}
-		else
-		{
-			desired_temperature = rx_buff[POS_DATA];
-		}
-	}
+//	if (manual_mode_temperature)
+//	{
+//		 desired_temperature_manual = rx_buff[POS_DATA]; // Attention uint8_t to float
+//	}
+//	else
+//	{
+//		if(rx_buff[POS_DATA] == AUTO_VALUE)
+//		{
+//			desired_temperature = get_temp_humi_SHT40();
+//		}
+//		else
+//		{
+//			desired_temperature = rx_buff[POS_DATA];
+//		}
+//	}
+
+	desired_temperature = rx_buff[POS_DATA];
+	set_heater_pwm(&desired_temperature);
 }
 
 void parser_cmd_led_color(uint8_t *rx_buff,UART_HandleTypeDef * uart){
@@ -102,10 +107,9 @@ void parser_cmd_printing_state(uint8_t * rx_buff,UART_HandleTypeDef * uart){
 }
 
 void parser_cmd_air_extract(uint8_t * rx_buff,UART_HandleTypeDef * uart){
-	if (manual_mode_filtration){
-		// Calling the function that will use the payload for the door command
-		dutycycle_cooling_manual = rx_buff[POS_DATA];
-	}
+	// Calling the function that will use the payload for the door command
+	dutycycle_cooling_manual = rx_buff[POS_DATA];
+	set_cooling(&dutycycle_cooling_manual);
 }
 
 void parser_cmd_relay(uint8_t * rx_buff,UART_HandleTypeDef * uart){

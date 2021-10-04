@@ -12,17 +12,16 @@ void set_shutdown_breakdown()
 	set_buzzer();
 
 	light = 6;
-	set_lights(light);
+//	set_lights(light);
 }
 
 void set_shutdown_all()
 {
 	int shutdown_pwm = 0;
 	set_cooling(&shutdown_pwm);
-	set_heater_pwm(&shutdown_pwm);
+	set_heater_pwm(&shutdown_pwm); // Ventilateur chauffage 12V
 	set_heater(&shutdown_pwm);
 
-	light = 8;
+	light = DARK;
 	set_lights(light);
-
 }
