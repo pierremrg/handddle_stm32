@@ -22,6 +22,8 @@
 #include "../../Transport/Parser/parser.h"
 #include "../../Lib/inc/ELN_temperature.h"
 #include "../../Lib/inc/Microphone.h"
+#include "../../Lib/inc/Demo.h"
+#include "../../Lib/inc/Porte.h"
 #include <string.h>
 
 
@@ -157,6 +159,11 @@ int dutycycle_cooling_manual = false;
 // Current variables
 int current_breakdown = 0;
 
+// Door
+uint8_t door_status = 1;
+
+//Variables LEDs
+int light;
 
 /**
  * @brief  The application entry point.
@@ -209,22 +216,23 @@ int main(void)
 
 
 	// Init values to STOP
-	int pwm_stop = 0;
-	set_heater_pwm(&pwm_stop);
-	set_cooling(&pwm_stop);
+//	int pwm_stop = 0;
+//	set_heater_pwm(&pwm_stop);
+//	set_cooling(&pwm_stop);
+
+	set_unlock(OPEN);
 
 
 	/* Infinite loop */
-	while(true)
+	while(1)
 	{
-		set_lights(0);
-
 		if(system_is_active == SYSTEM_ACTIVE)
 		{
 			/* Consequences of the interruption */
 			/* Get Current each 6 ms */
 			if(cpt_current_ADC_EN == 1)
 			{
+				door_status = get_door_state();
 				HAL_TIM_Base_Stop_IT(&htim7);
 				cpt_current_ADC_EN = 0;
 				getElectricCurrentConsumption();
@@ -274,6 +282,17 @@ int main(void)
 				send_buzzer_state();
 				send_pollution();
 				HAL_TIM_Base_Start_IT(&htim7);
+			}
+
+			if(req_opening_door == true)
+			{
+				light = WHITE_DOOR_OPEN;
+				set_lights(light);
+			}
+			else
+			{
+				light = DARK;
+				set_lights(light);
 			}
 
 //		  if(current_breakdown == 1) //Soft Limit for the system

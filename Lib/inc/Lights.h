@@ -1,7 +1,7 @@
 #ifndef INC_LIGHTS_C_
 #define INC_LIGHTS_C_
 
-#define WHITE_DOOR_OPEN 			0
+#define DARK             			0
 #define WHITE_PT 					1
 #define RED_PRINTING 				2
 #define GREEN_FREE 					3
@@ -9,7 +9,7 @@
 #define BLUE_HANDDDLE_MP 			5
 #define ORANGE_BLINKY_DEFAULT 		6
 #define WHITE_NIGHT_PT		 		7
-#define DARK		 				8
+#define WHITE_DOOR_OPEN		 		8
 
 /**
   * @brief  This function has been designed for the selection of the lights

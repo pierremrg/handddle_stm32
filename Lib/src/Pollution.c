@@ -89,7 +89,7 @@ void get_pollution ()
 
 }
 
-void send_pollution ()
+void send_pollution()
 {
 	send_main_msg_pollution(*pm10, *pm25, *pm100, &huart2);;
 }

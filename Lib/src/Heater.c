@@ -11,7 +11,7 @@
 #define FULL_PERIOD 2
 #define R22k 22000
 #define VOLTAGE_SUPPLY 3.3
-#define MAX_TEMPERATURE 90.0
+#define MAX_TEMPERATURE 200.0
 
 extern TIM_HandleTypeDef htim8;
 extern ADC_HandleTypeDef hadc1;

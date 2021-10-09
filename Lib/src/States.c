@@ -530,7 +530,7 @@ void cycle(int *state)
 		/* Stop actuators */
 		heater_actif = 0 ;
 		set_heater(&heater_actif);
-		light = 3 ;
+		light = GREEN_FREE;
 		set_lights(light);
 		dutycycle_heater = 0;
 		set_cooling(&dutycycle_heater);
