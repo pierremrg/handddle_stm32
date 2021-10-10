@@ -122,31 +122,31 @@ void cycle(int *state)
 				if (environment_temperature < (desired_temperature - DELTA))
 				{
 					heater_actif = 1;
-					set_heater(&heater_actif);
+					set_heater(heater_actif);
 					dutycycle_heater = 30;
-					set_heater_pwm(&dutycycle_heater);
+					set_heater_pwm(dutycycle_heater);
 					dutycycle_cooling = dutycycle_cooling_manual;
-					set_cooling(&dutycycle_cooling);
+					set_cooling(dutycycle_cooling);
 				}
 				//COOLING
 				else if (environment_temperature > (desired_temperature + DELTA))
 				{
 					heater_actif = 0;
-					set_heater(&heater_actif);
+					set_heater(heater_actif);
 					dutycycle_heater = 0;
-					set_heater_pwm(&dutycycle_heater);
+					set_heater_pwm(dutycycle_heater);
 					dutycycle_cooling = dutycycle_cooling_manual;
-					set_cooling(&dutycycle_cooling);
+					set_cooling(dutycycle_cooling);
 				}
 				//REACHED_POINT
 				else if (environment_temperature < (desired_temperature + DELTA) && environment_temperature > (desired_temperature - DELTA))
 				{
 					heater_actif = 0;
-					set_heater(&heater_actif);
+					set_heater(heater_actif);
 					dutycycle_heater = 30;
-					set_heater_pwm(&dutycycle_heater);
+					set_heater_pwm(dutycycle_heater);
 					dutycycle_cooling = dutycycle_cooling_manual;
-					set_cooling(&dutycycle_cooling);
+					set_cooling(dutycycle_cooling);
 					/* Change of state */
 					*state = 2 ;
 				}
@@ -157,42 +157,42 @@ void cycle(int *state)
 				if (environment_temperature < (desired_temperature_manual - DELTA))
 				{
 					heater_actif = 1;
-					set_heater(&heater_actif);
+					set_heater(heater_actif);
 					dutycycle_heater = 30;
-					set_heater_pwm(&dutycycle_heater);
+					set_heater_pwm(dutycycle_heater);
 					dutycycle_cooling = 0;
-					set_heater_pwm(&dutycycle_cooling);
+					set_heater_pwm(dutycycle_cooling);
 				}
 				//FAST-COOLING
 				else if (environment_temperature > (desired_temperature_manual + 2*DELTA))
 				{
 					heater_actif = 0;
-					set_heater(&heater_actif);
+					set_heater(heater_actif);
 					dutycycle_heater = 0;
-					set_heater_pwm(&dutycycle_heater);
+					set_heater_pwm(dutycycle_heater);
 					dutycycle_cooling = 100;
-					set_cooling(&dutycycle_cooling);
+					set_cooling(dutycycle_cooling);
 
 				}
 				//COOLING
 				else if (environment_temperature > (desired_temperature + DELTA) && environment_temperature < (desired_temperature + 2*DELTA))
 				{
 					heater_actif = 0;
-					set_heater(&heater_actif);
+					set_heater(heater_actif);
 					dutycycle_heater = 0;
-					set_heater_pwm(&dutycycle_heater);
+					set_heater_pwm(dutycycle_heater);
 					dutycycle_cooling = 50;
-					set_cooling(&dutycycle_cooling);
+					set_cooling(dutycycle_cooling);
 				}
 				//REACHED_POINT
 				else if (environment_temperature < (desired_temperature_manual + DELTA) && environment_temperature > (desired_temperature_manual - DELTA))
 				{
 					heater_actif = 0;
-					set_heater(&heater_actif);
+					set_heater(heater_actif);
 					dutycycle_heater = 30;
-					set_heater_pwm(&dutycycle_heater);
+					set_heater_pwm(dutycycle_heater);
 					dutycycle_cooling = 50;
-					set_cooling(&dutycycle_cooling);
+					set_cooling(dutycycle_cooling);
 					/* Change of state */
 					*state = 2 ;
 				}
@@ -203,31 +203,31 @@ void cycle(int *state)
 				if (environment_temperature < (desired_temperature_manual - DELTA))
 				{
 					heater_actif = 1;
-					set_heater(&heater_actif);
+					set_heater(heater_actif);
 					dutycycle_heater = 30;
-					set_heater_pwm(&dutycycle_heater);
+					set_heater_pwm(dutycycle_heater);
 					dutycycle_cooling = dutycycle_cooling_manual;
-					set_cooling(&dutycycle_cooling);
+					set_cooling(dutycycle_cooling);
 				}
 				//COOLING
 				else if (environment_temperature > (desired_temperature_manual + DELTA))
 				{
 					heater_actif = 0;
-					set_heater(&heater_actif);
+					set_heater(heater_actif);
 					dutycycle_heater = 0;
-					set_heater_pwm(&dutycycle_heater);
+					set_heater_pwm(dutycycle_heater);
 					dutycycle_cooling = dutycycle_cooling_manual;
-					set_cooling(&dutycycle_cooling);
+					set_cooling(dutycycle_cooling);
 				}
 				//REACHED_POINT
 				else if (environment_temperature < (desired_temperature_manual + DELTA) && environment_temperature > (desired_temperature_manual - DELTA))
 				{
 					heater_actif = 0;
-					set_heater(&heater_actif);
+					set_heater(heater_actif);
 					dutycycle_heater = 30;
-					set_heater_pwm(&dutycycle_heater);
+					set_heater_pwm(dutycycle_heater);
 					dutycycle_cooling = dutycycle_cooling_manual;
-					set_cooling(&dutycycle_cooling);
+					set_cooling(dutycycle_cooling);
 					/* Change of state */
 					*state = 2 ;
 				}
@@ -239,41 +239,41 @@ void cycle(int *state)
 				if (environment_temperature < (desired_temperature - DELTA))
 				{
 					heater_actif = 1;
-					set_heater(&heater_actif);
+					set_heater(heater_actif);
 					dutycycle_heater = 100;
-					set_heater_pwm(&dutycycle_heater);
+					set_heater_pwm(dutycycle_heater);
 					dutycycle_cooling = 0;
-					set_cooling(&dutycycle_cooling);
+					set_cooling(dutycycle_cooling);
 				}
 				//Fast-Cooling
 				else if (environment_temperature > (desired_temperature + 2*DELTA))
 				{
 					heater_actif = 0;
-					set_heater(&heater_actif);
+					set_heater(heater_actif);
 					dutycycle_heater = 0;
-					set_heater_pwm(&dutycycle_heater);
+					set_heater_pwm(dutycycle_heater);
 					dutycycle_cooling = 100;
-					set_cooling(&dutycycle_cooling);
+					set_cooling(dutycycle_cooling);
 				}
 				//Cooling
 				else if (environment_temperature > (desired_temperature + DELTA) && environment_temperature < (desired_temperature + 2*DELTA))
 				{
 					heater_actif = 0;
-					set_heater(&heater_actif);
+					set_heater(heater_actif);
 					dutycycle_heater = 0;
-					set_heater_pwm(&dutycycle_heater);
+					set_heater_pwm(dutycycle_heater);
 					dutycycle_cooling = 50;
-					set_cooling(&dutycycle_cooling);
+					set_cooling(dutycycle_cooling);
 				}
 				//Reached point
 				else if (environment_temperature < (desired_temperature + DELTA) && environment_temperature > (desired_temperature - DELTA))
 				{
 					heater_actif = 0;
-					set_heater(&heater_actif);
+					set_heater(heater_actif);
 					dutycycle_heater = 20;
-					set_heater_pwm(&dutycycle_heater);
+					set_heater_pwm(dutycycle_heater);
 					dutycycle_cooling = 0;
-					set_cooling(&dutycycle_cooling);
+					set_cooling(dutycycle_cooling);
 					/* Change of state */
 					*state = 2 ;
 				}
@@ -321,31 +321,31 @@ void cycle(int *state)
 					if (environment_temperature < (desired_temperature - DELTA))
 					{
 						heater_actif = 1;
-						set_heater(&heater_actif);
+						set_heater(heater_actif);
 						dutycycle_heater = 30;
-						set_heater_pwm(&dutycycle_heater);
+						set_heater_pwm(dutycycle_heater);
 						dutycycle_cooling = dutycycle_cooling_manual;
-						set_cooling(&dutycycle_cooling);
+						set_cooling(dutycycle_cooling);
 					}
 					//COOLING
 					else if (environment_temperature > (desired_temperature + DELTA))
 					{
 						heater_actif = 0;
-						set_heater(&heater_actif);
+						set_heater(heater_actif);
 						dutycycle_heater = 0;
-						set_heater_pwm(&dutycycle_heater);
+						set_heater_pwm(dutycycle_heater);
 						dutycycle_cooling = dutycycle_cooling_manual;
-						set_cooling(&dutycycle_cooling);
+						set_cooling(dutycycle_cooling);
 					}
 					//REACHED_POINT
 					else if (environment_temperature < (desired_temperature + DELTA) && environment_temperature > (desired_temperature - DELTA))
 					{
 						heater_actif = 0;
-						set_heater(&heater_actif);
+						set_heater(heater_actif);
 						dutycycle_heater = 30;
-						set_heater_pwm(&dutycycle_heater);
+						set_heater_pwm(dutycycle_heater);
 						dutycycle_cooling = dutycycle_cooling_manual;
-						set_cooling(&dutycycle_cooling);
+						set_cooling(dutycycle_cooling);
 					}
 				 }
 				 else if(manual_mode_temperature == 1 && manual_mode_filtration != 1 )
@@ -354,31 +354,31 @@ void cycle(int *state)
 					if (environment_temperature < (desired_temperature_manual - DELTA))
 					{
 						heater_actif = 1;
-						set_heater(&heater_actif);
+						set_heater(heater_actif);
 						dutycycle_heater = 50;
-						set_heater_pwm(&dutycycle_heater);
+						set_heater_pwm(dutycycle_heater);
 						dutycycle_cooling = 0;
-						set_cooling(&dutycycle_cooling);
+						set_cooling(dutycycle_cooling);
 					}
 					//COOLING
 					else if (environment_temperature > (desired_temperature_manual + DELTA))
 					{
 						heater_actif = 0;
-						set_heater(&heater_actif);
+						set_heater(heater_actif);
 						dutycycle_heater = 0;
-						set_heater_pwm(&dutycycle_heater);
+						set_heater_pwm(dutycycle_heater);
 						dutycycle_cooling = 50;
-						set_cooling(&dutycycle_cooling);
+						set_cooling(dutycycle_cooling);
 					}
 					//REACHED_POINT
 					else if (environment_temperature < (desired_temperature_manual + DELTA) && environment_temperature > (desired_temperature_manual - DELTA))
 					{
 						heater_actif = 0;
-						set_heater(&heater_actif);
+						set_heater(heater_actif);
 						dutycycle_heater = 30;
-						set_heater_pwm(&dutycycle_heater);
+						set_heater_pwm(dutycycle_heater);
 						dutycycle_cooling = 50;
-						set_cooling(&dutycycle_cooling);
+						set_cooling(dutycycle_cooling);
 					}
 				}
 				else if (manual_mode_temperature == 1 && manual_mode_filtration == 1 )
@@ -387,31 +387,31 @@ void cycle(int *state)
 					if (environment_temperature < (desired_temperature_manual - DELTA))
 					{
 						heater_actif = 1;
-						set_heater(&heater_actif);
+						set_heater(heater_actif);
 						dutycycle_heater = 30;
-						set_heater_pwm(&dutycycle_heater);
+						set_heater_pwm(dutycycle_heater);
 						dutycycle_cooling = dutycycle_cooling_manual;
-						set_cooling(&dutycycle_cooling);
+						set_cooling(dutycycle_cooling);
 					}
 					//COOLING
 					else if (environment_temperature > (desired_temperature_manual + DELTA))
 					{
 						heater_actif = 0;
-						set_heater(&heater_actif);
+						set_heater(heater_actif);
 						dutycycle_heater = 0;
-						set_heater_pwm(&dutycycle_heater);
+						set_heater_pwm(dutycycle_heater);
 						dutycycle_cooling = dutycycle_cooling_manual;
-						set_cooling(&dutycycle_cooling);
+						set_cooling(dutycycle_cooling);
 					}
 					//REACHED_POINT
 					else if (environment_temperature < (desired_temperature_manual + DELTA) && environment_temperature > (desired_temperature_manual - DELTA))
 					{
 						heater_actif = 0;
-						set_heater(&heater_actif);
+						set_heater(heater_actif);
 						dutycycle_heater = 30;
-						set_heater_pwm(&dutycycle_heater);
+						set_heater_pwm(dutycycle_heater);
 						dutycycle_cooling = dutycycle_cooling_manual;
-						set_cooling(&dutycycle_cooling);
+						set_cooling(dutycycle_cooling);
 					}
 				}
 				//Automatic Mode
@@ -420,29 +420,29 @@ void cycle(int *state)
 					if (environment_temperature < (desired_temperature - DELTA))
 					{
 						heater_actif = 1;
-						set_heater(&heater_actif);
+						set_heater(heater_actif);
 						dutycycle_heater = 30;
-						set_heater_pwm(&dutycycle_heater);
+						set_heater_pwm(dutycycle_heater);
 						dutycycle_cooling = 0;
-						set_cooling(&dutycycle_cooling);
+						set_cooling(dutycycle_cooling);
 					}
 					else if (environment_temperature > (desired_temperature + DELTA))
 					{
 						heater_actif = 0;
-						set_heater(&heater_actif);
+						set_heater(heater_actif);
 						dutycycle_heater = 0;
-						set_heater_pwm(&dutycycle_heater);
+						set_heater_pwm(dutycycle_heater);
 						dutycycle_cooling = 50;
-						set_cooling(&dutycycle_cooling);
+						set_cooling(dutycycle_cooling);
 					}
 					else if (environment_temperature < (desired_temperature + DELTA) && environment_temperature > (desired_temperature - DELTA))
 					{
 						heater_actif = 0;
-						set_heater(&heater_actif);
+						set_heater(heater_actif);
 						dutycycle_heater = 30;
-						set_heater_pwm(&dutycycle_heater);
+						set_heater_pwm(dutycycle_heater);
 						dutycycle_cooling = 30;
-						set_cooling(&dutycycle_cooling);
+						set_cooling(dutycycle_cooling);
 					}
 				}
 			}
@@ -456,7 +456,7 @@ void cycle(int *state)
 				else
 				{
 					dutycycle_cooling = 50;
-					set_cooling(&dutycycle_cooling);
+					set_cooling(dutycycle_cooling);
 				}
 			}
 		}
@@ -477,7 +477,7 @@ void cycle(int *state)
 				set_lights(light);
 			}
 			dutycycle_cooling = 50;
-			set_cooling(&dutycycle_cooling);
+			set_cooling(dutycycle_cooling);
 			lock = 0 ;
 			set_unlock(lock);
 
@@ -496,7 +496,7 @@ void cycle(int *state)
 			if(status == 0) //CLOSE
 			{
 				dutycycle_cooling = 100;
-				set_cooling(&dutycycle_cooling);
+				set_cooling(dutycycle_cooling);
 				get_pollution();
 				if(pm10[1] > pm10_th_limit && pm25[1] > pm25_th_limit && pm100[1] > pm100_th_limit)
 				{
@@ -508,7 +508,7 @@ void cycle(int *state)
 			else
 			{
 				dutycycle_cooling = 30;
-				set_cooling(&dutycycle_cooling);
+				set_cooling(dutycycle_cooling);
 				lock = 0;
 				set_unlock(lock);
 			}
@@ -518,7 +518,7 @@ void cycle(int *state)
 			light = 7 ; // WHITE NIGHT PT
 			set_lights(light);
 			dutycycle_cooling = 20;
-			set_cooling(&dutycycle_cooling);
+			set_cooling(dutycycle_cooling);
 			lock = 0 ;
 			set_unlock(lock);
 		}
@@ -529,13 +529,13 @@ void cycle(int *state)
 
 		/* Stop actuators */
 		heater_actif = 0 ;
-		set_heater(&heater_actif);
+		set_heater(heater_actif);
 		light = GREEN_FREE;
 		set_lights(light);
 		dutycycle_heater = 0;
-		set_cooling(&dutycycle_heater);
+		set_cooling(dutycycle_heater);
 		dutycycle_cooling = 0;
-		set_cooling(&dutycycle_cooling);
+		set_cooling(dutycycle_cooling);
 
 		/*Re Initialization of the variables of the Setup-Up State */
 		desired_temperature = 0;

@@ -5,13 +5,13 @@
   * @brief  This function is used to control the heater and the fan linked to the heater
   * @param  ptr_dutycycle : PWM rate to control the fan rate
   */
-void set_heater_pwm(int *ptr_dutycycle);
+void set_heater_pwm(int dutycycle);
 
 /**
   * @brief  This function is used to control the heater and the fan linked to the heater
   * @param  ON_off_heater : Activation of the heater
   */
-void set_heater(int *ON_off_heater);
+void set_heater(int ON_off_heater);
 
 /**
   * @brief  This function is used to collect the ADC value from the Channel 9 to get the temperature near the heater.

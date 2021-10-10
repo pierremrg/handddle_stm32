@@ -22,18 +22,18 @@ uint16_t adc_value_HEATER_TEMP[1];
 float temperature_C_heater;
 
 
-void set_heater_pwm (int *ptr_dutycycle)
+void set_heater_pwm (int dutycycle)
 {
 	HAL_TIM_PWM_Start(&htim8, TIM_CHANNEL_3);
-	htim8.Instance->CCR3 = *ptr_dutycycle; // PWM Rate might change
+	htim8.Instance->CCR3 = dutycycle; // PWM Rate might change
 }
 
-void set_heater(int *ON_off_heater)
+void set_heater(int ON_off_heater)
 {
 	get_heater_temp(); //Récupération de adc_value - Need to check if it's not working go on int for the heater_temp
 	if(temperature_C_heater < MAX_TEMPERATURE)
 	{
-		if(*ON_off_heater == 1 )
+		if(ON_off_heater == 1 )
 			HAL_GPIO_WritePin(GPIOB, HEATER_Pin, GPIO_PIN_SET);
 		else
 			HAL_GPIO_WritePin(GPIOB, HEATER_Pin, GPIO_PIN_RESET);

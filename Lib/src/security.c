@@ -5,9 +5,9 @@ extern int light;
 void set_shutdown_breakdown()
 {
 	int shutdown_pwm = 0;
-	set_cooling(&shutdown_pwm);
-	set_heater_pwm(&shutdown_pwm);
-	set_heater(&shutdown_pwm);
+	set_cooling(shutdown_pwm);
+	set_heater_pwm(shutdown_pwm);
+	set_heater(shutdown_pwm);
 
 	set_buzzer();
 
