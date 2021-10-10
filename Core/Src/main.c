@@ -222,7 +222,6 @@ int main(void)
 
 	set_unlock(OPEN);
 
-
 	/* Infinite loop */
 	while(1)
 	{
@@ -284,7 +283,7 @@ int main(void)
 				HAL_TIM_Base_Start_IT(&htim7);
 			}
 
-			if(req_opening_door == true)
+			if( req_opening_door == true )
 			{
 				light = WHITE_DOOR_OPEN;
 				set_lights(light);
