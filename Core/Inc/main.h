@@ -41,6 +41,7 @@ extern "C" {
 #include "../../Lib/inc/Heater.h"
 #include "../../Lib/inc/Relay.h"
 #include "../../Lib/inc/Test.h"
+#include "../../Lib/inc/Demo.h"
 #include "../../Lib/inc/security.h"
 #include "../../Transport/include/transport.h"
 #include "../../Transport/uid.h"

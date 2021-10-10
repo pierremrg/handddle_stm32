@@ -1,0 +1,10 @@
+23:38:42 **** Incremental Build of configuration Debug for project handddle_stm32 ****
+make -j4 all 
+arm-none-eabi-size   handddle_stm32.elf 
+   text	   data	    bss	    dec	    hex	filename
+  21580	     20	   2620	  24220	   5e9c	handddle_stm32.elf
+Finished building: default.size.stdout
+ 
+
+23:38:44 Build Finished. 0 errors, 0 warnings. (took 1s.447ms)
+
