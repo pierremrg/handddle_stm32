@@ -142,20 +142,20 @@ void set_lights(int color)
 			HAL_Delay(500);
 			break;
 
-		 case WHITE_NIGHT_PT :
-	    	//RED -- TIMER 2 CH1
-	    	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
-	    	htim2.Instance->CCR1 = 0; //Modulation
-	    	//BLUE -- TIMER 4 CH3
-	    	HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_3);
-	    	htim4.Instance->CCR3 = 0; //Modulation
-	    	//GREEN TIMER 2 CH2
-	    	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);
-	    	htim2.Instance->CCR2 = 0; //Modulation
-	    	//WHITE -- TIMER 3 - CH3
-	    	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_3);
-	    	htim3.Instance->CCR3 = 30; //Modulation
-	    	break;
+//		 case WHITE_NIGHT_PT :
+//	    	//RED -- TIMER 2 CH1
+//	    	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
+//	    	htim2.Instance->CCR1 = 0; //Modulation
+//	    	//BLUE -- TIMER 4 CH3
+//	    	HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_3);
+//	    	htim4.Instance->CCR3 = 0; //Modulation
+//	    	//GREEN TIMER 2 CH2
+//	    	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);
+//	    	htim2.Instance->CCR2 = 0; //Modulation
+//	    	//WHITE -- TIMER 3 - CH3
+//	    	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_3);
+//	    	htim3.Instance->CCR3 = 30; //Modulation
+//	    	break;
 
 		 case DARK :
 	    	//RED -- TIMER 2 CH1

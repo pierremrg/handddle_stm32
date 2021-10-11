@@ -5,7 +5,7 @@
  *      Author: Alternance
  */
 
-#include "../Inc/main.h"
+#include "../../Core/Inc/main.h"
 
 #include "../../Lib/inc/Pollution.h"
 #include "../../Lib/inc/Lights.h"
@@ -68,9 +68,9 @@ void process_demo()
 		set_lights(test_light);
 
 		int test_heater_pwm = 50; // on peut aussi faire à 100%
-		set_heater_pwm(&test_heater_pwm);
+		set_heater_pwm(test_heater_pwm);
 		int test_heater = HEATER_ON ; // Mise à ON du chauffage
-		set_heater(&test_heater);
+		set_heater(test_heater);
 
 		for(int i = 0 ; i < 2 ; i++)
 		{
@@ -87,7 +87,7 @@ void process_demo()
 		}
 
 		test_heater = 0; // Mise à 0 du chauffage
-		set_heater(&test_heater);
+		set_heater(test_heater);
 
 		for(int i = 0 ; i < 1 ; i++)
 		{
@@ -104,7 +104,7 @@ void process_demo()
 		}
 
 		test_heater_pwm = 0 ; // On eteind le chauffage et le ventilateur
-		set_heater_pwm(&test_heater_pwm);
+		set_heater_pwm(test_heater_pwm);
 
 		for(int i = 0 ; i < 1 ; i++)
 		{
@@ -129,7 +129,7 @@ void process_demo()
 		set_lights(test_light);
 
 		int test_cooler_pwm = 70;
-		set_cooling(&test_cooler_pwm);
+		set_cooling(test_cooler_pwm);
 
 		for(int i = 0 ; i < 2 ; i++)
 		{
@@ -146,7 +146,7 @@ void process_demo()
 		}
 
 		test_cooler_pwm = 0;
-		set_cooling(&test_cooler_pwm);
+		set_cooling(test_cooler_pwm);
 
 		for(int i = 0 ; i < 1 ; i++)
 		{
@@ -173,7 +173,7 @@ void process_demo()
 		set_lights(test_light);
 
 		test_cooler_pwm = 30;
-		set_cooling(&test_cooler_pwm);
+		set_cooling(test_cooler_pwm);
 
 		for(int i = 0 ; i < 2 ; i++)
 		{
@@ -190,7 +190,7 @@ void process_demo()
 		}
 
 		test_cooler_pwm = 0;
-		set_cooling(&test_cooler_pwm);
+		set_cooling(test_cooler_pwm);
 
 		HAL_Delay(5000);
 

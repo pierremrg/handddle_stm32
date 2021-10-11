@@ -1,7 +1,7 @@
 #ifndef INC_POLLUTION_H_
 #define INC_POLLUTION_H_
 
-#include "main.h"
+#include "../../Core/Inc/main.h"
 #include "stm32f4xx_hal.h"
 #include "stm32f4xx_hal_tim.h"
 

@@ -8,7 +8,7 @@
 #include "../inc/Buzzer.h"
 #include "../inc/Porte.h"
 #include "../inc/Cooling.h"
-#include "../inc/Temp_Humi.h"
+#include "../inc/Temp_humi.h"
 
 #define DELTA 1.0 // desired_temperature Delta -- X-1 < X < X+1
 #define REACHED_COUNTER_BUZZER 6 // Eq à 10 sec -- 60 pour 10 min

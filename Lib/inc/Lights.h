@@ -8,7 +8,6 @@
 #define ORANGE_STRAIGHT_DEFAULT 	4
 #define BLUE_HANDDDLE_MP 			5
 #define ORANGE_BLINKY_DEFAULT 		6
-#define WHITE_NIGHT_PT		 		7
 #define WHITE_DOOR_OPEN		 		8
 
 /**

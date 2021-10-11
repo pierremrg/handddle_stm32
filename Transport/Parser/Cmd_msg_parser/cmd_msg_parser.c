@@ -91,7 +91,7 @@ void parser_cmd_temp(uint8_t *rx_buff,UART_HandleTypeDef * uart){
 //	}
 
 	desired_temperature = rx_buff[POS_DATA];
-	set_heater_pwm(&desired_temperature);
+	set_heater_pwm(desired_temperature);
 }
 
 void parser_cmd_led_color(uint8_t *rx_buff,UART_HandleTypeDef * uart){
@@ -109,7 +109,7 @@ void parser_cmd_printing_state(uint8_t * rx_buff,UART_HandleTypeDef * uart){
 void parser_cmd_air_extract(uint8_t * rx_buff,UART_HandleTypeDef * uart){
 	// Calling the function that will use the payload for the door command
 	dutycycle_cooling_manual = rx_buff[POS_DATA];
-	set_cooling(&dutycycle_cooling_manual);
+	set_cooling(dutycycle_cooling_manual);
 }
 
 void parser_cmd_relay(uint8_t * rx_buff,UART_HandleTypeDef * uart){
