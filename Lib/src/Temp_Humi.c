@@ -113,11 +113,12 @@ float get_temp_humi_SHT40()
 
 	//1nd sensor
 	uint8_t buf1[7] = {0};                 /* Buffer for data read/written on the i2c bus */
-	buf1[0] = 0xFD;
-	HAL_StatusTypeDef ret1;
+	buf1[0] = 0xFD;                      // Command for measuring Temp and Hum with HIGH Precision
+	HAL_StatusTypeDef ret1;              // Struct to Use with i2C communication
+
 	// Tell HIH that we want to read from the temperature register
 	/* SmartPower */
-	ret1 = HAL_I2C_Master_Transmit(&hi2c2, (SHT4X_ADDRESS << 1), buf1, 1, 200);
+	ret1 = HAL_I2C_Master_Transmit(&hi2c2, (SHT4X_ADDRESS << 1), buf1, 1, 200); // Decalage de 1 bit car adresse sur 7 bits
 	HAL_Delay(20);
 	if ( ret1 != HAL_OK )
 	{
@@ -139,11 +140,11 @@ float get_temp_humi_SHT40()
 	  {
 		/* Temperature is located in next two bytes, padded by two trailing bits */
 		reading_temp1 = (buf1[0] << 8) + (buf1[1]);
-		temperature1 = 175 * reading_temp1 / 65535 - 45;
+		temperature1 = 175 * reading_temp1 / 65535 - 45;     // from datasheet
 
 		/* Humidity is located in the 4th and 5th bytes */
 		reading_hum1 = (buf1[3] << 8) + buf1[4];
-		humidity1 = 125 * reading_hum1 / 65535 - 6 ;
+		humidity1 = 125 * reading_hum1 / 65535 - 6 ;        // from datasheet
 
 		if(humidity1 > 100)
 		{

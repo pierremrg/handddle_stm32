@@ -23,17 +23,19 @@ void process_test()
 //	test_unlock = 0;
 //	set_unlock(&test_unlock);
 
-	int ab, lighty;
-	ab=get_door_state();
+//	int ab, lighty;
+//	ab=get_door_state();
+//
+//
+//	if(ab==0){
+//		set_buzzer();
+//		lighty = WHITE_DOOR_OPEN;
+//		set_lights(lighty);}
+//	else{
+//		lighty = DARK;
+//		set_lights(lighty);}
 
-
-	if(ab==0){
-		set_buzzer();
-		lighty = WHITE_DOOR_OPEN;
-		set_lights(lighty);}
-	else{
-		lighty = DARK;
-		set_lights(lighty);}
+	set_heater_pwm(0);
 
 
 
@@ -50,12 +52,12 @@ void process_test()
 //	int test_cooler_pwm = 50;
 //	set_cooling(&test_cooler_pwm);
 //
-//	int test_light = 0 ;
-//	for(int i=0; i<8; i+=1)
-//	{
-//		set_lights(i);
-//		HAL_Delay(1000);
-//	}
+
+	for(int i=0; i<7; i+=1)
+	{
+		set_lights(i);
+		HAL_Delay(1000);
+	}
 //	set_buzzer();
 
 //	HAL_Delay(2000);

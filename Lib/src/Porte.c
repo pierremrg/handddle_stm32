@@ -17,7 +17,8 @@ extern int req_opening_door;
 
 int get_door_state()
 {
-		int door1 = 0, door2 = 0, latch1 = 0, latch2 = 0;
+		int latch1 = 0;
+		int latch2 = 0;
 //	int latch2 = 0;
 
 	// Door State 1 -- Not Working because of the HW sensor
@@ -28,9 +29,7 @@ int get_door_state()
 
 	 //Latch state 1
 		if(HAL_GPIO_ReadPin(GPIOC, LATCH_STATUS1_Pin))
-		{
 			latch1 = 1;
-		}
 
 	// Door State 2 -- Not Working because of the HW sensor
 //		if(HAL_GPIO_ReadPin(GPIOA, DOOR_STATUS2_Pin))
@@ -39,9 +38,7 @@ int get_door_state()
 //		}
 	// Latch State 2
 	if(HAL_GPIO_ReadPin(GPIOA, LATCH_STATUS2_Pin))
-	{
 		latch2 = 1;
-	}
 
 
 //	if (latch1 == 0  && latch2 == 0)
@@ -57,10 +54,10 @@ int get_door_state()
 //		status = CLOSED; //Close
 
 
-	if ((latch2 == 0) || latch2 == 0)
+	if ((latch1 == 0) || latch2 == 0)
 		status = OPEN; //Open
 
-	if ((latch2 == 1) || latch2 == 1)
+	if ((latch1 == 1) || latch2 == 1)
 		status = CLOSED; //Close
 
 	return status;
