@@ -3,8 +3,8 @@
 
 #include <stdint.h>
 
-#define CLOSED 0
-#define OPEN 1
+#define PRESENT 	1
+#define NOT_PRESENT 0
 
 /**
   * @brief  This function is used for the detection of the doors states & the latches states.
@@ -26,8 +26,17 @@ void set_unlock(uint8_t ptr_door_state);
 void send_door_state();
 
 /**
+  * @brief  This function is used to give the state of the latch (PRESENT or NOT_PRESENT)
+  * @note
+  */
+void send_latch_state();
+
+void door_cycle();
+
+/**
   * @brief  This function is used to give the authorization to the app to open the door because we have to check the pollution inside every environment
   */
 void send_pollution_ok_door();
+
 
 #endif /* INC_PORTE_H_ */

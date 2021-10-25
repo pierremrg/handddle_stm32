@@ -23,6 +23,7 @@
 #include "stm32f4xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "../../Lib/inc/ELN_temperature.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -42,6 +43,9 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
+
+int i = 1;
+int DOOR_STATUS;
 
 /* USER CODE END PV */
 
@@ -259,7 +263,21 @@ void TIM7_IRQHandler(void)
   HAL_TIM_IRQHandler(&htim7);
   /* USER CODE BEGIN TIM7_IRQn 1 */
 
-//  HAL_TIM_Base_Start_IT(&htim7);
+  if (i % 125 == 0) //Each 750ms
+  {
+	  get_heater_temp();
+	  //send_heater_temp();
+  }
+  else if(i % 167 == 0) // Each 1002 ms -> 1s
+  {
+	  door_cycle();
+	  send_door_state();
+	  send_heater_temp();
+	  //send_latch_state();
+  }
+
+  i+=1;
+  HAL_TIM_Base_Start_IT(&htim7);
   /* USER CODE END TIM7_IRQn 1 */
 }
 

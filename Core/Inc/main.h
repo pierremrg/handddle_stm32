@@ -159,8 +159,8 @@ void Error_Handler(void);
 #define MODE_AUTO 0
 #define MODE_MANUAL 1
 
-#define CLOSED 0
-#define OPEN 1
+#define CLOSED 1
+#define OPEN 0
 
 
 /* USER CODE END Private defines */

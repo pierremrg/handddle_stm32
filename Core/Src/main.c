@@ -224,9 +224,14 @@ int main(void)
 	// Init values to STOP
 	int pwm_stop = 0;
 	set_heater_pwm(pwm_stop);
+	set_heater(0);
 	set_cooling(pwm_stop);
 
+	//White color as default
 	set_lights(WHITE_DOOR_OPEN);
+
+	// DOOR lock
+	set_unlock(status);
 
 
   /* USER CODE END 2 */
@@ -235,63 +240,62 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-
 	  if(system_is_active == SYSTEM_ACTIVE)
 	  		{
 	  			/* Consequences of the interruption */
 	  			/* Get Current each 6 ms */
-	  			if(cpt_current_ADC_EN == 1)
-	  			{
-	  				HAL_TIM_Base_Stop_IT(&htim7);
-	  				cpt_current_ADC_EN = 0;
-	  				getElectricCurrentConsumption();
-	  				HAL_TIM_Base_Start_IT(&htim7);
-	  			}
-
-	  			/* Get Current_MAX each 204 ms */
-	  			if(cpt_current_EN == 1)
-	  			{
-	  				HAL_TIM_Base_Stop_IT(&htim7);
-	  				cpt_current_EN = 0;
-	  				HAL_TIM_Base_Start_IT(&htim7);
-	  			}
-
-	  			/* Command Send each 1,002 sec including Current to not spam*/
-	  			if(cpt_1sec_EN == 1)
-	  			{
-	  				HAL_TIM_Base_Stop_IT(&htim7);
-	  				cpt_1sec_EN = 0;
-	  				get_door_state();
-	  				send_door_state();
-	  				HAL_TIM_Base_Start_IT(&htim7);
-	  			}
-
-	  			/* Command Send each 10,002 sec */
-	  			if(cpt_data_tx_EN == 1)
-	  			{
-	  				HAL_TIM_Base_Stop_IT(&htim7);
-	  				cpt_data_tx_EN = 0;
-	  				get_heater_temp();
-	  				get_pollution();
-	  				get_ELN_temp();
-	  				get_listening();
-	  				get_temp_humi_SHT40();
-	  				getElectricCurrentConsumptionTransmit();
-	  				index_adc_current = 0 ;
-	  				send_heater_temp();
-	  				send_temp_humi();
-	  				send_ELN_temp();
-	  				send_humi();
-	  				send_printer_state();
-	  				send_temp();
-	  				get_door_state();
-	  				get_pression();
-	  				send_pression();
-	  				send_lights(light);
-	  				send_buzzer_state();
-	  				send_pollution();
-	  				HAL_TIM_Base_Start_IT(&htim7);
-	  			}
+//	  			if(cpt_current_ADC_EN == 1)
+//	  			{
+//	  				HAL_TIM_Base_Stop_IT(&htim7);
+//	  				cpt_current_ADC_EN = 0;
+//	  				getElectricCurrentConsumption();
+//	  				HAL_TIM_Base_Start_IT(&htim7);
+//	  			}
+//
+//	  			/* Get Current_MAX each 204 ms */
+//	  			if(cpt_current_EN == 1)
+//	  			{
+//	  				HAL_TIM_Base_Stop_IT(&htim7);
+//	  				cpt_current_EN = 0;
+//	  				HAL_TIM_Base_Start_IT(&htim7);
+//	  			}
+//
+//	  			/* Command Send each 1,002 sec including Current to not spam*/
+//	  			if(cpt_1sec_EN == 1)
+//	  			{
+//	  				HAL_TIM_Base_Stop_IT(&htim7);
+//	  				cpt_1sec_EN = 0;
+//	  				get_door_state();
+//	  				send_door_state();
+//	  				HAL_TIM_Base_Start_IT(&htim7);
+//	  			}
+//
+//	  			/* Command Send each 10,002 sec */
+//	  			if(cpt_data_tx_EN == 1)
+//	  			{
+//	  				HAL_TIM_Base_Stop_IT(&htim7);
+//	  				cpt_data_tx_EN = 0;
+//	  				get_heater_temp();
+//	  				get_pollution();
+//	  				get_ELN_temp();
+//	  				get_listening();
+//	  				get_temp_humi_SHT40();
+//	  				getElectricCurrentConsumptionTransmit();
+//	  				index_adc_current = 0 ;
+//	  				send_heater_temp();
+//	  				send_temp_humi();
+//	  				send_ELN_temp();
+//	  				send_humi();
+//	  				send_printer_state();
+//	  				send_temp();
+//	  				get_door_state();
+//	  				get_pression();
+//	  				send_pression();
+//	  				send_lights(light);
+//	  				send_buzzer_state();
+//	  				send_pollution();
+//	  				HAL_TIM_Base_Start_IT(&htim7);
+//	  			}
 
 	  //		  if(current_breakdown == 1) //Soft Limit for the system
 	  //		  {

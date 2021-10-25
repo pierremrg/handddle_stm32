@@ -8,14 +8,18 @@ void process_test()
 {
 
 	  /* SENSOR TEST */
-	get_heater_temp();
-	get_door_state();
-	get_pollution();
+//	get_heater_temp();
+//	get_door_state();
+//	get_pollution();
+//	get_ELN_temp();
+//	get_listening();
+//	get_temp_humi_SHT40();
+//	get_pression();
+//	get_listening();
+
 	get_ELN_temp();
-	get_listening();
-	get_temp_humi_SHT40();
-	get_pression();
-	get_listening();
+	send_ELN_temp();
+	HAL_Delay(200);
 
 	/* Door TEST */
 //	int test_unlock = 1;
@@ -35,9 +39,6 @@ void process_test()
 //		lighty = DARK;
 //		set_lights(lighty);}
 
-	set_heater_pwm(0);
-
-
 
 //	// Reset heater
 //	int test_heater, test_heater_pwm;
@@ -53,11 +54,7 @@ void process_test()
 //	set_cooling(&test_cooler_pwm);
 //
 
-	for(int i=0; i<7; i+=1)
-	{
-		set_lights(i);
-		HAL_Delay(1000);
-	}
+
 //	set_buzzer();
 
 //	HAL_Delay(2000);

@@ -55,6 +55,11 @@
  */
 #define MAIN_MSG_PRINTING_STATE 0x0A
 
+/** @def MAIN_MSG_STATE_LATCH
+ *  @brief Main message ID for the latch state main message
+ */
+#define MAIN_MSG_STATE_LATCH 0x0B
+
 
 
 /** @fn int send_main_msg_temp(double temp,UART_HandleTypeDef * uart )
@@ -98,13 +103,21 @@ HAL_StatusTypeDef send_main_msg_current_EE(double current,UART_HandleTypeDef * u
  */
 HAL_StatusTypeDef send_main_msg_current_printer(double current,UART_HandleTypeDef * uart );
 
-/** @fn int send_main_msg_state_door(uint8_t state_door,UART_HandleTypeDef * uart )
+/** @fn int send_main_msg_door_state(uint8_t door_state,UART_HandleTypeDef * uart )
  * @brief Function used to send the door state message
  * @param state_door Door state value to be sent
  * @param uart Uart strcture used to the communication with the Jetson Nano. If the cable used is the ST-Link, huart2
  * @return -1 if something went wrong; 0 if every went well
  */
-HAL_StatusTypeDef send_main_msg_state_door(uint8_t state_door,UART_HandleTypeDef * uart );
+HAL_StatusTypeDef send_main_msg_door_state(uint8_t door_state,UART_HandleTypeDef * uart );
+
+/** @fn int send_main_msg_latch_state(uint8_t latch_state,UART_HandleTypeDef * uart )
+ * @brief Function used to send the latch state message
+ * @param latch state value to be sent
+ * @param uart Uart strcture used to the communication with the Jetson Nano. If the cable used is the ST-Link, huart2
+ * @return -1 if something went wrong; 0 if every went well
+ */
+HAL_StatusTypeDef send_main_msg_latch_state(uint8_t latch_state,UART_HandleTypeDef * uart );
 
 /** @fn int send_main_msg_pollution(uint16_t pm10, uint16_t pm25,uint16_t pm100,UART_HandleTypeDef * uart )
  * @brief Function used to send the Pollution message
