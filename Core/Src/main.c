@@ -27,6 +27,10 @@
 #include "../../Lib/inc/ELN_temperature.h"
 #include "../../Lib/inc/Microphone.h"
 #include "../../Lib/inc/Demo.h"
+#include "../../Lib/inc/Current.h"
+#include "../../Lib/inc/Weight.h"
+#include "../../Lib/inc/Temp_humi.h"
+#include "../../Transport/Msg_gen/Main_msg_gen/main_msg_gen.h"
 #include <string.h>
 
 /* USER CODE END Includes */
@@ -167,6 +171,17 @@ int dutycycle_cooling_manual = false;
 // Current variables
 int current_breakdown = 0;
 
+// Current variables
+extern int tab_ConsumptionValues[1000];
+extern int i_current;
+extern int Incorrect_Values;
+int i_timer = 0;
+int Cycle_Printer;
+
+// Weight sensor
+int getWeight;
+int cpt_GetWeight=0;
+
 
 /* USER CODE END 0 */
 
@@ -233,6 +248,31 @@ int main(void)
 	// DOOR lock
 	set_unlock(status);
 
+	// Initialization weight
+	Calibration();
+
+
+
+//	/*
+//	 * Initialization of the weight sensor
+//	 */
+//	hx711_init(&loadcell, PSCK_Weight_GPIO_Port, PSCK_Weight_Pin, DATA_Weight_GPIO_Port, DATA_Weight_Pin);
+//	//hx711_coef_set(&loadcell, 220); // read afer calibration
+//
+//	// Calibration
+//	int ave=0;
+//	for(int i=0; i<10; i++)
+//	{
+//		tab_weight=hx711_weight(&loadcell, 5);
+//		ave+=tab_weight;
+//	}
+//
+//	ave=ave/10;
+//	hx711_calibration(&loadcell, ave, ave+220, 1);
+//
+//	//Tare
+//	hx711_tare(&loadcell, 10);
+
 
   /* USER CODE END 2 */
 
@@ -241,7 +281,10 @@ int main(void)
   while (1)
   {
 	  if(system_is_active == SYSTEM_ACTIVE)
-	  		{
+	  {
+		  door_cycle();
+
+		  //ADC_Select_CH5();
 	  			/* Consequences of the interruption */
 	  			/* Get Current each 6 ms */
 //	  			if(cpt_current_ADC_EN == 1)
@@ -420,7 +463,7 @@ static void MX_ADC1_Init(void)
   */
   sConfig.Channel = ADC_CHANNEL_4;
   sConfig.Rank = 1;
-  sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
+  sConfig.SamplingTime = ADC_SAMPLETIME_112CYCLES;
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
   {
     Error_Handler();
@@ -437,6 +480,7 @@ static void MX_ADC1_Init(void)
   */
   sConfig.Channel = ADC_CHANNEL_12;
   sConfig.Rank = 3;
+  sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
   {
     Error_Handler();
@@ -804,9 +848,9 @@ static void MX_TIM7_Init(void)
 
   /* USER CODE END TIM7_Init 1 */
   htim7.Instance = TIM7;
-  htim7.Init.Prescaler = 90-1;
+  htim7.Init.Prescaler = 10000-1;
   htim7.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim7.Init.Period = 6000;
+  htim7.Init.Period = 9-1;
   htim7.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim7) != HAL_OK)
   {
@@ -1035,11 +1079,11 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(LATCH_STATUS2_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : DOOR_STATUS2_Pin */
-  GPIO_InitStruct.Pin = DOOR_STATUS2_Pin;
+  /*Configure GPIO pins : DOOR_STATUS2_Pin DATA_Weight_Pin PSCK_Weight_Pin */
+  GPIO_InitStruct.Pin = DOOR_STATUS2_Pin|DATA_Weight_Pin|PSCK_Weight_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(DOOR_STATUS2_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pins : DOOR_STATUS1_Pin LATCH_STATUS1_Pin */
   GPIO_InitStruct.Pin = DOOR_STATUS1_Pin|LATCH_STATUS1_Pin;
@@ -1085,38 +1129,79 @@ static void MX_GPIO_Init(void)
  */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-	if(htim == &htim7) // Test avec 6 ms
+//	if(htim == &htim7) // Test avec 6 ms
+//	{
+//		cpt_htim7++;
+//		if (cpt_htim7 % 1 == 0)
+//		{
+//			cpt_current_ADC_EN ++;
+//		}
+//		if(cpt_current_ADC_EN > 1) cpt_current_ADC_EN = 0;
+//
+//		if (cpt_htim7 % 34 == 0) cpt_current_EN ++; // 204 ms
+//		if(cpt_current_EN > 34) cpt_current_EN = 0;
+//
+//		if (cpt_htim7 % 167 == 0 )
+//		{
+//			cpt_1sec_EN ++; // 1.002 sec
+//			delay_counter ++;
+//		}
+//		if (cpt_htim7 % 1667 == 0) // 10.002 sec
+//		{
+//			cpt_data_tx_EN ++; //A reset à la fin de l'envoi de donnée
+//			if (buzzer_wait == 1)
+//			{
+//				//Compter 10 min
+//				if(cpt_data_tx_EN == 1)
+//				{
+//					cpt_buzzer_counter ++; //Reste bloqué ici
+//				}
+//			}
+//			cpt_htim7 = 0;
+//			if(cpt_data_tx_EN > 1 ) cpt_data_tx_EN = 0;
+//		}
+//
+//	}
+
+	if(htim == &htim7)
 	{
-		cpt_htim7++;
-		if (cpt_htim7 % 1 == 0)
+		if(i_timer % 1000 == 0) // Each 1002 ms -> 1s
 		{
-			cpt_current_ADC_EN ++;
+		  get_door_state();
+		  send_door_state();
 		}
-		if(cpt_current_ADC_EN > 1) cpt_current_ADC_EN = 0;
-
-		if (cpt_htim7 % 34 == 0) cpt_current_EN ++; // 204 ms
-		if(cpt_current_EN > 34) cpt_current_EN = 0;
-
-		if (cpt_htim7 % 167 == 0 )
+		if(i_timer % 10000 == 0) // Each 10002 ms -> 10s
 		{
-			cpt_1sec_EN ++; // 1.002 sec
-			delay_counter ++;
-		}
-		if (cpt_htim7 % 1667 == 0) // 10.002 sec
-		{
-			cpt_data_tx_EN ++; //A reset à la fin de l'envoi de donnée
-			if (buzzer_wait == 1)
-			{
-				//Compter 10 min
-				if(cpt_data_tx_EN == 1)
-				{
-					cpt_buzzer_counter ++; //Reste bloqué ici
-				}
-			}
-			cpt_htim7 = 0;
-			if(cpt_data_tx_EN > 1 ) cpt_data_tx_EN = 0;
-		}
+			get_heater_temp();
+			send_heater_temp();
 
+			if(Incorrect_Values <= 100)
+			  Cycle_Printer = 0;
+			else Cycle_Printer = 1;
+
+			send_main_msg_current_printer(Cycle_Printer,&huart2);
+			get_temp_humi_SHT40();
+			send_temp();
+			send_humi();
+		}
+		if(i_timer % 10 == 0 )
+		  getElectricCurrentConsumption();
+
+//		if(i_timer % 1500 == 0)
+//		{
+//
+//			if(getWeight == 1)
+//			{
+//				cpt_GetWeight++;
+//				get_weight();
+//				send_weight();
+//			} else if(cpt_GetWeight == 20)
+//			{
+//				getWeight=0;
+//				cpt_GetWeight=0;
+//			}
+//		}
+		i_timer+=1;
 	}
 }
 

@@ -123,6 +123,10 @@ void Error_Handler(void);
 #define RELAY_GPIO_Port GPIOC
 #define SHTC3_SCL1_Pin GPIO_PIN_8
 #define SHTC3_SCL1_GPIO_Port GPIOA
+#define DATA_Weight_Pin GPIO_PIN_11
+#define DATA_Weight_GPIO_Port GPIOA
+#define PSCK_Weight_Pin GPIO_PIN_12
+#define PSCK_Weight_GPIO_Port GPIOA
 #define TMS_Pin GPIO_PIN_13
 #define TMS_GPIO_Port GPIOA
 #define FILTRATION_TACHY_Pin GPIO_PIN_10

@@ -50,6 +50,16 @@
  */
 #define CMD_RELAY 0x08
 
+/** @def CMD_TARE
+ *  @brief Command ID for the tare command message
+ */
+#define CMD_TARE 0x09
+
+/** @def CMD_GET_WEIGHT
+ *  @brief Command ID for the weight command message
+ */
+#define CMD_GET_WEIGHT 0x0A
+
 /** @fn void parser_cmd_door(uint8_t *rx_buff, UART_HandleTypeDef * uart)
  * @brief Parser function for the open/close door command message without forcing
  * @param rx_buff Pointer to the array tab containing the message received
@@ -92,11 +102,25 @@ void parser_cmd_printing_state(uint8_t * rx_buff,UART_HandleTypeDef * uart);
  */
 void parser_cmd_relay(uint8_t * rx_buff,UART_HandleTypeDef * uart);
 
+
 /** @fn void parser_cmd(uint8_t * rx_buff, UART_HandleTypeDef * uart)
  * @brief General parser function used to dispatch every command message to the correct parser
  * @param rx_buff Pointer to the array tab containing the message received
  * @param uart Uart strcture used to the communication with the Jetson Nano. If the cable used is the ST-Link, huart2
  */
+
+void parser_cmd_tare(uint8_t * rx_buff,UART_HandleTypeDef * uart);
+
+
+/** @fn void parser_cmd(uint8_t * rx_buff, UART_HandleTypeDef * uart)
+ * @brief General parser function used to dispatch every command message to the correct parser
+ * @param rx_buff Pointer to the array tab containing the message received
+ * @param uart Uart strcture used to the communication with the Jetson Nano. If the cable used is the ST-Link, huart2
+ */
+
+void parser_cmd_getWeight(uint8_t * rx_buff,UART_HandleTypeDef * uart);
+
+
 void parser_cmd(uint8_t * rx_buff, UART_HandleTypeDef * uart);
 
 /** @fn void build_ack_msg_cmd(uint8_t ack)

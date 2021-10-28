@@ -24,6 +24,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "../../Lib/inc/ELN_temperature.h"
+#include "../../Lib/inc/Current.h"
+#include "../../Transport/Msg_gen/Main_msg_gen/main_msg_gen.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -44,8 +46,13 @@
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
 
-int i = 1;
-int DOOR_STATUS;
+//int i_timer = 0;
+//int DOOR_STATUS;
+//
+//extern int tab_ConsumptionValues[1000];
+//extern int i_current;
+//extern int Incorrect_Values;
+//int Cycle_Printer;
 
 /* USER CODE END PV */
 
@@ -64,6 +71,7 @@ extern DMA_HandleTypeDef hdma_adc2;
 extern ADC_HandleTypeDef hadc1;
 extern ADC_HandleTypeDef hadc2;
 extern TIM_HandleTypeDef htim7;
+extern TIM_HandleTypeDef htim8;
 extern TIM_HandleTypeDef htim10;
 extern UART_HandleTypeDef huart2;
 /* USER CODE BEGIN EV */
@@ -253,6 +261,20 @@ void USART2_IRQHandler(void)
 }
 
 /**
+  * @brief This function handles TIM8 update interrupt and TIM13 global interrupt.
+  */
+void TIM8_UP_TIM13_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM8_UP_TIM13_IRQn 0 */
+
+  /* USER CODE END TIM8_UP_TIM13_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim8);
+  /* USER CODE BEGIN TIM8_UP_TIM13_IRQn 1 */
+
+  /* USER CODE END TIM8_UP_TIM13_IRQn 1 */
+}
+
+/**
   * @brief This function handles TIM7 global interrupt.
   */
 void TIM7_IRQHandler(void)
@@ -263,21 +285,29 @@ void TIM7_IRQHandler(void)
   HAL_TIM_IRQHandler(&htim7);
   /* USER CODE BEGIN TIM7_IRQn 1 */
 
-  if (i % 125 == 0) //Each 750ms
-  {
-	  get_heater_temp();
-	  //send_heater_temp();
-  }
-  else if(i % 167 == 0) // Each 1002 ms -> 1s
-  {
-	  door_cycle();
-	  send_door_state();
-	  send_heater_temp();
-	  //send_latch_state();
-  }
-
-  i+=1;
-  HAL_TIM_Base_Start_IT(&htim7);
+//  if(i_timer % 1000 == 0) // Each 1002 ms -> 1s
+//  {
+//	  get_door_state();
+//  	  send_door_state();
+//  }
+//  if(i_timer % 10000 == 0) // Each 10002 ms -> 10s
+//  {
+//	get_heater_temp();
+//	send_heater_temp();
+//
+//	send_main_msg_current_printer(Cycle_Printer,&huart2);
+//
+//	if(Incorrect_Values <= 100)
+//	  Cycle_Printer = 0;
+//	else Cycle_Printer = 1;
+//  }
+//  if(i_timer % 10 == 0 )
+//  {
+//	  getElectricCurrentConsumption();
+//  }
+//
+//  i_timer+=1;
+//  HAL_TIM_Base_Start_IT(&htim7);
   /* USER CODE END TIM7_IRQn 1 */
 }
 

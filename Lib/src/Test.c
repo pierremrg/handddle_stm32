@@ -4,8 +4,11 @@
 #include "../../Lib/inc/ELN_temperature.h"
 #include "../../Lib/inc/Microphone.h"
 
+
 void process_test()
 {
+
+	ADC_Select_CH5();
 
 	  /* SENSOR TEST */
 //	get_heater_temp();
@@ -17,9 +20,8 @@ void process_test()
 //	get_pression();
 //	get_listening();
 
-	get_ELN_temp();
-	send_ELN_temp();
-	HAL_Delay(200);
+
+
 
 	/* Door TEST */
 //	int test_unlock = 1;

@@ -146,22 +146,24 @@ HAL_StatusTypeDef send_main_msg_latch_state(uint8_t latch_state,UART_HandleTypeD
 	return HAL_UART_Transmit(uart,Tx_msg_state_latch,MSG_SIZE+1,200);
 }
 
-HAL_StatusTypeDef send_main_msg_state_latch(uint8_t state_latch,UART_HandleTypeDef * uart ){
-	uint8_t Tx_msg_state_latch[MSG_SIZE + 1] = {
+HAL_StatusTypeDef send_main_msg_weight(uint16_t weight,UART_HandleTypeDef * uart ){
+	uint8_t Tx_msg_weight[MSG_SIZE + 1] = {
 		MSG_HEADER_IDENTIFIER_1, MSG_HEADER_IDENTIFIER_2, MSG_HEADER_SIZE_1, MSG_HEADER_SIZE_2, // Global information
 		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4, // UID of the STM32
 		MSG_TYPE_MAIN, // Message type
-		MAIN_MSG_STATE_LATCH, // Sub message type
-		0x00, 0x01 // Length
+		MAIN_MSG_WEIGHT, // Sub message type
+		0x00, 0x02 // Length
 	}; // 12 first bytes
 
-	Tx_msg_state_latch[POS_DATA] = state_latch;
+	Tx_msg_weight[POS_DATA] = weight >> 8; // weight takes two bytes because it's a uint16_t value
+	Tx_msg_weight[POS_DATA + 1] = weight;
 
-	for(int i = POS_DATA + 1; i< MSG_SIZE; i++)
-		Tx_msg_state_latch[i] = 0x00;
+	for(int i = POS_DATA + 2; i< MSG_SIZE; i++)
+		Tx_msg_weight[i] = 0x00;
 
-	Tx_msg_state_latch[MSG_SIZE] = '\n';
-	return HAL_UART_Transmit(uart,Tx_msg_state_latch,MSG_SIZE+1,200);
+	Tx_msg_weight[MSG_SIZE] = '\n';
+
+	return HAL_UART_Transmit(uart,Tx_msg_weight,MSG_SIZE+1,200);
 }
 
 HAL_StatusTypeDef send_main_msg_pollution(uint16_t pm10, uint16_t pm25,uint16_t pm100,UART_HandleTypeDef * uart ){

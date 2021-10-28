@@ -106,10 +106,10 @@ float get_temp_humi_SHT40()
 	float reading_hum2;
 	float reading_temp1;
 	float reading_temp2;
-	float humidity1;
-	float humidity2;
-	float temperature1;
-	float temperature2;
+	float humidity1; //SmartPower Sensor
+	float humidity2; //SmartBoard Sensor
+	float temperature1; //SmartPower Sensor
+	float temperature2; //SmartBoard Sensor
 
 	//1nd sensor
 	uint8_t buf1[7] = {0};                 /* Buffer for data read/written on the i2c bus */

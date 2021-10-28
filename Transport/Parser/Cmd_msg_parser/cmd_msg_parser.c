@@ -22,6 +22,8 @@ extern int req_opening_door;
 extern int manual_mode_filtration;
 extern int manual_mode_temperature;
 extern int CMD_Relay;
+extern int tare;
+extern int getWeight;
 
 
 // Message ACK header
@@ -117,6 +119,14 @@ void parser_cmd_relay(uint8_t * rx_buff,UART_HandleTypeDef * uart){
 	CMD_Relay = rx_buff[POS_DATA];
 }
 
+void parser_cmd_tare(uint8_t * rx_buff,UART_HandleTypeDef * uart){
+	tare = rx_buff[POS_DATA];
+}
+
+void parser_cmd_getWeight(uint8_t * rx_buff,UART_HandleTypeDef * uart){
+	getWeight = rx_buff[POS_DATA];
+}
+
 
 void parser_cmd(uint8_t * rx_buff, UART_HandleTypeDef * uart){
 	uint8_t cmd_type = rx_buff[POS_MSG_SUBTYPE]; // The first byte has already been checked. We want the second one with the cmd type
@@ -152,6 +162,14 @@ void parser_cmd(uint8_t * rx_buff, UART_HandleTypeDef * uart){
 			break;
 		case CMD_RELAY:
 			parser_cmd_relay(rx_buff, uart);
+			send_cmd_ack(uart);
+			break;
+		case CMD_TARE:
+			parser_cmd_tare(rx_buff, uart);
+			send_cmd_ack(uart);
+			break;
+		case CMD_GET_WEIGHT:
+			parser_cmd_getWeight(rx_buff, uart);
 			send_cmd_ack(uart);
 			break;
 		default:

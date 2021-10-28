@@ -20,6 +20,8 @@ extern uint16_t pm100[1];
 extern int req_opening_door;
 
 
+
+
 int get_door_state()
 {
 	// Door State 1
