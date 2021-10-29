@@ -7,8 +7,8 @@
 #define GREEN_FREE 					3
 #define ORANGE_STRAIGHT_DEFAULT 	4
 #define BLUE_HANDDDLE_MP 			5
-#define ORANGE_BLINKY_DEFAULT 		6
-#define WHITE_DOOR_OPEN		 		8
+#define ORANGE_BLINKY_DEFAULT 		6 // A vérifier
+#define WHITE_DOOR_OPEN		 		7
 
 /**
   * @brief  This function has been designed for the selection of the lights

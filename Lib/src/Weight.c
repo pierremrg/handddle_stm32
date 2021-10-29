@@ -6,11 +6,11 @@
  */
 
 
-#include "../../Lib/inc/Weight.h"
 #include "../../Lib/inc/Weight_HX711Config.h"
 #include "../../Core/Inc/main.h"
 
 #include "../../Transport/Msg_gen/Main_msg_gen/main_msg_gen.h"
+#include "../inc/Weight_HX711.h"
 
 #define DELTA 3
 
@@ -40,7 +40,7 @@ void Calibration()
 	}
 
 	average=average/10;
-	hx711_calibration(&loadcell, average, average+221, 1);
+	hx711_calibration(&loadcell, average, average+221, 1); // iPhone 12 = 221g
 
 	//Tare
 	hx711_tare(&loadcell, 10);
@@ -48,16 +48,15 @@ void Calibration()
 
 float get_weight()
 {
+	weight_raw = 0;
 
 	if(tare == 1)
-	  {
-		weight_raw = hx711_weight(&loadcell, 10);
-		tare = 2;
-	  }
-	else if (tare == 0) weight_raw = 0;
+	{
+		weight_raw = hx711_weight(&loadcell, 1);
+		tare = 0;
+	}
 
-	weight = hx711_weight(&loadcell, 10) - weight_raw;
-
+	weight = hx711_weight(&loadcell, 1) - weight_raw;
 	return weight;
 
 }

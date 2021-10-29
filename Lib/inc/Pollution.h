@@ -13,8 +13,18 @@
 void get_pollution();
 
 /**
-  * @brief  This function is used to send the 3 differents particules
+  * @brief  This function is used to send the pm 1.0
   */
-void send_pollution ();
+void send_pollution_pm1_0();
+
+/**
+  * @brief  This function is used to send the pm 2.5
+  */
+void send_pollution_pm2_5();
+
+/**
+  * @brief  This function is used to send the pm 10
+  */
+void send_pollution_pm10();
 
 #endif /* INC_POLLUTION_H_ */

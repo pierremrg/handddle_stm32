@@ -1,5 +1,5 @@
+#include "../inc/Weight_HX711.h"
 #include "../../Lib/inc/Weight_HX711Config.h"
-#include "../../Lib/inc/Weight.h"
 
 #if (_HX711_USE_FREERTOS == 1)
 #include "cmsis_os.h"
@@ -74,27 +74,26 @@ int32_t hx711_value(hx711_t *hx711)
     HAL_GPIO_WritePin(hx711->clk_gpio, hx711->clk_pin, GPIO_PIN_SET);
     hx711_delay_us();
     HAL_GPIO_WritePin(hx711->clk_gpio, hx711->clk_pin, GPIO_PIN_RESET);
-    hx711_delay_us();
+//    hx711_delay_us();
     data = data << 1;
     if(HAL_GPIO_ReadPin(hx711->dat_gpio, hx711->dat_pin) == GPIO_PIN_SET)
       data ++;
   }
   data = data ^ 0x800000;
   HAL_GPIO_WritePin(hx711->clk_gpio, hx711->clk_pin, GPIO_PIN_SET);
-  hx711_delay_us();
+//  hx711_delay_us();
   HAL_GPIO_WritePin(hx711->clk_gpio, hx711->clk_pin, GPIO_PIN_RESET);
-  hx711_delay_us();
+//  hx711_delay_us();
   return data;
 }
 //#############################################################################################
 int32_t hx711_value_ave(hx711_t *hx711, uint16_t sample)
 {
   hx711_lock(hx711);
-  int64_t  ave = 0;
+  int16_t  ave = 0;
   for(uint16_t i=0 ; i<sample ; i++)
   {
     ave += hx711_value(hx711);
-    hx711_delay(5);
   }
   int32_t answer = (int32_t)(ave / sample);
   hx711_unlock(hx711);
@@ -125,14 +124,15 @@ void hx711_calibration(hx711_t *hx711, int32_t noload_raw, int32_t load_raw, flo
 float hx711_weight(hx711_t *hx711, uint16_t sample)
 {
   hx711_lock(hx711);
-  int64_t  ave = 0;
-  for(uint16_t i=0 ; i<sample ; i++)
-  {
-    ave += hx711_value(hx711);
-    hx711_delay(5);
-  }
-  int32_t data = (int32_t)(ave / sample);
-  float answer =  (data - hx711->offset) / hx711->coef;
+//  short int  ave = 0;
+//  for(int i=0 ; i<sample ; i++)
+//  {
+//    ave += hx711_value(hx711);
+//    hx711_delay(1);
+//  }
+//  int32_t data = (int32_t)(ave / sample);
+//  float answer =  (data - hx711->offset) / hx711->coef;
+  float answer =  (hx711_value(hx711) - hx711->offset) / hx711->coef;
   hx711_unlock(hx711);
   return answer;
 }

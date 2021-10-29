@@ -28,10 +28,11 @@
 #include "../../Lib/inc/Microphone.h"
 #include "../../Lib/inc/Demo.h"
 #include "../../Lib/inc/Current.h"
-#include "../../Lib/inc/Weight.h"
 #include "../../Lib/inc/Temp_humi.h"
 #include "../../Transport/Msg_gen/Main_msg_gen/main_msg_gen.h"
 #include <string.h>
+
+#include "../../Lib/inc/Weight.h"
 
 /* USER CODE END Includes */
 
@@ -45,6 +46,9 @@
 
 // Maximum Security Constant
 #define TEMPERATURE_BREAKDOWN 60.0
+
+// For CMD Door
+#define CLOSE_DOOR 0
 
 /* USER CODE END PD */
 
@@ -180,7 +184,10 @@ int Cycle_Printer;
 
 // Weight sensor
 int getWeight;
-int cpt_GetWeight=0;
+int cpt_GetWeight;
+
+//  Initializing door state
+int DOOR_Previous_State;
 
 
 /* USER CODE END 0 */
@@ -247,31 +254,11 @@ int main(void)
 
 	// DOOR lock
 	set_unlock(status);
+	DOOR_Previous_State = get_door_state();
 
 	// Initialization weight
 	Calibration();
-
-
-
-//	/*
-//	 * Initialization of the weight sensor
-//	 */
-//	hx711_init(&loadcell, PSCK_Weight_GPIO_Port, PSCK_Weight_Pin, DATA_Weight_GPIO_Port, DATA_Weight_Pin);
-//	//hx711_coef_set(&loadcell, 220); // read afer calibration
-//
-//	// Calibration
-//	int ave=0;
-//	for(int i=0; i<10; i++)
-//	{
-//		tab_weight=hx711_weight(&loadcell, 5);
-//		ave+=tab_weight;
-//	}
-//
-//	ave=ave/10;
-//	hx711_calibration(&loadcell, ave, ave+220, 1);
-//
-//	//Tare
-//	hx711_tare(&loadcell, 10);
+	cpt_GetWeight=0;
 
 
   /* USER CODE END 2 */
@@ -282,6 +269,8 @@ int main(void)
   {
 	  if(system_is_active == SYSTEM_ACTIVE)
 	  {
+		  get_pollution();
+
 		  door_cycle();
 
 		  //ADC_Select_CH5();
@@ -362,9 +351,17 @@ int main(void)
 	  		}
 	  		else
 	  		{
-	  			set_shutdown_all();
-	  		}
+	  			set_unlock(CLOSE_DOOR);
+	  			int shutdown_pwm = 0;
+				set_cooling(shutdown_pwm);
+				set_heater_pwm(shutdown_pwm); // Ventilateur chauffage 12V
+				set_heater(shutdown_pwm);
 
+				light = DARK;
+				set_lights(light);
+
+				HAL_TIM_Base_Stop(&htim7);
+	  		}
 
     /* USER CODE END WHILE */
 
@@ -848,9 +845,9 @@ static void MX_TIM7_Init(void)
 
   /* USER CODE END TIM7_Init 1 */
   htim7.Instance = TIM7;
-  htim7.Init.Prescaler = 10000-1;
+  htim7.Init.Prescaler = 90-1;
   htim7.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim7.Init.Period = 9-1;
+  htim7.Init.Period = 1000-1;
   htim7.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim7) != HAL_OK)
   {
@@ -1167,13 +1164,17 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	{
 		if(i_timer % 1000 == 0) // Each 1002 ms -> 1s
 		{
-		  get_door_state();
-		  send_door_state();
+			get_pollution ();
+
+			send_door_state();
+
+			get_pression();
+			send_pression();
 		}
 		if(i_timer % 10000 == 0) // Each 10002 ms -> 10s
 		{
 			get_heater_temp();
-			send_heater_temp();
+//			send_heater_temp();
 
 			if(Incorrect_Values <= 100)
 			  Cycle_Printer = 0;
@@ -1185,22 +1186,27 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			send_humi();
 		}
 		if(i_timer % 10 == 0 )
-		  getElectricCurrentConsumption();
+		{
+			getElectricCurrentConsumption();
+		}
+		if((i_timer % 1500 == 0) && (getWeight == 1))
+		{
+			if(cpt_GetWeight == 20)
+			{
+				getWeight=0;
+				cpt_GetWeight=0;
+			}
+			cpt_GetWeight++;
+			get_weight();
+			send_weight();
+		}
+		if(i_timer % 5000 == 0)
+		{
+			send_pollution_pm1_0();
+			send_pollution_pm2_5();
+			send_pollution_pm10();
+		}
 
-//		if(i_timer % 1500 == 0)
-//		{
-//
-//			if(getWeight == 1)
-//			{
-//				cpt_GetWeight++;
-//				get_weight();
-//				send_weight();
-//			} else if(cpt_GetWeight == 20)
-//			{
-//				getWeight=0;
-//				cpt_GetWeight=0;
-//			}
-//		}
 		i_timer+=1;
 	}
 }

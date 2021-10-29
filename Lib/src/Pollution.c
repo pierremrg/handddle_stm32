@@ -5,9 +5,9 @@
 
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart2;
-extern uint16_t pm10[1] ;
-extern uint16_t pm25[1] ;
-extern uint16_t pm100[1] ;
+uint16_t pm1_0 ;// Particulate Matter : 10 micrometers and smaller
+uint16_t pm2_5 ; // 2.5 micrometers and smaller
+uint16_t pm10 ;
 
 uint8_t UART1_rxBuffer[33] = {0};
 uint8_t UART1_manip_33[33] = {0};
@@ -68,20 +68,20 @@ void get_pollution ()
 			buffer_test[i] = buffer_u16[i+1];
 		}
 
-	if((buffer_u16[1] == 0) | (buffer_u16[1] > (pm10[0] + 500) ) )
-		pm10[0] = pm10[0];
+	if((buffer_u16[1] == 0) | (buffer_u16[1] > (pm1_0 + 500) ) )
+		pm1_0 = pm1_0;
 	else
-		pm10[0] = buffer_test[0];
+		pm1_0 = buffer_test[0];
 
-	if((buffer_u16[2] == 0) | ( buffer_u16[2] > (pm25[0] + 500) ))
-			pm25[0] = pm25[0];
-		else
-			pm25[0] = buffer_test[1];
+	if((buffer_u16[2] == 0) | ( buffer_u16[2] > (pm2_5 + 500) ))
+		pm2_5 = pm2_5;
+	else
+		pm2_5 = buffer_test[1];
 
-	if((buffer_u16[3] == 0) | ( buffer_u16[3] > (pm100[0] + 500) ) )
-			pm100[0] = pm100[0];
+	if((buffer_u16[3] == 0) | ( buffer_u16[3] > (pm10 + 500) ) )
+			pm10 = pm10;
 		else
-			pm100[0] = buffer_test[2];
+			pm10 = buffer_test[2];
 
 	// put it into a nice struct :)
 	memcpy((void *)&data, (void *)buffer_u16, 30);
@@ -89,8 +89,17 @@ void get_pollution ()
 
 }
 
-void send_pollution()
+void send_pollution_pm1_0()
 {
-	send_main_msg_pollution(*pm10, *pm25, *pm100, &huart2);;
+	send_main_msg_pm1_0(pm1_0, &huart2);
 }
 
+void send_pollution_pm2_5()
+{
+	send_main_msg_pm2_5(pm2_5, &huart2);
+}
+
+void send_pollution_pm10()
+{
+	send_main_msg_pm10(pm10, &huart2);
+}

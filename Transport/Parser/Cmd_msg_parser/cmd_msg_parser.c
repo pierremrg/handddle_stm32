@@ -7,10 +7,13 @@
 #include "../../include/msg_types.h"
 #include "../../uid.h"
 
+#define CONFIRM_SHUTDOWN 2
+
 
 extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim3;
 extern TIM_HandleTypeDef htim4;
+extern TIM_HandleTypeDef htim7;
 
 extern uint8_t cmd_door_state;
 extern int state;
@@ -24,6 +27,8 @@ extern int manual_mode_temperature;
 extern int CMD_Relay;
 extern int tare;
 extern int getWeight;
+
+int relay=0;
 
 
 // Message ACK header
@@ -56,12 +61,20 @@ void send_cmd_nok(UART_HandleTypeDef * uart){
 }
 
 void parser_cmd_on_off(uint8_t * rx_buff,UART_HandleTypeDef * uart){
-	system_is_active = rx_buff[POS_DATA];
+	if(rx_buff[POS_DATA] == 1)
+	{
+		system_is_active = rx_buff[POS_DATA];
+		HAL_TIM_Base_Start(&htim7);
+		set_lights(WHITE_DOOR_OPEN);
+		HAL_Delay(100);
+
+	}
+	else system_is_active = rx_buff[POS_DATA];
 
 
 
 	// Calling the function that will use the payload for the door command
-	// power_on_off_cmd_received(rx_buff[4]);
+//	 power_on_off_cmd_received(rx_buff[4]);
 }
 
 void parser_cmd_door(uint8_t *rx_buff, UART_HandleTypeDef * uart){
@@ -116,7 +129,14 @@ void parser_cmd_air_extract(uint8_t * rx_buff,UART_HandleTypeDef * uart){
 
 void parser_cmd_relay(uint8_t * rx_buff,UART_HandleTypeDef * uart){
 	// Calling the function that will use the payload for the door command
-	CMD_Relay = rx_buff[POS_DATA];
+	if(rx_buff[POS_DATA] == SYSTEM_ACTIVE)
+	{
+		relay++;
+		if(relay == CONFIRM_SHUTDOWN){
+			CMD_Relay = rx_buff[POS_DATA];
+			relay = 0 ;
+		}
+	} else CMD_Relay = rx_buff[POS_DATA];
 }
 
 void parser_cmd_tare(uint8_t * rx_buff,UART_HandleTypeDef * uart){

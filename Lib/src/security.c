@@ -22,6 +22,6 @@ void set_shutdown_all()
 	set_heater_pwm(shutdown_pwm); // Ventilateur chauffage 12V
 	set_heater(shutdown_pwm);
 
-	light = DARK;
+	light = 5;
 	set_lights(light);
 }

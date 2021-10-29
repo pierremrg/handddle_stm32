@@ -18,6 +18,7 @@ extern uint16_t pm10[1];
 extern uint16_t pm25[1];
 extern uint16_t pm100[1];
 extern int req_opening_door;
+extern int DOOR_Previous_State;
 
 
 
@@ -88,7 +89,13 @@ void door_cycle()
 
 void send_door_state()
 {
-	send_main_msg_door_state(door_state,&huart2);
+	get_door_state();
+
+	if(door_state != DOOR_Previous_State)
+	{
+		DOOR_Previous_State = door_state;
+		send_main_msg_door_state(door_state,&huart2);
+	}
 }
 
 void send_latch_state()

@@ -65,6 +65,21 @@
  */
 #define MAIN_MSG_WEIGHT 0x0C
 
+/** @def MAIN_MSG_WEIGHT
+ *  @brief Main message ID for the weight
+ */
+#define MAIN_MSG_PM1_0 0x0D
+
+/** @def MAIN_MSG_WEIGHT
+ *  @brief Main message ID for the weight
+ */
+#define MAIN_MSG_PM2_5 0x0E
+
+/** @def MAIN_MSG_WEIGHT
+ *  @brief Main message ID for the weight
+ */
+#define MAIN_MSG_PM10 0x0F
+
 
 
 /** @fn int send_main_msg_temp(double temp,UART_HandleTypeDef * uart )
@@ -124,7 +139,7 @@ HAL_StatusTypeDef send_main_msg_door_state(uint8_t door_state,UART_HandleTypeDef
  */
 HAL_StatusTypeDef send_main_msg_latch_state(uint8_t latch_state,UART_HandleTypeDef * uart );
 
-/** @fn send_main_msg_weight(uint8_t weight,UART_HandleTypeDef * uart )
+/** @fn send_main_msg_weight(uint16_t weight,UART_HandleTypeDef * uart )
  * @brief Function used to send the weight message
  * @param weight value to be sent
  * @param uart Uart structure used to the communication with the Jetson Nano. If the cable used is the ST-Link, huart2
@@ -132,15 +147,33 @@ HAL_StatusTypeDef send_main_msg_latch_state(uint8_t latch_state,UART_HandleTypeD
  */
 HAL_StatusTypeDef send_main_msg_weight(uint16_t weight,UART_HandleTypeDef * uart );
 
-/** @fn int send_main_msg_pollution(uint16_t pm10, uint16_t pm25,uint16_t pm100,UART_HandleTypeDef * uart )
- * @brief Function used to send the Pollution message
- * @param pm10 PM10 value to be sent
- * @param pm25 PM25 value to be sent
- * @param pm100 PM100 value to be sent
- * @param uart Uart strcture used to the communication with the Jetson Nano. If the cable used is the ST-Link, huart2
+
+/** @fn send_main_msg_pm1_0(uint16_t pm1_0,UART_HandleTypeDef * uart )
+ * @brief Function used to send the pm1_0 pollution message
+ * @param pm1.0 value to be sent
+ * @param uart Uart structure used to the communication with the Jetson Nano. If the cable used is the ST-Link, huart2
  * @return -1 if something went wrong; 0 if every went well
  */
-HAL_StatusTypeDef send_main_msg_pollution(uint16_t pm10, uint16_t pm25,uint16_t pm100,UART_HandleTypeDef * uart );
+HAL_StatusTypeDef send_main_msg_pm1_0(uint16_t pm1_0,UART_HandleTypeDef * uart );
+
+
+/** @fn send_main_msg_pm2_5(uint16_t pm2_5,UART_HandleTypeDef * uart )
+ * @brief Function used to send the pm2_5 pollution message
+ * @param pm2.5 value to be sent
+ * @param uart Uart structure used to the communication with the Jetson Nano. If the cable used is the ST-Link, huart2
+ * @return -1 if something went wrong; 0 if every went well
+ */
+HAL_StatusTypeDef send_main_msg_pm2_5(uint16_t pm2_5,UART_HandleTypeDef * uart );
+
+
+/** @fn send_main_msg_pm10(uint16_t pm10,UART_HandleTypeDef * uart )
+ * @brief Function used to send the pm10 pollution message
+ * @param pm10 value to be sent
+ * @param uart Uart structure used to the communication with the Jetson Nano. If the cable used is the ST-Link, huart2
+ * @return -1 if something went wrong; 0 if every went well
+ */
+HAL_StatusTypeDef send_main_msg_pm10(uint16_t pm10,UART_HandleTypeDef * uart );
+
 
 /** @fn int send_main_msg_sound(uint16_t sound,UART_HandleTypeDef * uart )
  * @brief Function used to send the Sound message

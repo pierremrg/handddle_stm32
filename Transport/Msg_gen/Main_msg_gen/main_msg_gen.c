@@ -166,28 +166,68 @@ HAL_StatusTypeDef send_main_msg_weight(uint16_t weight,UART_HandleTypeDef * uart
 	return HAL_UART_Transmit(uart,Tx_msg_weight,MSG_SIZE+1,200);
 }
 
-HAL_StatusTypeDef send_main_msg_pollution(uint16_t pm10, uint16_t pm25,uint16_t pm100,UART_HandleTypeDef * uart ){
-	uint8_t Tx_msg_pollution[MSG_SIZE + 1] = {
+
+HAL_StatusTypeDef send_main_msg_pm1_0(uint16_t pm1_0, UART_HandleTypeDef * uart ){
+	uint8_t Tx_msg_pm1_0[MSG_SIZE + 1] = {
 		MSG_HEADER_IDENTIFIER_1, MSG_HEADER_IDENTIFIER_2, MSG_HEADER_SIZE_1, MSG_HEADER_SIZE_2, // Global information
 		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4, // UID of the STM32
 		MSG_TYPE_MAIN, // Message type
-		MAIN_MSG_POLLUTION, // Sub message type
-		0x00, 0x06 // Length
+		MAIN_MSG_PM1_0, // Sub message type
+		0x00, 0x02 // Length
 	}; // 12 first bytes
 
-	Tx_msg_pollution[POS_DATA] = pm10 >> 8; // pm10 takes two bytes because it's a uint16_t value
-	Tx_msg_pollution[POS_DATA + 1] = pm10;
-	Tx_msg_pollution[POS_DATA + 2] = pm25 >> 8; // pm25 takes two bytes because it's a uint16_t value
-	Tx_msg_pollution[POS_DATA + 3] = pm25;
-	Tx_msg_pollution[POS_DATA + 4] = pm100 >> 8; // pm100 takes two bytes because it's a uint16_t value
-	Tx_msg_pollution[POS_DATA + 5] = pm100;
+	Tx_msg_pm1_0[POS_DATA] = pm1_0 >> 8; // weight takes two bytes because it's a uint16_t value
+	Tx_msg_pm1_0[POS_DATA + 1] = pm1_0;
 
-	for(int i = POS_DATA + 6; i< MSG_SIZE; i++)
-		Tx_msg_pollution[i] = 0x00;
+	for(int i = POS_DATA + 2; i< MSG_SIZE; i++)
+		Tx_msg_pm1_0[i] = 0x00;
 
-	Tx_msg_pollution[MSG_SIZE] = '\n';
-	return HAL_UART_Transmit(uart,Tx_msg_pollution,MSG_SIZE+1,200);
+	Tx_msg_pm1_0[MSG_SIZE] = '\n';
+
+	return HAL_UART_Transmit(uart,Tx_msg_pm1_0,MSG_SIZE+1,200);
 }
+
+
+HAL_StatusTypeDef send_main_msg_pm2_5(uint16_t pm2_5, UART_HandleTypeDef * uart ){
+	uint8_t Tx_msg_pm2_5[MSG_SIZE + 1] = {
+		MSG_HEADER_IDENTIFIER_1, MSG_HEADER_IDENTIFIER_2, MSG_HEADER_SIZE_1, MSG_HEADER_SIZE_2, // Global information
+		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4, // UID of the STM32
+		MSG_TYPE_MAIN, // Message type
+		MAIN_MSG_PM2_5, // Sub message type
+		0x00, 0x02 // Length
+	}; // 12 first bytes
+
+	Tx_msg_pm2_5[POS_DATA] = pm2_5 >> 8; // weight takes two bytes because it's a uint16_t value
+	Tx_msg_pm2_5[POS_DATA + 1] = pm2_5;
+
+	for(int i = POS_DATA + 2; i< MSG_SIZE; i++)
+		Tx_msg_pm2_5[i] = 0x00;
+
+	Tx_msg_pm2_5[MSG_SIZE] = '\n';
+
+	return HAL_UART_Transmit(uart,Tx_msg_pm2_5,MSG_SIZE+1,200);
+}
+
+HAL_StatusTypeDef send_main_msg_pm10(uint16_t pm10, UART_HandleTypeDef * uart ){
+	uint8_t Tx_msg_pm10[MSG_SIZE + 1] = {
+		MSG_HEADER_IDENTIFIER_1, MSG_HEADER_IDENTIFIER_2, MSG_HEADER_SIZE_1, MSG_HEADER_SIZE_2, // Global information
+		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4, // UID of the STM32
+		MSG_TYPE_MAIN, // Message type
+		MAIN_MSG_PM10, // Sub message type
+		0x00, 0x02 // Length
+	}; // 12 first bytes
+
+	Tx_msg_pm10[POS_DATA] = pm10 >> 8; // weight takes two bytes because it's a uint16_t value
+	Tx_msg_pm10[POS_DATA + 1] = pm10;
+
+	for(int i = POS_DATA + 2; i< MSG_SIZE; i++)
+		Tx_msg_pm10[i] = 0x00;
+
+	Tx_msg_pm10[MSG_SIZE] = '\n';
+
+	return HAL_UART_Transmit(uart,Tx_msg_pm10,MSG_SIZE+1,200);
+}
+
 
 HAL_StatusTypeDef send_main_msg_sound(uint16_t sound,UART_HandleTypeDef * uart ){
 	uint8_t Tx_msg_sound[MSG_SIZE + 1] = {
