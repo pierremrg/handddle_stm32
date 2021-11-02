@@ -48,7 +48,7 @@ void process_demo()
 			send_humi();
 			send_printer_state();
 			send_temp();
-			send_pollution();
+			//send_pollution();
 			getElectricCurrentConsumption();
 			getElectricCurrentConsumptionTransmit();
 			HAL_Delay(5000);
@@ -80,7 +80,7 @@ void process_demo()
 			send_humi();
 			send_printer_state();
 			send_temp();
-			send_pollution();
+			//send_pollution();
 			getElectricCurrentConsumption();
 			getElectricCurrentConsumptionTransmit();
 			HAL_Delay(5000);
@@ -97,7 +97,7 @@ void process_demo()
 			send_humi();
 			send_printer_state();
 			send_temp();
-			send_pollution();
+			//send_pollution();
 			getElectricCurrentConsumption();
 			getElectricCurrentConsumptionTransmit();
 			HAL_Delay(10000);
@@ -114,7 +114,7 @@ void process_demo()
 			send_humi();
 			send_printer_state();
 			send_temp();
-			send_pollution();
+			//send_pollution();
 			getElectricCurrentConsumption();
 			getElectricCurrentConsumptionTransmit();
 			HAL_Delay(10000);
@@ -139,7 +139,7 @@ void process_demo()
 			send_humi();
 			send_printer_state();
 			send_temp();
-			send_pollution();
+			//send_pollution();
 			getElectricCurrentConsumption();
 			getElectricCurrentConsumptionTransmit();
 			HAL_Delay(5000);
@@ -156,7 +156,7 @@ void process_demo()
 			send_humi();
 			send_printer_state();
 			send_temp();
-			send_pollution();
+			//send_pollution();
 			getElectricCurrentConsumption();
 			getElectricCurrentConsumptionTransmit();
 			HAL_Delay(10000);
@@ -183,7 +183,7 @@ void process_demo()
 			send_humi();
 			send_printer_state();
 			send_temp();
-			send_pollution();
+			//send_pollution();
 			getElectricCurrentConsumption();
 			getElectricCurrentConsumptionTransmit();
 			HAL_Delay(10000);
@@ -214,7 +214,7 @@ void process_demo()
 			send_humi();
 			send_printer_state();
 			send_temp();
-			send_pollution();
+			//send_pollution();
 
 			if(i == 1 || i == 6 || i== 12) set_buzzer();
 

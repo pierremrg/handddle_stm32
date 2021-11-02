@@ -7,4 +7,6 @@
   */
 void set_cooling(int dutycycle);
 
+void get_tachy_cooling();
+
 #endif /* INC_COOLING_H_ */

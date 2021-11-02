@@ -156,7 +156,7 @@ uint16_t state_buzzer = 0; // TODO Define buzzer states
 int light;
 
 // Temperatures & Humidity variables
-float desired_temperature = 0;
+int desired_temperature = 22;
 float desired_temperature_manual = 0;
 float moy_temperature = 0;
 float moy_humidity = 0;
@@ -188,6 +188,11 @@ int cpt_GetWeight;
 
 //  Initializing door state
 int DOOR_Previous_State;
+
+// HEATING & COOLING
+int temperature;
+int DELTA = 1.0;
+extern int heater_actif, dutycycle_heater, dutycycle_cooling;
 
 
 /* USER CODE END 0 */
@@ -246,7 +251,7 @@ int main(void)
 	// Init values to STOP
 	int pwm_stop = 0;
 	set_heater_pwm(pwm_stop);
-	set_heater(0);
+	set_heater(pwm_stop);
 	set_cooling(pwm_stop);
 
 	//White color as default
@@ -269,6 +274,7 @@ int main(void)
   {
 	  if(system_is_active == SYSTEM_ACTIVE)
 	  {
+
 		  get_pollution();
 
 		  door_cycle();
@@ -1095,18 +1101,18 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : HEATER_TACHY_Pin FILTRATION_TACHY_Pin */
-  GPIO_InitStruct.Pin = HEATER_TACHY_Pin|FILTRATION_TACHY_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-
   /*Configure GPIO pin : RELAY_Pin */
   GPIO_InitStruct.Pin = RELAY_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(RELAY_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : FILTRATION_TACHY_Pin */
+  GPIO_InitStruct.Pin = FILTRATION_TACHY_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(FILTRATION_TACHY_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : CMD_PORTE_Pin ELN_FAN_Pin */
   GPIO_InitStruct.Pin = CMD_PORTE_Pin|ELN_FAN_Pin;
@@ -1174,7 +1180,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		if(i_timer % 10000 == 0) // Each 10002 ms -> 10s
 		{
 			get_heater_temp();
-//			send_heater_temp();
+			send_heater_temp();
 
 			if(Incorrect_Values <= 100)
 			  Cycle_Printer = 0;
@@ -1199,6 +1205,55 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			cpt_GetWeight++;
 			get_weight();
 			send_weight();
+		}
+		if(i_timer % 3000 == 0)
+		{
+			temperature = get_temp_humi_SHT40();
+			if(temperature < desired_temperature - 2*DELTA)
+			{
+				heater_actif = 1;
+				set_heater(heater_actif);
+
+				dutycycle_heater = 80;
+				set_heater_pwm(dutycycle_heater);
+
+				dutycycle_cooling = 0;
+				set_cooling(dutycycle_cooling);
+			}
+			else if(temperature < desired_temperature - DELTA)
+			{
+				heater_actif = 0;
+				set_heater(heater_actif);
+
+				dutycycle_heater = 50;
+				set_heater_pwm(dutycycle_heater);
+
+				dutycycle_cooling = 0;
+				set_cooling(dutycycle_cooling);
+			}
+			else if(temperature > desired_temperature + 2*DELTA)
+			{
+				heater_actif = 0;
+				set_heater(heater_actif);
+
+				dutycycle_heater = 0;
+				set_heater_pwm(dutycycle_heater);
+
+				dutycycle_cooling = 50;
+				set_cooling(dutycycle_cooling);
+			}
+			else
+			{
+				heater_actif = 0;
+				set_heater(heater_actif);
+
+				dutycycle_heater = 0;
+				set_heater_pwm(dutycycle_heater);
+
+				dutycycle_cooling = 0;
+				set_cooling(dutycycle_cooling);
+			}
+
 		}
 		if(i_timer % 5000 == 0)
 		{

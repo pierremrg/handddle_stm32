@@ -9,6 +9,9 @@
 
 #define CONFIRM_SHUTDOWN 2
 
+#define TEMP_AMBIANTE 22
+#define TEMP_MAX 70
+
 
 extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim3;
@@ -17,7 +20,7 @@ extern TIM_HandleTypeDef htim7;
 
 extern uint8_t cmd_door_state;
 extern int state;
-extern float desired_temperature;
+extern int desired_temperature;
 extern float desired_temperature_manual;
 extern int dutycycle_cooling_manual;
 extern int system_is_active;
@@ -104,9 +107,13 @@ void parser_cmd_temp(uint8_t *rx_buff,UART_HandleTypeDef * uart){
 //			desired_temperature = rx_buff[POS_DATA];
 //		}
 //	}
-
 	desired_temperature = rx_buff[POS_DATA];
-	set_heater_pwm(desired_temperature);
+	if(rx_buff[POS_DATA] > TEMP_AMBIANTE && rx_buff[POS_DATA] < TEMP_MAX)
+	{
+		// On va agir sur les interruptions
+		desired_temperature = rx_buff[POS_DATA];
+	}
+
 }
 
 void parser_cmd_led_color(uint8_t *rx_buff,UART_HandleTypeDef * uart){

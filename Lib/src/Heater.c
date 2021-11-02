@@ -81,6 +81,7 @@ int get_heater_temp()
 	float A = 0.0006318979274;
 	float B = 0.000226285692;
 	float C = 0.0000000766104297845452;
+
 	float ADC_1 = adc_value_HEATER_TEMP[0];
 	float sensorVoltage = ADC_1 * VOLTAGE_SUPPLY / 4096;
 	float R_CTN_Heater = (R22k * (sensorVoltage/VOLTAGE_SUPPLY)/ (1 - (sensorVoltage/VOLTAGE_SUPPLY)));
