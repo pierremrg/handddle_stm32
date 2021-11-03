@@ -67,12 +67,26 @@ void parser_cmd_on_off(uint8_t * rx_buff,UART_HandleTypeDef * uart){
 	if(rx_buff[POS_DATA] == 1)
 	{
 		system_is_active = rx_buff[POS_DATA];
-		HAL_TIM_Base_Start(&htim7);
-		set_lights(WHITE_DOOR_OPEN);
-		HAL_Delay(100);
 
+		int light = WHITE_DOOR_OPEN;
+		set_lights(light);
 	}
-	else system_is_active = rx_buff[POS_DATA];
+	else if(rx_buff[POS_DATA] == 0)
+	{
+		system_is_active = rx_buff[POS_DATA];
+
+		int DOOR_CLOSED = 0;
+		set_unlock(CLOSED);
+
+		int shutdown_pwm = 0;
+		set_cooling(shutdown_pwm);
+
+		set_heater_pwm(shutdown_pwm); // Ventilateur chauffage 12V
+		set_heater(shutdown_pwm);
+
+		int light = DARK;
+		set_lights(light);
+	}
 
 
 
@@ -91,28 +105,14 @@ void parser_cmd_forcing_door(uint8_t *rx_buff, UART_HandleTypeDef * uart){
 }
 
 void parser_cmd_temp(uint8_t *rx_buff,UART_HandleTypeDef * uart){
-	// Compute the temperature value
-//	if (manual_mode_temperature)
+
+	set_heater_pwm(rx_buff[POS_DATA]);
+
+//	if(rx_buff[POS_DATA] > TEMP_AMBIANTE && rx_buff[POS_DATA] < TEMP_MAX)
 //	{
-//		 desired_temperature_manual = rx_buff[POS_DATA]; // Attention uint8_t to float
+//		// On va agir sur les interruptions
+//		desired_temperature = rx_buff[POS_DATA];
 //	}
-//	else
-//	{
-//		if(rx_buff[POS_DATA] == AUTO_VALUE)
-//		{
-//			desired_temperature = get_temp_humi_SHT40();
-//		}
-//		else
-//		{
-//			desired_temperature = rx_buff[POS_DATA];
-//		}
-//	}
-	desired_temperature = rx_buff[POS_DATA];
-	if(rx_buff[POS_DATA] > TEMP_AMBIANTE && rx_buff[POS_DATA] < TEMP_MAX)
-	{
-		// On va agir sur les interruptions
-		desired_temperature = rx_buff[POS_DATA];
-	}
 
 }
 

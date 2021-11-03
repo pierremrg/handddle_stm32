@@ -12,7 +12,7 @@ int16_t pressure;
 extern ADC_HandleTypeDef hadc1;
 extern UART_HandleTypeDef huart2;
 
-void get_pression()
+int get_pression()
 {
 	ADC_Select_CH12();
 
@@ -21,6 +21,8 @@ void get_pression()
 	float sensorVoltage = Value_ADC/4096*VOLTAGE_SUPPLY;
 	float DP = (750*sensorVoltage/VOLTAGE_SUPPLY)-150;
 	pressure = (int16_t) DP;
+
+	return pressure;
 }
 
 

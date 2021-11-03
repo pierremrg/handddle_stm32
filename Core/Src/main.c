@@ -194,6 +194,9 @@ int temperature;
 int DELTA = 1.0;
 extern int heater_actif, dutycycle_heater, dutycycle_cooling;
 
+// Pressure
+int c_Pressure = 0, p_Pressure = 0, DELTA_Pressure = 50;
+
 
 /* USER CODE END 0 */
 
@@ -266,6 +269,8 @@ int main(void)
 	cpt_GetWeight=0;
 
 
+
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -274,100 +279,21 @@ int main(void)
   {
 	  if(system_is_active == SYSTEM_ACTIVE)
 	  {
-
 		  get_pollution();
 
 		  door_cycle();
 
-		  //ADC_Select_CH5();
-	  			/* Consequences of the interruption */
-	  			/* Get Current each 6 ms */
-//	  			if(cpt_current_ADC_EN == 1)
-//	  			{
-//	  				HAL_TIM_Base_Stop_IT(&htim7);
-//	  				cpt_current_ADC_EN = 0;
-//	  				getElectricCurrentConsumption();
-//	  				HAL_TIM_Base_Start_IT(&htim7);
-//	  			}
-//
-//	  			/* Get Current_MAX each 204 ms */
-//	  			if(cpt_current_EN == 1)
-//	  			{
-//	  				HAL_TIM_Base_Stop_IT(&htim7);
-//	  				cpt_current_EN = 0;
-//	  				HAL_TIM_Base_Start_IT(&htim7);
-//	  			}
-//
-//	  			/* Command Send each 1,002 sec including Current to not spam*/
-//	  			if(cpt_1sec_EN == 1)
-//	  			{
-//	  				HAL_TIM_Base_Stop_IT(&htim7);
-//	  				cpt_1sec_EN = 0;
-//	  				get_door_state();
-//	  				send_door_state();
-//	  				HAL_TIM_Base_Start_IT(&htim7);
-//	  			}
-//
-//	  			/* Command Send each 10,002 sec */
-//	  			if(cpt_data_tx_EN == 1)
-//	  			{
-//	  				HAL_TIM_Base_Stop_IT(&htim7);
-//	  				cpt_data_tx_EN = 0;
-//	  				get_heater_temp();
-//	  				get_pollution();
-//	  				get_ELN_temp();
-//	  				get_listening();
-//	  				get_temp_humi_SHT40();
-//	  				getElectricCurrentConsumptionTransmit();
-//	  				index_adc_current = 0 ;
-//	  				send_heater_temp();
-//	  				send_temp_humi();
-//	  				send_ELN_temp();
-//	  				send_humi();
-//	  				send_printer_state();
-//	  				send_temp();
-//	  				get_door_state();
-//	  				get_pression();
-//	  				send_pression();
-//	  				send_lights(light);
-//	  				send_buzzer_state();
-//	  				send_pollution();
-//	  				HAL_TIM_Base_Start_IT(&htim7);
-//	  			}
-
-	  //		  if(current_breakdown == 1) //Soft Limit for the system
-	  //		  {
-	  //			  set_shutdown_breakdown();
-	  //		  }
-	  //		  else
-	  //		  {
-	  			current_breakdown = 0;
-	  			if(CMD_Relay == 1) //Lors de la production série, il faudra changer cette ligne pour if(CMD_Relay == 0)
-	  			{
-	  				cycle(&state);
-	  				int activation_relay = 1 ;
-	  				set_shutdown_printer(&activation_relay);
-	  			}
-	  			else
-	  			{
-	  				int activation_relay = 0 ;
-	  				set_shutdown_printer(&activation_relay);
-	  				}
-	  //		  }
-	  		}
-	  		else
-	  		{
-	  			set_unlock(CLOSE_DOOR);
-	  			int shutdown_pwm = 0;
-				set_cooling(shutdown_pwm);
-				set_heater_pwm(shutdown_pwm); // Ventilateur chauffage 12V
-				set_heater(shutdown_pwm);
-
-				light = DARK;
-				set_lights(light);
-
-				HAL_TIM_Base_Stop(&htim7);
-	  		}
+		  if(CMD_Relay == 1) //Lors de la production série, il faudra changer cette ligne pour if(CMD_Relay == 0)
+		  {
+			  int activation_relay = 1 ;
+			  set_shutdown_printer(&activation_relay);
+		  }
+		  else
+		  {
+			  int activation_relay = 0 ;
+			  set_shutdown_printer(&activation_relay);
+		  }
+	}
 
     /* USER CODE END WHILE */
 
@@ -1166,7 +1092,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 //
 //	}
 
-	if(htim == &htim7)
+	if(htim == &htim7 && system_is_active == SYSTEM_ACTIVE)
 	{
 		if(i_timer % 1000 == 0) // Each 1002 ms -> 1s
 		{
@@ -1174,8 +1100,12 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
 			send_door_state();
 
-			get_pression();
-			send_pression();
+			c_Pressure = get_pression();
+			if((c_Pressure - p_Pressure) > DELTA_Pressure || (p_Pressure - c_Pressure) > DELTA_Pressure)
+			{
+				send_pression();
+			}
+			p_Pressure = c_Pressure;
 		}
 		if(i_timer % 10000 == 0) // Each 10002 ms -> 10s
 		{
@@ -1205,55 +1135,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			cpt_GetWeight++;
 			get_weight();
 			send_weight();
-		}
-		if(i_timer % 3000 == 0)
-		{
-			temperature = get_temp_humi_SHT40();
-			if(temperature < desired_temperature - 2*DELTA)
-			{
-				heater_actif = 1;
-				set_heater(heater_actif);
-
-				dutycycle_heater = 80;
-				set_heater_pwm(dutycycle_heater);
-
-				dutycycle_cooling = 0;
-				set_cooling(dutycycle_cooling);
-			}
-			else if(temperature < desired_temperature - DELTA)
-			{
-				heater_actif = 0;
-				set_heater(heater_actif);
-
-				dutycycle_heater = 50;
-				set_heater_pwm(dutycycle_heater);
-
-				dutycycle_cooling = 0;
-				set_cooling(dutycycle_cooling);
-			}
-			else if(temperature > desired_temperature + 2*DELTA)
-			{
-				heater_actif = 0;
-				set_heater(heater_actif);
-
-				dutycycle_heater = 0;
-				set_heater_pwm(dutycycle_heater);
-
-				dutycycle_cooling = 50;
-				set_cooling(dutycycle_cooling);
-			}
-			else
-			{
-				heater_actif = 0;
-				set_heater(heater_actif);
-
-				dutycycle_heater = 0;
-				set_heater_pwm(dutycycle_heater);
-
-				dutycycle_cooling = 0;
-				set_cooling(dutycycle_cooling);
-			}
-
 		}
 		if(i_timer % 5000 == 0)
 		{

@@ -60,6 +60,10 @@
  */
 #define CMD_GET_WEIGHT 0x0A
 
+
+void parser_cmd_on_off(uint8_t * rx_buff,UART_HandleTypeDef * uart);
+
+
 /** @fn void parser_cmd_door(uint8_t *rx_buff, UART_HandleTypeDef * uart)
  * @brief Parser function for the open/close door command message without forcing
  * @param rx_buff Pointer to the array tab containing the message received
