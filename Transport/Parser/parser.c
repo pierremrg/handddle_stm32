@@ -25,8 +25,14 @@ int check_msg_identifier(uint8_t * rx_buff){
 
 // Function used to check the UID in the messages. If not the same as the one defined for the STM32, the message is not for us.
 int check_msg_UID(uint8_t * rx_buff){
-	return rx_buff[POS_UID_1] == MSG_HEADER_UID_1 && rx_buff[POS_UID_2] == MSG_HEADER_UID_2
+	int is_receiver = rx_buff[POS_UID_1] == MSG_HEADER_UID_1 && rx_buff[POS_UID_2] == MSG_HEADER_UID_2
 			&& rx_buff[POS_UID_3] == MSG_HEADER_UID_3 && rx_buff[POS_UID_4] == MSG_HEADER_UID_4;
+
+	int is_broadcast = rx_buff[POS_UID_1] == MSG_HEADER_UID_1 && rx_buff[POS_UID_2] == MSG_HEADER_UID_BROADCAST
+			&& rx_buff[POS_UID_3] == MSG_HEADER_UID_BROADCAST && rx_buff[POS_UID_4] == MSG_HEADER_UID_BROADCAST;
+
+	return is_receiver || is_broadcast;
+
 }
 
 // The message has to be check because if it is not correct it might suggest that the code version are not the same between the STM32 and Jetson boards.

@@ -167,6 +167,9 @@ void Error_Handler(void);
 #define OPEN 0
 
 
+void update_last_watchdog_time();
+
+
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

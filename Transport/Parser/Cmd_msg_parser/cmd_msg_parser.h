@@ -60,6 +60,16 @@
  */
 #define CMD_GET_WEIGHT 0x0A
 
+/** @def CMD_UPDATE_WATCHDOG
+ *  @brief Command ID for the watchdog
+ */
+#define CMD_UPDATE_WATCHDOG 0x0B
+
+/** @def CMD_UPDATE_WATCHDOG
+ *  @brief Command ID to force reset
+ */
+#define CMD_FORCE_RESET 0x0C
+
 
 void parser_cmd_on_off(uint8_t * rx_buff,UART_HandleTypeDef * uart);
 
@@ -125,6 +135,11 @@ void parser_cmd_tare(uint8_t * rx_buff,UART_HandleTypeDef * uart);
 void parser_cmd_getWeight(uint8_t * rx_buff,UART_HandleTypeDef * uart);
 
 
+void parser_cmd_update_watchdog(uint8_t * rx_buff,UART_HandleTypeDef * uart);
+
+void parser_cmd_force_reset(uint8_t * rx_buff,UART_HandleTypeDef * uart);
+
+
 void parser_cmd(uint8_t * rx_buff, UART_HandleTypeDef * uart);
 
 /** @fn void build_ack_msg_cmd(uint8_t ack)
@@ -134,5 +149,7 @@ void parser_cmd(uint8_t * rx_buff, UART_HandleTypeDef * uart);
 void build_ack_msg_cmd(uint8_t ack);
 
 void send_cmd_ack(UART_HandleTypeDef * uart);
+
+void send_cmd_ack_with_value(UART_HandleTypeDef * uart, uint8_t value);
 
 void send_cmd_nok(UART_HandleTypeDef * uart);

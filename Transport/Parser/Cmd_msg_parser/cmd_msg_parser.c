@@ -58,6 +58,11 @@ void send_cmd_ack(UART_HandleTypeDef * uart){
 	HAL_UART_Transmit(uart, msg_ack_cmd, MSG_SIZE + 1, 200);
 }
 
+void send_cmd_ack_with_value(UART_HandleTypeDef * uart, uint8_t value){
+	build_ack_msg_cmd(value);
+	HAL_UART_Transmit(uart, msg_ack_cmd, MSG_SIZE + 1, 200);
+}
+
 void send_cmd_nok(UART_HandleTypeDef * uart){
 	build_ack_msg_cmd(0x00);
 	HAL_UART_Transmit(uart, msg_ack_cmd, MSG_SIZE + 1, 200);
@@ -75,7 +80,6 @@ void parser_cmd_on_off(uint8_t * rx_buff,UART_HandleTypeDef * uart){
 	{
 		system_is_active = rx_buff[POS_DATA];
 
-		int DOOR_CLOSED = 0;
 		set_unlock(CLOSED);
 
 		int shutdown_pwm = 0;
@@ -154,6 +158,14 @@ void parser_cmd_getWeight(uint8_t * rx_buff,UART_HandleTypeDef * uart){
 	getWeight = rx_buff[POS_DATA];
 }
 
+void parser_cmd_udpate_watchdog(uint8_t * rx_buff, UART_HandleTypeDef * uart){
+	update_last_watchdog_time();
+}
+
+void parser_cmd_force_reset(uint8_t * rx_buff, UART_HandleTypeDef * uart){
+	NVIC_SystemReset();
+}
+
 
 void parser_cmd(uint8_t * rx_buff, UART_HandleTypeDef * uart){
 	uint8_t cmd_type = rx_buff[POS_MSG_SUBTYPE]; // The first byte has already been checked. We want the second one with the cmd type
@@ -198,6 +210,12 @@ void parser_cmd(uint8_t * rx_buff, UART_HandleTypeDef * uart){
 		case CMD_GET_WEIGHT:
 			parser_cmd_getWeight(rx_buff, uart);
 			send_cmd_ack(uart);
+			break;
+		case CMD_UPDATE_WATCHDOG:
+			parser_cmd_udpate_watchdog(rx_buff, uart);
+			break;
+		case CMD_FORCE_RESET:
+			parser_cmd_force_reset(rx_buff, uart);
 			break;
 		default:
 			// Unknown command type -> Sending ACK NOK

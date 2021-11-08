@@ -181,6 +181,7 @@ extern int i_current;
 extern int Incorrect_Values;
 int i_timer = 0;
 int Cycle_Printer;
+int last_watchdog_time = 0;
 
 // Weight sensor
 int getWeight;
@@ -250,6 +251,7 @@ int main(void)
 
 	// Start UART reception
 	HAL_UART_Receive_IT(&huart2, Rx_buffer, MSG_SIZE);
+	send_cmd_ack_with_value(&huart2, 100);
 
 	// Init values to STOP
 	int pwm_stop = 0;
@@ -1138,6 +1140,13 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		}
 		if(i_timer % 5000 == 0)
 		{
+			if(last_watchdog_time > i_timer){ // Clock overflow
+				last_watchdog_time = 0;
+			}
+			if(i_timer - last_watchdog_time > 30*1000){ // Watchdog 30s
+				NVIC_SystemReset();
+			}
+
 			send_pollution_pm1_0();
 			send_pollution_pm2_5();
 			send_pollution_pm10();
@@ -1145,6 +1154,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
 		i_timer+=1;
 	}
+}
+
+void update_last_watchdog_time(){
+	last_watchdog_time = i_timer;
 }
 
 /**

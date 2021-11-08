@@ -14,8 +14,10 @@
 
 #define UID_START 0xC0
 
-// 0x[TYPE][00][POS_X][POS_Y]
-#define MSG_HEADER_UID_1 0xC0             // Ne pas toucher
-#define MSG_HEADER_UID_2 0x10   // A configurer
-#define MSG_HEADER_UID_3 0x21                  // position x, y     toit du 2e module -> 2 - 1    et rack 2 - 2
+#define MSG_HEADER_UID_BROADCAST 0xFF
+
+// 0x[START][MONTH][YEAR][ID (01/02/03/etc.)]
+#define MSG_HEADER_UID_1 UID_START
+#define MSG_HEADER_UID_2 0x00
+#define MSG_HEADER_UID_3 0x00
 #define MSG_HEADER_UID_4 0x01
