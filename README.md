@@ -83,33 +83,37 @@ For internal messages, only the ACK message is defined for the moment.
 
 ### Command messages 
 
-| Command message ID | 00           | 01           | 02               | 03          | 04                                                                                                                 | 05                                                                                                                | 06             |
-|--------------------|--------------|--------------|------------------|-------------|--------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------|----------------|
-| Command type | Ack          | ON/OFF       | Door Open  | Temperature | Led color                                                                                                          | Printing State                                                                                                    | Air extraction |
-| Value              | OK: 1 / NOK: 0 | ON: 1 / OFF: 0 | Open: 01 | 0 - 100°C   | Strong White: 0 / Medium White: 1 / Red: 2 / Green: 3 / Steady orange: 4 / Handddle blue: 5 / Blinky Orange: 6 / Low white: others | Door open: 0 / Post treatment: 1 / Print in progress: 2 / Free: 3 / Default: 4 / Material: 5 / Default: 6 / Other: other | 0 - 100%       |
+| Command message ID | 00           | 01           | 02               | 03                | 04          | 05                                                                                                                           | 06             | 07             | 08            |
+|--------------------|--------------|--------------|------------------|-------------------|-------------|------------------------------------------------------------------------------------------------------------------------------|----------------|----------------|---------------|
+| Command type       | Ack          | ON/OFF       | Door Open        | Relay             | Temperature | Led color                                                                                                                    | Air extraction | Tare           | Get weight    |
+| Value              | OK: 1 NOK: 0 | ON: 1 OFF: 0 | Open: 01         | Off: 01   ON: 00  | 0 - 100°C   | Dark: 0,   Medium White: 1,   Red: 2,   Green: 3, Steady orange: 4, Handdle blue: 5, Blinky Orange: 6, Strong White: 7       | 0 - 100%       | 01             | 01
+
 
 ### Main messages
 
-| Main message ID | 01          | 02       | 03                   | 04         | 05                 | 06         | 07        | 08    | 09        | 10             |
-|-----------------|-------------|----------|----------------------|------------|--------------------|------------|-----------|-------|-----------|----------------|
-|                 | Temperature | Humidity | Temperature/Humidity | Current EE |  Current Printer   |Door state  | Pollution | Sound | Led color | Printing_State |
+| Main message ID    | 01          | 02       | 03                   | 04         | 05                 | 06         | 07        | 08    | 09        | 10     | 11     | 12     | 13     |
+|--------------------|-------------|----------|----------------------|------------|--------------------|------------|-----------|-------|-----------|--------|--------|--------|--------|
+| Main message type  | Temperature | Humidity | Latch state          | Current EE |  Current Printer   |Door state  | Pollution | Sound | Led color | Weight | Pm1    | Pm2.5  | Pm10   |
 
-### Secondary messages
-| Secondary message ID | 01            | 02            | 03               | 04                           | 05       | 06          | 07           |
-|--------------------|---------------|---------------|------------------|------------------------------|----------|-------------|--------------|
-| Main message type | Tachy Extract | Tachy Heating | Rack Temperature | Heating Resistor Temperature | Pressure | Relay state | Buzzer State |
 
-### Error messages
+### Secondary Messages
+| Secondary message ID     | 01            | 02            | 03               | 04                           | 05       | 06          | 07           |
+|--------------------------|---------------|---------------|------------------|------------------------------|----------|-------------|--------------|
+| Secondary message type   | Tachy Extract | Tachy Heating | Rack Temperature | Heating Resistor Temperature | Pressure | Relay state | Buzzer State |
 
-| Error message ID | 01            | 02     | 03                      | 04                   | 05             | 06           |
+
+### Error Messages
+
+| Error message ID   | 01            | 02     | 03                      | 04                   | 05             | 06           |
 |--------------------|---------------|--------|-------------------------|----------------------|----------------|--------------|
 | Error message type | Tachy Extract | Heater | Environment Temperature | Environment Humidity | Heater Warning | Rack Warning |
 
-### Information messages
 
-| Inforamtion message ID | 01             | 02                    | 03                  | 04           |
-|------------------------|----------------|-----------------------|---------------------|--------------|
-| Information message type | Day/Night Mode | Manual/Automatic Mode | Pollution Threshold | Preheat Over |
+## Information Messages
+
+| Information message ID     | 00             | 01                    | 02                |
+|----------------------------|----------------|-----------------------|-------------------|
+| Information message type   | Acknowledge    | Pollution Threshold   | Info Door State   |
 
 **Attention !** For the pollution threshold information message, there is a special treatment of the data.
 - If you want to set every threshold, just use the message as usual, and set the three fields at the value desired ;
@@ -120,31 +124,35 @@ For internal messages, only the ACK message is defined for the moment.
 _".." cases stand for the values of the message._
 
 ### Commands
-|      Commands       | Identifier | Length | UID      | Msg Type | Cmd Type | Length |      | Padding       |
-|---------------------|------------|--------|----------|----------|----------|--------|------|---------------|
-| Cmd ACK             | 0101 | 0010   | C0C0C0C0 | 01       | 00       | 0001   | .. | (7 bytes)  |
-| Cmd ON/OFF          | 0101 | 0010   | C0C0C0C0 | 01       | 01       | 0001   | .. | (7 bytes)  |
-| Cmd Door Open/Close | 0101 | 0010   | C0C0C0C0 | 01       | 02       | 0001   | .. | (7 bytes)  |
-| Forcing door | 0101 | 0010   | C0C0C0C0 | 01       | 03       | 0001   | .. | (7 bytes)  |
-| Cmd Temperature     | 0101 | 0010   | C0C0C0C0 | 01       | 04       | 0001   | .. | (7 bytes) |
-| Cmd Led color       | 0101 | 0010   | C0C0C0C0 | 01       | 05       | 0001   | .. | (7 bytes) |
-| Cmd Printing State  | 0101 | 0010   | C0C0C0C0 | 01       | 06       | 0001   | .. | (7 bytes)  |
-| Cmd Air Extraction  | 0101 | 0010   | C0C0C0C0 | 01       | 07       | 0001   | .. | (7 bytes) |
-| Cmd Relay  | 0101 | 0010   | C0C0C0C0 | 01       | 08       | 0001   | .. | (7 bytes) |
+|      Commands       | Identifier | Length | UID      | Msg Type | Cmd Type | Length |      | Padding    |
+|---------------------|------------|--------|----------|----------|----------|--------|------|------------|
+| Cmd Ack             | 0101       | 0010   | C0C0C0C0 | 01       | 00       | 0001   | ..   | (7 bytes)  |
+| Cmd ON/OFF          | 0101       | 0010   | C0C0C0C0 | 01       | 01       | 0001   | ..   | (7 bytes)  |
+| Cmd Door Open/Close | 0101       | 0010   | C0C0C0C0 | 01       | 02       | 0001   | ..   | (7 bytes)  |
+| Cmd Relay			  | 0101       | 0010   | C0C0C0C0 | 01       | 03       | 0001   | ..   | (7 bytes)  |
+| Cmd Temperature     | 0101       | 0010   | C0C0C0C0 | 01       | 04       | 0001   | ..   | (7 bytes)  |
+| Cmd Led color       | 0101       | 0010   | C0C0C0C0 | 01       | 05       | 0001   | ..   | (7 bytes)  |
+| Cmd Air Extraction  | 0101       | 0010   | C0C0C0C0 | 01       | 06       | 0001   | ..   | (7 bytes)  |
+| Cmd Tare            | 0101       | 0010   | C0C0C0C0 | 01       | 07		 | 0001   | ..   | (7 bytes)  |
+| Cmd Get Weight      | 0101       | 0010   | C0C0C0C0 | 01       | 08       | 0001   | ..   | (7 bytes)  |
+
 
 ### Main Messages
 | Main Messages       |  Identifier   | Length | UID      | Msg Type | Main Msg Type | Length |    | Padding     |
 |---------------------|---------------|----------|----------|---------------|--------|--------|----|-------------|
 | Temperature         | 0101 | 0010   | C0C0C0C0 | 02       | 01            | 0002   | .. .. | (6 bytes)        |
 | Humidity            | 0101 | 0010   | C0C0C0C0 | 02       | 02            | 0002   | .. .. | (6 bytes)       |
-| Temperature Humidiy | 0101 | 0010   | C0C0C0C0 | 02       | 03            | 0004   | .. .. .. .. | (4 bytes)        |
+| Latch State         | 0101 | 0010   | C0C0C0C0 | 02       | 03            | 0001   | .. | (7 bytes)        |
 | Current EE          | 0101 | 0010   | C0C0C0C0 | 02       | 04            | 0002   | .. .. | (6 bytes)        |
 | Current Printer     | 0101 | 0010   | C0C0C0C0 | 02       | 05            | 0002   | .. .. | (6 bytes)       |
 | State door          | 0101 | 0010   | C0C0C0C0 | 02       | 06            | 0001   | .. | (7 bytes)       |
-| Pollution           | 0101 | 0010   | C0C0C0C0 | 02       | 07            | 0006   | .. .. .. .. .. .. | (2 bytes) |
+| Pollution           | 0101 | 0010   | C0C0C0C0 | 02       | 07            | 0001   | .. | (7 bytes) |
 | Sound               | 0101 | 0010   | C0C0C0C0 | 02       | 08            | 0002   | .. .. | (6 bytes)        |
 | Led Color           | 0101 | 0010   | C0C0C0C0 | 02       | 09            | 0002   | .. .. | (6 bytes)        |
-| Printing State      | 0101 | 0010   | C0C0C0C0 | 02       | 0A            | 0002   | .. .. | (6 bytes)        |
+| Weight		      | 0101 | 0010   | C0C0C0C0 | 02       | 0A            | 0002   | .. .. | (6 bytes)        |
+| Pm1		 	      | 0101 | 0010   | C0C0C0C0 | 02       | 0B            | 0002   | .. .. | (6 bytes)        |
+| Pm2.5		      	  | 0101 | 0010   | C0C0C0C0 | 02       | 0C            | 0002   | .. .. | (6 bytes)        |
+| Pm10		    	  | 0101 | 0010   | C0C0C0C0 | 02       | 0D            | 0002   | .. .. | (6 bytes)        |
 
 #### Important information for the Jetson Nano script
 
@@ -180,8 +188,5 @@ In order to facilitate the management of error messages by the Jetson script and
 | Information Messages | Identifier | Length | UID      | Msg Type | Information Type | Length |  | Padding    |
 |----------------------|------------|--------|----------|----------|------------------|--------|--|------------|
 | Ack                  | 0101 | 0010   | C0C0C0C0 | 05       | 00               | 0001   | .. | (7 bytes)      |
-| Day/Night            | 0101 | 0010   | C0C0C0C0 | 05       | 01               | 0001   | .. | (7 bytes)        |
-| Temperature manual mode | 0101 | 0010   | C0C0C0C0 | 05       | 02               | 0001   | .. | (7 bytes)      |
-| Filtration manual mode | 0101 | 0010   | C0C0C0C0 | 05       | 03               | 0001   | .. | (7 bytes)      |
-| Pollution threshold  | 0101 | 0010   | C0C0C0C0 | 05       | 04               | 0006   | .. | (7 bytes)      |  
-| Door state         | 0101 | 0010   | C0C0C0C0 | 05       | 05 | 0001   | .. | (7 bytes)     |
+| Pollution threshold  | 0101 | 0010   | C0C0C0C0 | 05       | 01               | 0006   | .. | (7 bytes)      |  
+| Door state         | 0101 | 0010   | C0C0C0C0 | 05       | 02 | 0001   | .. | (7 bytes)     |

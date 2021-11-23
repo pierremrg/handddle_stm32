@@ -3,12 +3,17 @@
 #include "../../Lib/inc/Cooling.h"
 #include "../../Lib/inc/ELN_temperature.h"
 #include "../../Lib/inc/Microphone.h"
+#include "../../Lib/inc/Weight.h"
 
 
 void process_test()
 {
 
-	ADC_Select_CH5();
+	get_weight();
+	HAL_Delay(1000);
+	send_weight();
+
+//	ADC_Select_CH5();
 
 	  /* SENSOR TEST */
 //	get_heater_temp();

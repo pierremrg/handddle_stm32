@@ -12,4 +12,6 @@ void set_buzzer();
   */
 void send_buzzer_state();
 
+void stop_buzzer();
+
 #endif /* BUZZER_BUZZER_H_ */

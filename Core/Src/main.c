@@ -154,6 +154,7 @@ uint16_t state_buzzer = 0; // TODO Define buzzer states
 
 // Light Variable
 int light;
+int p_light;
 
 // Temperatures & Humidity variables
 int desired_temperature = 22;
@@ -260,7 +261,9 @@ int main(void)
 	set_cooling(pwm_stop);
 
 	//White color as default
-	set_lights(WHITE_DOOR_OPEN);
+	light = WHITE_DOOR_OPEN;
+	p_light = light;
+	set_lights(light);
 
 	// DOOR lock
 	set_unlock(status);
@@ -281,6 +284,7 @@ int main(void)
   {
 	  if(system_is_active == SYSTEM_ACTIVE)
 	  {
+
 		  get_pollution();
 
 		  door_cycle();
@@ -295,6 +299,9 @@ int main(void)
 			  int activation_relay = 0 ;
 			  set_shutdown_printer(&activation_relay);
 		  }
+
+		  // Asservissement chauffage
+		  asservissement();
 	}
 
     /* USER CODE END WHILE */
@@ -1102,12 +1109,23 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
 			send_door_state();
 
+			// (condition) ? {code for YES} : {code for NO}
+			if(p_light != light){
+				send_lights(light);
+				p_light = light;
+			}
+
+			// if pressure changes, send
 			c_Pressure = get_pression();
 			if((c_Pressure - p_Pressure) > DELTA_Pressure || (p_Pressure - c_Pressure) > DELTA_Pressure)
 			{
 				send_pression();
 			}
+
+			// Update datas
 			p_Pressure = c_Pressure;
+
+
 		}
 		if(i_timer % 10000 == 0) // Each 10002 ms -> 10s
 		{

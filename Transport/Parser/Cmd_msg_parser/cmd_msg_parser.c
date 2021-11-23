@@ -30,8 +30,12 @@ extern int manual_mode_temperature;
 extern int CMD_Relay;
 extern int tare;
 extern int getWeight;
+int T0_Ambiant = 20;
+
+extern int heater_active;
 
 int relay=0;
+int light;
 
 
 // Message ACK header
@@ -73,7 +77,7 @@ void parser_cmd_on_off(uint8_t * rx_buff,UART_HandleTypeDef * uart){
 	{
 		system_is_active = rx_buff[POS_DATA];
 
-		int light = WHITE_DOOR_OPEN;
+		light = WHITE_DOOR_OPEN;
 		set_lights(light);
 	}
 	else if(rx_buff[POS_DATA] == 0)
@@ -88,7 +92,7 @@ void parser_cmd_on_off(uint8_t * rx_buff,UART_HandleTypeDef * uart){
 		set_heater_pwm(shutdown_pwm); // Ventilateur chauffage 12V
 		set_heater(shutdown_pwm);
 
-		int light = DARK;
+		light = DARK;
 		set_lights(light);
 	}
 
@@ -110,18 +114,20 @@ void parser_cmd_forcing_door(uint8_t *rx_buff, UART_HandleTypeDef * uart){
 
 void parser_cmd_temp(uint8_t *rx_buff,UART_HandleTypeDef * uart){
 
-	set_heater_pwm(rx_buff[POS_DATA]);
-
-//	if(rx_buff[POS_DATA] > TEMP_AMBIANTE && rx_buff[POS_DATA] < TEMP_MAX)
-//	{
-//		// On va agir sur les interruptions
-//		desired_temperature = rx_buff[POS_DATA];
-//	}
+	if (rx_buff[POS_DATA] < T0_Ambiant || rx_buff[POS_DATA] > TEMP_MAX) // Arret du chauffage
+		{
+			heater_active = 0;
+		} else // Activation du chauffage
+		{
+			desired_temperature = rx_buff[POS_DATA];
+			heater_active = 1;
+		}
 
 }
 
 void parser_cmd_led_color(uint8_t *rx_buff,UART_HandleTypeDef * uart){
-	set_lights(rx_buff[POS_DATA]);
+	light = rx_buff[POS_DATA];
+	set_lights(light);
 
 	// Calling the function that will use the payload for the door command
 	//led_color_cmd_received(led_color);

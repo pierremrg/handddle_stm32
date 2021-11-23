@@ -107,7 +107,7 @@ void hx711_tare(hx711_t *hx711, uint16_t sample)
   for(uint16_t i=0 ; i<sample ; i++)
   {
     ave += hx711_value(hx711);
-    hx711_delay(5);
+    hx711_delay(2);
   }
   hx711->offset = (int32_t)(ave / sample);
   hx711_unlock(hx711);

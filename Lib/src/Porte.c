@@ -82,7 +82,7 @@ void door_cycle()
 	int DOOR = get_door_state();
 
 	// CYCLE
-	if (LATCH == NOT_PRESENT || DOOR == OPEN) 		// If door is open
+	if (LATCH == NOT_PRESENT && DOOR == OPEN) 		// If door is open
 		set_unlock(CLOSED); 	//Lock
 }
 

@@ -25,6 +25,11 @@ void ADC_Select_CH9();
 void get_tachy();
 
 /**
+  * @brief  This function is used to reach the temperature requested by the user.
+  */
+void asservissement();
+
+/**
   * @brief  This function is used to translate the ADC value collected from the Channel 19 into a Temperature.
   * @note	This Channel is linked to PB1. Those lines below are linked to the HW configuration (CTN choice)
   */
