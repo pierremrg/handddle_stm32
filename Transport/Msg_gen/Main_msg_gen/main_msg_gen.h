@@ -65,20 +65,45 @@
  */
 #define MAIN_MSG_WEIGHT 0x0C
 
-/** @def MAIN_MSG_WEIGHT
- *  @brief Main message ID for the weight
+/** @def MAIN_MSG_PM1_0
+ *  @brief Main message ID for the pollution rate
  */
 #define MAIN_MSG_PM1_0 0x0D
 
-/** @def MAIN_MSG_WEIGHT
- *  @brief Main message ID for the weight
+/** @def MAIN_MSG_PM2_5
+ *  @brief Main message ID for the pollution rate
  */
 #define MAIN_MSG_PM2_5 0x0E
 
-/** @def MAIN_MSG_WEIGHT
- *  @brief Main message ID for the weight
+/** @def MAIN_MSG_PM10
+ *  @brief Main message ID for the pollution rate
  */
 #define MAIN_MSG_PM10 0x0F
+
+/** @def MAIN_MSG_INCENDIE_CO2
+ *  @brief Main message ID for the weight
+ */
+#define MAIN_MSG_INCENDIE_CO2 0x10
+
+/** @def MAIN_MSG_INCENDIE_TVOC
+ *  @brief Main message ID for the weight
+ */
+#define MAIN_MSG_INCENDIE_TVOC 0x11
+
+/** @def MAIN_MSG_TVOC_WARNING
+ *  @brief Main message ID for the weight
+ */
+#define MAIN_MSG_TVOC_WARNING 0x12
+
+/** @def MAIN_MSG_CO2_WARNING
+ *  @brief Main message ID for the weight
+ */
+#define MAIN_MSG_CO2_WARNING 0x13
+
+/** @def MAIN_MSG_TYPOLOGY
+ *  @brief Main message ID for the weight
+ */
+#define MAIN_MSG_TYPOLOGY 0x14
 
 
 
@@ -175,6 +200,24 @@ HAL_StatusTypeDef send_main_msg_pm2_5(uint16_t pm2_5,UART_HandleTypeDef * uart )
 HAL_StatusTypeDef send_main_msg_pm10(uint16_t pm10,UART_HandleTypeDef * uart );
 
 
+/** @fn send_main_msg_incendie_co2(uint16_t co2,UART_HandleTypeDef * uart )
+ * @brief Function used to send the co2 rate
+ * @param co2 value to be sent
+ * @param uart Uart structure used to the communication with the Jetson Nano. If the cable used is the ST-Link, huart2
+ * @return -1 if something went wrong; 0 if every went well
+ */
+HAL_StatusTypeDef send_main_msg_incendie_co2(uint16_t co2,UART_HandleTypeDef * uart );
+
+
+/** @fn send_main_msg_incendie_tvoc(uint16_t tvoc,UART_HandleTypeDef * uart )
+ * @brief Function used to send the tvoc rate
+ * @param tvoc value to be sent
+ * @param uart Uart structure used to the communication with the Jetson Nano. If the cable used is the ST-Link, huart2
+ * @return -1 if something went wrong; 0 if every went well
+ */
+HAL_StatusTypeDef send_main_msg_incendie_tvoc(uint16_t tvoc,UART_HandleTypeDef * uart );
+
+
 /** @fn int send_main_msg_sound(uint16_t sound,UART_HandleTypeDef * uart )
  * @brief Function used to send the Sound message
  * @param sound Sound value to sent
@@ -191,6 +234,20 @@ HAL_StatusTypeDef send_main_msg_sound(uint16_t sound,UART_HandleTypeDef * uart )
  */
 HAL_StatusTypeDef send_main_msg_led_color(uint16_t led_color,UART_HandleTypeDef * uart );
 
+/** @fn int send_main_msg_co2_warning(uint8_t co2_warning,UART_HandleTypeDef * uart )
+ * @brief Function used to send the co2_warning state message
+ * @param uart Uart structure used to the communication with the Jetson Nano. If the cable used is the ST-Link, huart2
+ * @return -1 if something went wrong; 0 if every went well
+ */
+HAL_StatusTypeDef send_main_msg_co2_warning(uint8_t co2_warning,UART_HandleTypeDef * uart );
+
+/** @fn int send_main_msg_tvoc_warning(uint8_t tvoc_warning,UART_HandleTypeDef * uart )
+ * @brief Function used to send the tvoc_warning state message
+ * @param uart Uart structure used to the communication with the Jetson Nano. If the cable used is the ST-Link, huart2
+ * @return -1 if something went wrong; 0 if every went well
+ */
+HAL_StatusTypeDef send_main_msg_tvoc_warning(uint8_t tvoc_warning,UART_HandleTypeDef * uart );
+
 /** @fn int send_main_msg_printing_state(uint8_t printig_state,uint8_t status,UART_HandleTypeDef * uart )
  * @brief Function used to send the Printing state message
  * @param printig_state Printing state value to sent
@@ -199,3 +256,11 @@ HAL_StatusTypeDef send_main_msg_led_color(uint16_t led_color,UART_HandleTypeDef 
  * @return -1 if something went wrong; 0 if every went well
  */
 HAL_StatusTypeDef send_main_msg_printing_state(uint8_t printig_state,uint8_t status,UART_HandleTypeDef * uart );
+
+/** @fn int send_main_msg_typology(uint8_t typo, uint8_t status,UART_HandleTypeDef * uart )
+ * @brief Function used to send the stm32 typology
+ * @param typo is value to sent
+ * @param uart Uart strcture used to the communication with the Jetson Nano. If the cable used is the ST-Link, huart2
+ * @return -1 if something went wrong; 0 if every went well
+ */
+HAL_StatusTypeDef send_main_msg_typology(uint8_t typo, UART_HandleTypeDef * uart );

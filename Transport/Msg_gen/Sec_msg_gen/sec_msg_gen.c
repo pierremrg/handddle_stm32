@@ -10,7 +10,7 @@
 HAL_StatusTypeDef send_sec_msg_tachy_extract(uint16_t tachy_extract,UART_HandleTypeDef * uart ){
 	uint8_t Tx_msg_tachy_extract[MSG_SIZE + 1] = {
 		MSG_HEADER_IDENTIFIER_1, MSG_HEADER_IDENTIFIER_2, MSG_HEADER_SIZE_1, MSG_HEADER_SIZE_2, // Global information
-		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4, // UID of the STM32
+		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4,  // UID of the STM32
 		MSG_TYPE_SECONDARY, // Message type
 		SEC_MSG_TACHY_EXTRACT, // Sub message type
 		0x00, 0x02 // Length
@@ -30,7 +30,7 @@ HAL_StatusTypeDef send_sec_msg_tachy_extract(uint16_t tachy_extract,UART_HandleT
 HAL_StatusTypeDef send_sec_msg_tachy_heating(uint16_t tachy_heating,UART_HandleTypeDef * uart ){
 	uint8_t Tx_msg_tachy_heating[MSG_SIZE + 1] = {
 		MSG_HEADER_IDENTIFIER_1, MSG_HEADER_IDENTIFIER_2, MSG_HEADER_SIZE_1, MSG_HEADER_SIZE_2, // Global information
-		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4, // UID of the STM32
+		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4,  // UID of the STM32
 		MSG_TYPE_SECONDARY, // Message type
 		SEC_MSG_TACHY_HEATING, // Sub message type
 		0x00, 0x02 // Length
@@ -49,7 +49,7 @@ HAL_StatusTypeDef send_sec_msg_tachy_heating(uint16_t tachy_heating,UART_HandleT
 HAL_StatusTypeDef send_sec_msg_temp_rack(uint16_t temp_rack,UART_HandleTypeDef * uart ){
 	uint8_t Tx_msg_temp_rack[MSG_SIZE + 1] = {
 		MSG_HEADER_IDENTIFIER_1, MSG_HEADER_IDENTIFIER_2, MSG_HEADER_SIZE_1, MSG_HEADER_SIZE_2, // Global information
-		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4, // UID of the STM32
+		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4,  // UID of the STM32
 		MSG_TYPE_SECONDARY, // Message type
 		SEC_MSG_TEMP_RACK, // Sub message type
 		0x00, 0x02 // Length
@@ -69,7 +69,7 @@ HAL_StatusTypeDef send_sec_msg_temp_rack(uint16_t temp_rack,UART_HandleTypeDef *
 HAL_StatusTypeDef send_sec_msg_temp_heating_resistor(uint16_t temp_heating_resistor,UART_HandleTypeDef * uart ){
 	uint8_t Tx_msg_temp_heating_resistor[MSG_SIZE + 1] = {
 		MSG_HEADER_IDENTIFIER_1, MSG_HEADER_IDENTIFIER_2, MSG_HEADER_SIZE_1, MSG_HEADER_SIZE_2, // Global information
-		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4, // UID of the STM32
+		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4,  // UID of the STM32
 		MSG_TYPE_SECONDARY, // Message type
 		SEC_MSG_TEMP_HEATING_RESISTOR, // Sub message type
 		0x00, 0x02 // Length
@@ -88,7 +88,7 @@ HAL_StatusTypeDef send_sec_msg_temp_heating_resistor(uint16_t temp_heating_resis
 HAL_StatusTypeDef send_sec_msg_pressure(int pressure,UART_HandleTypeDef * uart ){
 	uint8_t Tx_msg_pressure[MSG_SIZE + 1] = {
 		MSG_HEADER_IDENTIFIER_1, MSG_HEADER_IDENTIFIER_2, MSG_HEADER_SIZE_1, MSG_HEADER_SIZE_2, // Global information
-		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4, // UID of the STM32
+		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4,  // UID of the STM32
 		MSG_TYPE_SECONDARY, // Message type
 		SEC_MSG_PRESSURE, // Sub message type
 		0x00, 0x02 // Length
@@ -108,7 +108,7 @@ HAL_StatusTypeDef send_sec_msg_pressure(int pressure,UART_HandleTypeDef * uart )
 HAL_StatusTypeDef send_sec_msg_relay_state(uint16_t relay_state,UART_HandleTypeDef * uart ){
 	uint8_t Tx_msg_relay_state[MSG_SIZE + 1] = {
 		MSG_HEADER_IDENTIFIER_1, MSG_HEADER_IDENTIFIER_2, MSG_HEADER_SIZE_1, MSG_HEADER_SIZE_2, // Global information
-		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4, // UID of the STM32
+		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4,  // UID of the STM32
 		MSG_TYPE_SECONDARY, // Message type
 		SEC_MSG_RELAY_STATE, // Sub message type
 		0x00, 0x02 // Length
@@ -127,7 +127,7 @@ HAL_StatusTypeDef send_sec_msg_relay_state(uint16_t relay_state,UART_HandleTypeD
 HAL_StatusTypeDef send_sec_msg_buzzer_state(uint16_t buzzer_state,UART_HandleTypeDef * uart ){
 	uint8_t Tx_msg_buzzer_state[MSG_SIZE + 1] = {
 		MSG_HEADER_IDENTIFIER_1, MSG_HEADER_IDENTIFIER_2, MSG_HEADER_SIZE_1, MSG_HEADER_SIZE_2, // Global information
-		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4, // UID of the STM32
+		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4,  // UID of the STM32
 		MSG_TYPE_SECONDARY, // Message type
 		SEC_MSG_BUZZER_STATE, // Sub message type
 		0x00, 0x02 // Length

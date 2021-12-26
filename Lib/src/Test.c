@@ -4,14 +4,13 @@
 #include "../../Lib/inc/ELN_temperature.h"
 #include "../../Lib/inc/Microphone.h"
 #include "../../Lib/inc/Weight.h"
+#include "../../Lib/inc/Fire.h"
 
 
 void process_test()
 {
 
-	get_weight();
-	HAL_Delay(1000);
-	send_weight();
+	get_pollution();
 
 //	ADC_Select_CH5();
 

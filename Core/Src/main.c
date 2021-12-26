@@ -28,8 +28,11 @@
 #include "../../Lib/inc/Microphone.h"
 #include "../../Lib/inc/Demo.h"
 #include "../../Lib/inc/Current.h"
+#include "../../Lib/inc/Fire.h"
 #include "../../Lib/inc/Temp_humi.h"
+#include "../../Lib/inc/Typology.h"
 #include "../../Transport/Msg_gen/Main_msg_gen/main_msg_gen.h"
+#include "../../Transport/Parser/Cmd_msg_parser/cmd_msg_parser.h"
 #include <string.h>
 
 #include "../../Lib/inc/Weight.h"
@@ -50,6 +53,11 @@
 // For CMD Door
 #define CLOSE_DOOR 0
 
+//BUZZER IN SECOND
+#define MAX_OPENING_TIME_M 60
+#define MAX_OPENING_TIME_PT 300
+
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -65,6 +73,7 @@ DMA_HandleTypeDef hdma_adc2;
 I2C_HandleTypeDef hi2c2;
 I2C_HandleTypeDef hi2c3;
 
+TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim3;
 TIM_HandleTypeDef htim4;
@@ -97,6 +106,7 @@ static void MX_ADC2_Init(void);
 static void MX_TIM8_Init(void);
 static void MX_TIM7_Init(void);
 static void MX_TIM10_Init(void);
+static void MX_TIM1_Init(void);
 /* USER CODE BEGIN PFP */
 void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 /* USER CODE END PFP */
@@ -148,12 +158,23 @@ int CMD_Relay = false;
 uint16_t relay_state = true;
 
 // Buzzer linked Variable
-int buzzer_wait = 0;
-int cpt_buzzer_counter = 0;
-uint16_t state_buzzer = 0; // TODO Define buzzer states
+int buzzer_state = 1; // TODO Define buzzer states
+int compteur_buzzer = 0, compteur_porte = 0;
+int CPT_CoolingDoorClosed = COOLING_T_DOOR_CLOSED; // En secondes
+int fermeture_porte=0;
+int i_timer1 = 0;
+
+const int LOW_STATE_TIME = 3;
+const int HIGH_STATE_TIME = 2;
+
+const int HIGH_STATE_TIME_BUZZER_M = MAX_OPENING_TIME_M + HIGH_STATE_TIME;
+const int LOW_STATE_TIME_BUZZER_M = MAX_OPENING_TIME_M - LOW_STATE_TIME;
+
+const int HIGH_STATE_TIME_BUZZER_PT = MAX_OPENING_TIME_PT + HIGH_STATE_TIME;
+const int LOW_STATE_TIME_BUZZER_PT = MAX_OPENING_TIME_PT - LOW_STATE_TIME;
 
 // Light Variable
-int light;
+extern int light;
 int p_light;
 
 // Temperatures & Humidity variables
@@ -170,9 +191,6 @@ uint16_t pm10_th_limit = 1000;
 uint16_t pm25_th_limit = 1000;
 uint16_t pm100_th_limit = 1000;
 
-// Extraction variable
-int dutycycle_cooling_manual = false;
-
 // Current variables
 int current_breakdown = 0;
 
@@ -180,9 +198,14 @@ int current_breakdown = 0;
 extern int tab_ConsumptionValues[1000];
 extern int i_current;
 extern int Incorrect_Values;
-int i_timer = 0;
+int i_timer7 = 0;
+extern int i_timer5;
 int Cycle_Printer;
 int last_watchdog_time = 0;
+float tabEXEMPLE[1500];
+float tabEXEMPLE2[1500];
+float MAX; //extern
+float MIN; // extern
 
 // Weight sensor
 int getWeight;
@@ -194,11 +217,16 @@ int DOOR_Previous_State;
 // HEATING & COOLING
 int temperature;
 int DELTA = 1.0;
-extern int heater_actif, dutycycle_heater, dutycycle_cooling;
+extern int heater_actif, dutycycle_heater;
+int dutycycle_cooling = 0;
 
 // Pressure
 int c_Pressure = 0, p_Pressure = 0, DELTA_Pressure = 50;
 
+//Fire variable
+uint16_t co2;
+uint16_t tvoc;
+int Fire;
 
 /* USER CODE END 0 */
 
@@ -244,6 +272,7 @@ int main(void)
   MX_TIM8_Init();
   MX_TIM7_Init();
   MX_TIM10_Init();
+  MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
 
 
@@ -261,7 +290,8 @@ int main(void)
 	set_cooling(pwm_stop);
 
 	//White color as default
-	light = WHITE_DOOR_OPEN;
+	if(MSG_HEADER_UID_1 == TYPE_MACHINE) light = WHITE_DOOR_OPEN;
+	else if(MSG_HEADER_UID_1 == TYPE_POST_TREATMENT) light = WHITE_PT;
 	p_light = light;
 	set_lights(light);
 
@@ -273,7 +303,19 @@ int main(void)
 	Calibration();
 	cpt_GetWeight=0;
 
+	//Initialize SGP30
+	if(-1 == sgp30_init()) {
+		//fail
+		//wait
+		while(1);
+	} //else success of init
 
+	//Current
+	MAX = tabEXEMPLE[0]; //extern
+	MIN = tabEXEMPLE[0]; // extern
+
+	HAL_GPIO_WritePin(POLLUTION_RST_GPIO_Port, POLLUTION_RST_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(POLLUTION_SLEEPMODE_GPIO_Port, POLLUTION_SLEEPMODE_Pin, GPIO_PIN_SET);
 
 
   /* USER CODE END 2 */
@@ -282,12 +324,11 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  if(system_is_active == SYSTEM_ACTIVE)
+	  if(system_is_active == SYSTEM_ACTIVE && MSG_HEADER_UID_1 != TYPE_MP)
 	  {
-
-		  get_pollution();
-
 		  door_cycle();
+		  asservissement(desired_temperature);// Asservissement chauffage
+		  HAL_Delay(50);
 
 		  if(CMD_Relay == 1) //Lors de la production série, il faudra changer cette ligne pour if(CMD_Relay == 0)
 		  {
@@ -299,9 +340,6 @@ int main(void)
 			  int activation_relay = 0 ;
 			  set_shutdown_printer(&activation_relay);
 		  }
-
-		  // Asservissement chauffage
-		  asservissement();
 	}
 
     /* USER CODE END WHILE */
@@ -572,6 +610,52 @@ static void MX_I2C3_Init(void)
 }
 
 /**
+  * @brief TIM1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM1_Init(void)
+{
+
+  /* USER CODE BEGIN TIM1_Init 0 */
+
+  /* USER CODE END TIM1_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM1_Init 1 */
+
+  /* USER CODE END TIM1_Init 1 */
+  htim1.Instance = TIM1;
+  htim1.Init.Prescaler = 18000-1;
+  htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim1.Init.Period = 1000-1;
+  htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim1.Init.RepetitionCounter = 0;
+  htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim1, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim1, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM1_Init 2 */
+
+  /* USER CODE END TIM1_Init 2 */
+
+}
+
+/**
   * @brief TIM2 Initialization Function
   * @param None
   * @retval None
@@ -786,9 +870,9 @@ static void MX_TIM7_Init(void)
 
   /* USER CODE END TIM7_Init 1 */
   htim7.Instance = TIM7;
-  htim7.Init.Prescaler = 90-1;
+  htim7.Init.Prescaler = 10-1;
   htim7.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim7.Init.Period = 1000-1;
+  htim7.Init.Period = 90-1;
   htim7.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim7) != HAL_OK)
   {
@@ -1000,10 +1084,10 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, TEST_COMMAND_PORTE_Pin|HEATER_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, TEST_COMMAND_PORTE_Pin|POLLUTION_RST_Pin|HEATER_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, RELAY_Pin|CMD_PORTE_Pin|ELN_FAN_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOC, POLLUTION_SLEEPMODE_Pin|RELAY_Pin|CMD_PORTE_Pin|ELN_FAN_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : B1_Pin */
   GPIO_InitStruct.Pin = B1_Pin;
@@ -1029,12 +1113,19 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : TEST_COMMAND_PORTE_Pin HEATER_Pin */
-  GPIO_InitStruct.Pin = TEST_COMMAND_PORTE_Pin|HEATER_Pin;
+  /*Configure GPIO pins : TEST_COMMAND_PORTE_Pin POLLUTION_RST_Pin HEATER_Pin */
+  GPIO_InitStruct.Pin = TEST_COMMAND_PORTE_Pin|POLLUTION_RST_Pin|HEATER_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : POLLUTION_SLEEPMODE_Pin CMD_PORTE_Pin ELN_FAN_Pin */
+  GPIO_InitStruct.Pin = POLLUTION_SLEEPMODE_Pin|CMD_PORTE_Pin|ELN_FAN_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   /*Configure GPIO pin : RELAY_Pin */
   GPIO_InitStruct.Pin = RELAY_Pin;
@@ -1049,13 +1140,6 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(FILTRATION_TACHY_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : CMD_PORTE_Pin ELN_FAN_Pin */
-  GPIO_InitStruct.Pin = CMD_PORTE_Pin|ELN_FAN_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-
 }
 
 /* USER CODE BEGIN 4 */
@@ -1067,53 +1151,58 @@ static void MX_GPIO_Init(void)
  */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-//	if(htim == &htim7) // Test avec 6 ms
-//	{
-//		cpt_htim7++;
-//		if (cpt_htim7 % 1 == 0)
-//		{
-//			cpt_current_ADC_EN ++;
-//		}
-//		if(cpt_current_ADC_EN > 1) cpt_current_ADC_EN = 0;
-//
-//		if (cpt_htim7 % 34 == 0) cpt_current_EN ++; // 204 ms
-//		if(cpt_current_EN > 34) cpt_current_EN = 0;
-//
-//		if (cpt_htim7 % 167 == 0 )
-//		{
-//			cpt_1sec_EN ++; // 1.002 sec
-//			delay_counter ++;
-//		}
-//		if (cpt_htim7 % 1667 == 0) // 10.002 sec
-//		{
-//			cpt_data_tx_EN ++; //A reset à la fin de l'envoi de donnée
-//			if (buzzer_wait == 1)
-//			{
-//				//Compter 10 min
-//				if(cpt_data_tx_EN == 1)
-//				{
-//					cpt_buzzer_counter ++; //Reste bloqué ici
-//				}
-//			}
-//			cpt_htim7 = 0;
-//			if(cpt_data_tx_EN > 1 ) cpt_data_tx_EN = 0;
-//		}
-//
-//	}
-
-	if(htim == &htim7 && system_is_active == SYSTEM_ACTIVE)
+	if(htim == &htim1 && system_is_active == SYSTEM_ACTIVE && MSG_HEADER_UID_1 != TYPE_MP) // 100ms
 	{
-		if(i_timer % 1000 == 0) // Each 1002 ms -> 1s
+		if(buzzer_state)
 		{
-			get_pollution ();
+			if(i_timer1 % 10 == 0) //each 1s
+			{
+				compteur_buzzer += 1;
+				compteur_porte += 1;
+				if(fermeture_porte) CPT_CoolingDoorClosed--;
+			}
 
-			send_door_state();
+			if(MSG_HEADER_UID_1 == TYPE_MACHINE)
+			{
+				if ((compteur_buzzer >= MAX_OPENING_TIME_M)) set_buzzer();
 
+				if(compteur_buzzer == HIGH_STATE_TIME_BUZZER_M)
+				{
+					stop_buzzer();
+					compteur_buzzer = LOW_STATE_TIME_BUZZER_M;
+				}
+			} else if(MSG_HEADER_UID_1 == TYPE_POST_TREATMENT)
+			{
+				if ((compteur_buzzer >= MAX_OPENING_TIME_PT)) set_buzzer();
+
+				if(compteur_buzzer == HIGH_STATE_TIME_BUZZER_PT)
+				{
+					stop_buzzer();
+					compteur_buzzer = LOW_STATE_TIME_BUZZER_PT;
+				}
+			}
+
+
+		} else {
+			HAL_TIM_Base_Stop_IT(&htim1);
+			compteur_buzzer = 0;
+			stop_buzzer();
+		}
+		i_timer1+=1;
+	}
+
+
+	if(htim == &htim7 && system_is_active == SYSTEM_ACTIVE) //10µs
+	{
+		if((i_timer7 % 100000 == 0) && (MSG_HEADER_UID_1 != TYPE_MP)) // Each 10µs * 100'000 -> 1s
+		{
 			// (condition) ? {code for YES} : {code for NO}
 			if(p_light != light){
 				send_lights(light);
 				p_light = light;
 			}
+
+			get_temp_humi_SHT40();
 
 			// if pressure changes, send
 			c_Pressure = get_pression();
@@ -1125,27 +1214,42 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			// Update datas
 			p_Pressure = c_Pressure;
 
+			// Send datas
 
-		}
-		if(i_timer % 10000 == 0) // Each 10002 ms -> 10s
-		{
-			get_heater_temp();
+			send_main_msg_current_printer(Cycle_Printer,&huart2);
+			send_temp();
+			send_humi();
 			send_heater_temp();
+			if(spg30_read() != -1){ // s'il n'y a pas d'erreur, on envoit
+				send_co2();
+				send_tvoc();
+			}
+//			send_pollution_pm1_0();
+//			send_pollution_pm2_5();
+//			send_pollution_pm10();
+			send_TVOC_CO2_treatments();
+			send_typology();
+			send_door_state();
+			get_ELN_temp();
+			send_ELN_temp();
+		}
+		if(i_timer7 % 100000 == 0){
+			get_pollution();
+		}
+		if(i_timer7 % 5000 == 0) // Each 10µs * 5000 -> 50ms
+		{
 
 			if(Incorrect_Values <= 100)
 			  Cycle_Printer = 0;
 			else Cycle_Printer = 1;
 
-			send_main_msg_current_printer(Cycle_Printer,&huart2);
-			get_temp_humi_SHT40();
-			send_temp();
-			send_humi();
+			get_heater_temp();
 		}
-		if(i_timer % 10 == 0 )
+		if((i_timer7 % 5 == 0) && (MSG_HEADER_UID_1 == TYPE_MACHINE)) // each 10µs * 5 = 50µs
 		{
 			getElectricCurrentConsumption();
 		}
-		if((i_timer % 1500 == 0) && (getWeight == 1))
+		if((i_timer7 % 50000 == 0) && (getWeight == 1) && (MSG_HEADER_UID_1 == TYPE_MP)) // each 0.5s
 		{
 			if(cpt_GetWeight == 20)
 			{
@@ -1156,26 +1260,21 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			get_weight();
 			send_weight();
 		}
-		if(i_timer % 5000 == 0)
+		if(i_timer7 % 500000 == 0) // each 5s
 		{
-			if(last_watchdog_time > i_timer){ // Clock overflow
+			if(last_watchdog_time > i_timer7){ // Clock overflow
 				last_watchdog_time = 0;
 			}
-			if(i_timer - last_watchdog_time > 30*1000){ // Watchdog 30s
+			if(i_timer7 - last_watchdog_time > 30*1000000){ // Watchdog 30s
 				NVIC_SystemReset();
 			}
-
-			send_pollution_pm1_0();
-			send_pollution_pm2_5();
-			send_pollution_pm10();
 		}
-
-		i_timer+=1;
+		i_timer7+=1;
 	}
 }
 
 void update_last_watchdog_time(){
-	last_watchdog_time = i_timer;
+	last_watchdog_time = i_timer7;
 }
 
 /**

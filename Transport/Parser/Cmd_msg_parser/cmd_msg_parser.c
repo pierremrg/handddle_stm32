@@ -22,7 +22,7 @@ extern uint8_t cmd_door_state;
 extern int state;
 extern int desired_temperature;
 extern float desired_temperature_manual;
-extern int dutycycle_cooling_manual;
+extern int dutycycle_cooling;
 extern int system_is_active;
 extern int req_opening_door;
 extern int manual_mode_filtration;
@@ -32,16 +32,18 @@ extern int tare;
 extern int getWeight;
 int T0_Ambiant = 20;
 
-extern int heater_active;
+extern int heater_actif;
 
 int relay=0;
 int light;
+
+int buzzer_state;
 
 
 // Message ACK header
 uint8_t msg_ack_cmd[MSG_SIZE + 1] = {
 	MSG_HEADER_IDENTIFIER_1, MSG_HEADER_IDENTIFIER_2, MSG_HEADER_SIZE_1, MSG_HEADER_SIZE_2, // Global information
-	MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4, // UID of the STM32
+	MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4,  // UID of the STM32
 	MSG_TYPE_INFORMATION, // Message type
 	CMD_ACK, // Sub message type
 	0x00, 0x01 // Length
@@ -115,13 +117,14 @@ void parser_cmd_forcing_door(uint8_t *rx_buff, UART_HandleTypeDef * uart){
 void parser_cmd_temp(uint8_t *rx_buff,UART_HandleTypeDef * uart){
 
 	if (rx_buff[POS_DATA] < T0_Ambiant || rx_buff[POS_DATA] > TEMP_MAX) // Arret du chauffage
-		{
-			heater_active = 0;
-		} else // Activation du chauffage
-		{
-			desired_temperature = rx_buff[POS_DATA];
-			heater_active = 1;
-		}
+	{
+		heater_actif = 0;
+//		desired_temperature = 0;
+	} else // Activation du chauffage
+	{
+		desired_temperature = rx_buff[POS_DATA];
+		heater_actif = 1;
+	}
 
 }
 
@@ -140,8 +143,9 @@ void parser_cmd_printing_state(uint8_t * rx_buff,UART_HandleTypeDef * uart){
 
 void parser_cmd_air_extract(uint8_t * rx_buff,UART_HandleTypeDef * uart){
 	// Calling the function that will use the payload for the door command
-	dutycycle_cooling_manual = rx_buff[POS_DATA];
-	set_cooling(dutycycle_cooling_manual);
+	dutycycle_cooling = rx_buff[POS_DATA];
+	heater_actif = 0;
+	set_cooling(dutycycle_cooling);
 }
 
 void parser_cmd_relay(uint8_t * rx_buff,UART_HandleTypeDef * uart){
@@ -158,6 +162,10 @@ void parser_cmd_relay(uint8_t * rx_buff,UART_HandleTypeDef * uart){
 
 void parser_cmd_tare(uint8_t * rx_buff,UART_HandleTypeDef * uart){
 	tare = rx_buff[POS_DATA];
+}
+
+void parser_cmd_buzzer(uint8_t * rx_buff,UART_HandleTypeDef * uart){
+	buzzer_state = rx_buff[POS_DATA];
 }
 
 void parser_cmd_getWeight(uint8_t * rx_buff,UART_HandleTypeDef * uart){
@@ -222,6 +230,9 @@ void parser_cmd(uint8_t * rx_buff, UART_HandleTypeDef * uart){
 			break;
 		case CMD_FORCE_RESET:
 			parser_cmd_force_reset(rx_buff, uart);
+			break;
+		case CMD_BUZZER:
+			parser_cmd_buzzer(rx_buff, uart);
 			break;
 		default:
 			// Unknown command type -> Sending ACK NOK

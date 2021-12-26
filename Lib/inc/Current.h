@@ -28,5 +28,9 @@ void getElectricCurrentConsumption();
   */
 void getElectricCurrentConsumptionTransmit();
 
+void get();
+
+void append();
+
 
 #endif /* INC_CURRENT_H_ */

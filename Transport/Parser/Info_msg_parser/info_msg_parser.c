@@ -17,7 +17,7 @@ extern int status;
 
 uint8_t msg_ack_info[MSG_SIZE + 1] = {
 		MSG_HEADER_IDENTIFIER_1, MSG_HEADER_IDENTIFIER_2, MSG_HEADER_SIZE_1, MSG_HEADER_SIZE_2, // Global information
-		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4, // UID of the STM32
+		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4,  // UID of the STM32
 		MSG_TYPE_INTERNAL, // Message type
 		INFO_ACK, // Sub message type
 		0x00, 0x01 // Length

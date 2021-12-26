@@ -5,101 +5,44 @@
 
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart2;
-uint16_t pm1_0 ;// Particulate Matter : 10 micrometers and smaller
-uint16_t pm2_5 ; // 2.5 micrometers and smaller
-uint16_t pm10 ;
 
-uint8_t UART1_rxBuffer[33] = {0};
-uint8_t UART1_manip_33[33] = {0};
-uint8_t UART1_manip_32[32] = {0};
+uint8_t getReading[7] =    {0x42, 0x4D, 0xE2, 0x00, 0x00, 0x01, 0x71};
+uint8_t askAnswerMode[8] = {0x42, 0x4D, 0x00, 0x04, 0xE1, 0x00, 0x01, 0x74};
+uint8_t DirectMode[8] =    {0x42, 0x4D, 0x00, 0x04, 0xE1, 0x01, 0x01, 0x75};
+uint8_t standbyMode[8] =   {0x42,0x4D, 0x00, 0x04, 0xE4, 0x00, 0x01, 0x77};
+uint8_t workingMode[8] =   {0x42,0x4D, 0x00, 0x04, 0xE4, 0x01, 0x01, 0x78};
+
+uint8_t data2[32];
+
+uint8_t a = 0x20;
 
 
-void get_pollution ()
+void get_pollution()
 {
+//	HAL_UART_Transmit(&huart1, a, sizeof(a), HAL_MAX_DELAY);
+//	HAL_UART_Transmit(&huart1, b, sizeof(b), HAL_MAX_DELAY);
+//	HAL_UART_Transmit(&huart1, c, sizeof(c), HAL_MAX_DELAY);
 
-	struct pms5003data {
-	  uint16_t framelen;
-	  uint16_t pm10_standard, pm25_standard, pm100_standard;
-	  uint16_t pm10_env, pm25_env, pm100_env;
-	  uint16_t particles_03um, particles_05um, particles_10um, particles_25um, particles_50um, particles_100um;
-	  uint16_t unused;
-	  uint16_t checksum;
-	};
-
-	struct pms5003data data;
-
-	HAL_UART_Receive(&huart1, UART1_rxBuffer, 33, 1000);
-
-	// Si UART1_rxBuffer commence par 0x42 sur l'octet 1 et 2 alors on fait un décalage de tableau pour refaire un
-	// tableau de 32 bytes qui correspond à une trame correcte
-	// De même si on a un le "bit de fin" qui est au debut et à la fin de la trame on décale et on retire le dernier byte
-	for (int i = 0; i<33 ; i++)
-	{
-	  UART1_manip_33[i] = UART1_rxBuffer[i];
-	}
-
-	if(UART1_manip_33[0] == UART1_manip_33[1] || (UART1_manip_33[0] != 66 && UART1_manip_33[33] != 66))
-	{
-	  for (int i = 1 ; i<33; i++)
-	  {
-		  if(i!=33)
-			  UART1_manip_33[i-1] = UART1_manip_33[i];
-		  else
-			  UART1_manip_33[i]=0; //Possiblement pas besoin de mettre la dernière case à 0 car je la vire
-	  }
-	}
-
-	for (int i = 0 ; i<32; i++)
-	{
-	  UART1_manip_32[i] = UART1_manip_33[i];
-	}
-
-	// The data comes in endian'd, this solves it so it works on all platforms
-	uint16_t buffer_u16[15];
-	uint16_t buffer_test[3];
-	for (uint8_t i = 0; i < 15; i++)
-	{
-	 buffer_u16[i] = UART1_manip_32[2 + i * 2 + 1];
-	 buffer_u16[i] += (UART1_manip_32[2 + i * 2] << 8);
-	}
-
-	for (int i = 0; i<3; i++)
-		{
-			buffer_test[i] = buffer_u16[i+1];
-		}
-
-	if((buffer_u16[1] == 0) | (buffer_u16[1] > (pm1_0 + 500) ) )
-		pm1_0 = pm1_0;
-	else
-		pm1_0 = buffer_test[0];
-
-	if((buffer_u16[2] == 0) | ( buffer_u16[2] > (pm2_5 + 500) ))
-		pm2_5 = pm2_5;
-	else
-		pm2_5 = buffer_test[1];
-
-	if((buffer_u16[3] == 0) | ( buffer_u16[3] > (pm10 + 500) ) )
-			pm10 = pm10;
-		else
-			pm10 = buffer_test[2];
-
-	// put it into a nice struct :)
-	memcpy((void *)&data, (void *)buffer_u16, 30);
-
-
+//	HAL_UART_Transmit(&huart1, workingMode, 1, 100);
+//	HAL_Delay(50);
+//	HAL_UART_Transmit(&huart1, askAnswerMode, 1, 100);
+//	HAL_Delay(50);
+//	HAL_UART_Transmit(&huart1, getReading, sizeof(getReading), 100);
+//	HAL_Delay(50);
+//	HAL_UART_Receive(&huart1, data2, sizeof(data2), 100);
 }
-
-void send_pollution_pm1_0()
-{
-	send_main_msg_pm1_0(pm1_0, &huart2);
-}
-
-void send_pollution_pm2_5()
-{
-	send_main_msg_pm2_5(pm2_5, &huart2);
-}
-
-void send_pollution_pm10()
-{
-	send_main_msg_pm10(pm10, &huart2);
-}
+//
+//void send_pollution_pm1_0()
+//{
+//	send_main_msg_pm1_0(pm1_0, &huart2);
+//}
+//
+//void send_pollution_pm2_5()
+//{
+//	send_main_msg_pm2_5(pm2_5, &huart2);
+//}
+//
+//void send_pollution_pm10()
+//{
+//	send_main_msg_pm10(pm10, &huart2);
+//}

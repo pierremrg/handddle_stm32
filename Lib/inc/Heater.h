@@ -27,7 +27,7 @@ void get_tachy();
 /**
   * @brief  This function is used to reach the temperature requested by the user.
   */
-void asservissement();
+void asservissement(int desired_temperature);
 
 /**
   * @brief  This function is used to translate the ADC value collected from the Channel 19 into a Temperature.
@@ -39,5 +39,7 @@ int get_heater_temp();
   * @brief  This function is used to send the temperature near the Heater
   */
 void send_heater_temp();
+
+void heater_stop();
 
 #endif /* HEATER_HEATER_H_ */

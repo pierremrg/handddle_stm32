@@ -70,6 +70,11 @@
  */
 #define CMD_FORCE_RESET 0x0C
 
+/** @def CMD_BUZZER
+ *  @brief active or not buzzer
+ */
+#define CMD_BUZZER 0x0D
+
 
 void parser_cmd_on_off(uint8_t * rx_buff,UART_HandleTypeDef * uart);
 
@@ -131,6 +136,8 @@ void parser_cmd_tare(uint8_t * rx_buff,UART_HandleTypeDef * uart);
  * @param rx_buff Pointer to the array tab containing the message received
  * @param uart Uart strcture used to the communication with the Jetson Nano. If the cable used is the ST-Link, huart2
  */
+
+void parser_cmd_buzzer(uint8_t * rx_buff, UART_HandleTypeDef * uart);
 
 void parser_cmd_getWeight(uint8_t * rx_buff,UART_HandleTypeDef * uart);
 

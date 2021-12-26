@@ -10,7 +10,7 @@
 HAL_StatusTypeDef send_main_msg_temp(double temp,UART_HandleTypeDef * uart ){
 	uint8_t Tx_msg_temp[MSG_SIZE + 1] = {
 		MSG_HEADER_IDENTIFIER_1, MSG_HEADER_IDENTIFIER_2, MSG_HEADER_SIZE_1, MSG_HEADER_SIZE_2, // Global information
-		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4, // UID of the STM32
+		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4,  // UID of the STM32
 		MSG_TYPE_MAIN, // Message type
 		MAIN_MSG_TEMPERATURE, // Sub message type
 		0x00, 0x02 // Length
@@ -31,7 +31,7 @@ HAL_StatusTypeDef send_main_msg_temp(double temp,UART_HandleTypeDef * uart ){
 HAL_StatusTypeDef send_main_msg_hum(uint16_t hum,UART_HandleTypeDef * uart ){
 	uint8_t Tx_msg_hum[MSG_SIZE + 1] = {
 		MSG_HEADER_IDENTIFIER_1, MSG_HEADER_IDENTIFIER_2, MSG_HEADER_SIZE_1, MSG_HEADER_SIZE_2, // Global information
-		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4, // UID of the STM32
+		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4,  // UID of the STM32
 		MSG_TYPE_MAIN, // Message type
 		MAIN_MSG_HUMIDITY, // Sub message type
 		0x00, 0x02 // Length
@@ -51,7 +51,7 @@ HAL_StatusTypeDef send_main_msg_hum(uint16_t hum,UART_HandleTypeDef * uart ){
 HAL_StatusTypeDef send_main_msg_temp_hum(double temp,uint16_t hum,UART_HandleTypeDef * uart ){
 	uint8_t Tx_msg_temp_hum[MSG_SIZE + 1] = {
 		MSG_HEADER_IDENTIFIER_1, MSG_HEADER_IDENTIFIER_2, MSG_HEADER_SIZE_1, MSG_HEADER_SIZE_2, // Global information
-		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4, // UID of the STM32
+		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4,  // UID of the STM32
 		MSG_TYPE_MAIN, // Message type
 		MAIN_MSG_TEMPERATURE_HUMIDITY, // Sub message type
 		0x00, 0x04 // Length
@@ -73,7 +73,7 @@ HAL_StatusTypeDef send_main_msg_temp_hum(double temp,uint16_t hum,UART_HandleTyp
 HAL_StatusTypeDef send_main_msg_current_EE(double current,UART_HandleTypeDef * uart ){
 	uint8_t Tx_msg_current[MSG_SIZE + 1] = {
 		MSG_HEADER_IDENTIFIER_1, MSG_HEADER_IDENTIFIER_2, MSG_HEADER_SIZE_1, MSG_HEADER_SIZE_2, // Global information
-		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4, // UID of the STM32
+		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4,  // UID of the STM32
 		MSG_TYPE_MAIN, // Message type
 		MAIN_MSG_CURRENT_EE, // Sub message type
 		0x00, 0x02 // Length
@@ -93,7 +93,7 @@ HAL_StatusTypeDef send_main_msg_current_EE(double current,UART_HandleTypeDef * u
 HAL_StatusTypeDef send_main_msg_current_printer(double current,UART_HandleTypeDef * uart ){
 	uint8_t Tx_msg_current[MSG_SIZE + 1] = {
 		MSG_HEADER_IDENTIFIER_1, MSG_HEADER_IDENTIFIER_2, MSG_HEADER_SIZE_1, MSG_HEADER_SIZE_2, // Global information
-		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4, // UID of the STM32
+		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4,  // UID of the STM32
 		MSG_TYPE_MAIN, // Message type
 		MAIN_MSG_CURRENT_PRINTER, // Sub message type
 		0x00, 0x02 // Length
@@ -113,7 +113,7 @@ HAL_StatusTypeDef send_main_msg_current_printer(double current,UART_HandleTypeDe
 HAL_StatusTypeDef send_main_msg_door_state(uint8_t door_state,UART_HandleTypeDef * uart ){
 	uint8_t Tx_msg_state_door[MSG_SIZE + 1] = {
 		MSG_HEADER_IDENTIFIER_1, MSG_HEADER_IDENTIFIER_2, MSG_HEADER_SIZE_1, MSG_HEADER_SIZE_2, // Global information
-		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4, // UID of the STM32
+		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4,  // UID of the STM32
 		MSG_TYPE_MAIN, // Message type
 		MAIN_MSG_STATE_DOOR, // Sub message type
 		0x00, 0x01 // Length
@@ -131,7 +131,7 @@ HAL_StatusTypeDef send_main_msg_door_state(uint8_t door_state,UART_HandleTypeDef
 HAL_StatusTypeDef send_main_msg_latch_state(uint8_t latch_state,UART_HandleTypeDef * uart ){
 	uint8_t Tx_msg_state_latch[MSG_SIZE + 1] = {
 		MSG_HEADER_IDENTIFIER_1, MSG_HEADER_IDENTIFIER_2, MSG_HEADER_SIZE_1, MSG_HEADER_SIZE_2, // Global information
-		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4, // UID of the STM32
+		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4,  // UID of the STM32
 		MSG_TYPE_MAIN, // Message type
 		MAIN_MSG_STATE_LATCH, // Sub message type
 		0x00, 0x01 // Length
@@ -149,7 +149,7 @@ HAL_StatusTypeDef send_main_msg_latch_state(uint8_t latch_state,UART_HandleTypeD
 HAL_StatusTypeDef send_main_msg_weight(uint16_t weight,UART_HandleTypeDef * uart ){
 	uint8_t Tx_msg_weight[MSG_SIZE + 1] = {
 		MSG_HEADER_IDENTIFIER_1, MSG_HEADER_IDENTIFIER_2, MSG_HEADER_SIZE_1, MSG_HEADER_SIZE_2, // Global information
-		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4, // UID of the STM32
+		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4,  // UID of the STM32
 		MSG_TYPE_MAIN, // Message type
 		MAIN_MSG_WEIGHT, // Sub message type
 		0x00, 0x02 // Length
@@ -170,7 +170,7 @@ HAL_StatusTypeDef send_main_msg_weight(uint16_t weight,UART_HandleTypeDef * uart
 HAL_StatusTypeDef send_main_msg_pm1_0(uint16_t pm1_0, UART_HandleTypeDef * uart ){
 	uint8_t Tx_msg_pm1_0[MSG_SIZE + 1] = {
 		MSG_HEADER_IDENTIFIER_1, MSG_HEADER_IDENTIFIER_2, MSG_HEADER_SIZE_1, MSG_HEADER_SIZE_2, // Global information
-		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4, // UID of the STM32
+		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4,  // UID of the STM32
 		MSG_TYPE_MAIN, // Message type
 		MAIN_MSG_PM1_0, // Sub message type
 		0x00, 0x02 // Length
@@ -191,7 +191,7 @@ HAL_StatusTypeDef send_main_msg_pm1_0(uint16_t pm1_0, UART_HandleTypeDef * uart 
 HAL_StatusTypeDef send_main_msg_pm2_5(uint16_t pm2_5, UART_HandleTypeDef * uart ){
 	uint8_t Tx_msg_pm2_5[MSG_SIZE + 1] = {
 		MSG_HEADER_IDENTIFIER_1, MSG_HEADER_IDENTIFIER_2, MSG_HEADER_SIZE_1, MSG_HEADER_SIZE_2, // Global information
-		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4, // UID of the STM32
+		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4,  // UID of the STM32
 		MSG_TYPE_MAIN, // Message type
 		MAIN_MSG_PM2_5, // Sub message type
 		0x00, 0x02 // Length
@@ -211,7 +211,7 @@ HAL_StatusTypeDef send_main_msg_pm2_5(uint16_t pm2_5, UART_HandleTypeDef * uart 
 HAL_StatusTypeDef send_main_msg_pm10(uint16_t pm10, UART_HandleTypeDef * uart ){
 	uint8_t Tx_msg_pm10[MSG_SIZE + 1] = {
 		MSG_HEADER_IDENTIFIER_1, MSG_HEADER_IDENTIFIER_2, MSG_HEADER_SIZE_1, MSG_HEADER_SIZE_2, // Global information
-		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4, // UID of the STM32
+		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4,  // UID of the STM32
 		MSG_TYPE_MAIN, // Message type
 		MAIN_MSG_PM10, // Sub message type
 		0x00, 0x02 // Length
@@ -232,7 +232,7 @@ HAL_StatusTypeDef send_main_msg_pm10(uint16_t pm10, UART_HandleTypeDef * uart ){
 HAL_StatusTypeDef send_main_msg_sound(uint16_t sound,UART_HandleTypeDef * uart ){
 	uint8_t Tx_msg_sound[MSG_SIZE + 1] = {
 		MSG_HEADER_IDENTIFIER_1, MSG_HEADER_IDENTIFIER_2, MSG_HEADER_SIZE_1, MSG_HEADER_SIZE_2, // Global information
-		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4, // UID of the STM32
+		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4,  // UID of the STM32
 		MSG_TYPE_MAIN, // Message type
 		MAIN_MSG_SOUND, // Sub message type
 		0x00, 0x02 // Length
@@ -251,7 +251,7 @@ HAL_StatusTypeDef send_main_msg_sound(uint16_t sound,UART_HandleTypeDef * uart )
 HAL_StatusTypeDef send_main_msg_led_color(uint16_t led_color,UART_HandleTypeDef * uart){
 	uint8_t Tx_msg_led_color[MSG_SIZE + 1] = {
 		MSG_HEADER_IDENTIFIER_1, MSG_HEADER_IDENTIFIER_2, MSG_HEADER_SIZE_1, MSG_HEADER_SIZE_2, // Global information
-		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4, // UID of the STM32
+		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4,  // UID of the STM32
 		MSG_TYPE_MAIN, // Message type
 		MAIN_MSG_LED_COLOR, // Sub message type
 		0x00, 0x02 // Length
@@ -270,7 +270,7 @@ HAL_StatusTypeDef send_main_msg_led_color(uint16_t led_color,UART_HandleTypeDef 
 HAL_StatusTypeDef send_main_msg_printing_state(uint8_t printing_state,uint8_t status,UART_HandleTypeDef * uart ){
 	uint8_t Tx_msg_printing_state[MSG_SIZE + 1] = {
 		MSG_HEADER_IDENTIFIER_1, MSG_HEADER_IDENTIFIER_2, MSG_HEADER_SIZE_1, MSG_HEADER_SIZE_2, // Global information
-		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4, // UID of the STM32
+		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4,  // UID of the STM32
 		MSG_TYPE_MAIN, // Message type
 		MAIN_MSG_PRINTING_STATE, // Sub message type
 		0x00, 0x02 // Length
@@ -284,4 +284,98 @@ HAL_StatusTypeDef send_main_msg_printing_state(uint8_t printing_state,uint8_t st
 
 	Tx_msg_printing_state[MSG_SIZE] = '\n';
 	return HAL_UART_Transmit(uart,Tx_msg_printing_state,MSG_SIZE+1,200);
+}
+
+HAL_StatusTypeDef send_main_msg_incendie_co2(uint16_t co2,UART_HandleTypeDef * uart ){
+	uint8_t Tx_msg_co2[MSG_SIZE + 1] = {
+			MSG_HEADER_IDENTIFIER_1, MSG_HEADER_IDENTIFIER_2, MSG_HEADER_SIZE_1, MSG_HEADER_SIZE_2, // Global information
+			MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4,  // UID of the STM32
+			MSG_TYPE_MAIN, // Message type
+			MAIN_MSG_INCENDIE_CO2, // Sub message type
+			0x00, 0x02 // Length
+		}; // 12 first bytes
+
+		Tx_msg_co2[POS_DATA] = co2 >> 8; // weight takes two bytes because it's a uint16_t value
+		Tx_msg_co2[POS_DATA + 1] = co2;
+
+		for(int i = POS_DATA + 2; i< MSG_SIZE; i++)
+			Tx_msg_co2[i] = 0x00;
+
+		Tx_msg_co2[MSG_SIZE] = '\n';
+
+		return HAL_UART_Transmit(uart,Tx_msg_co2,MSG_SIZE+1,200);
+}
+
+HAL_StatusTypeDef send_main_msg_incendie_tvoc(uint16_t tvoc,UART_HandleTypeDef * uart ){
+	uint8_t Tx_msg_tvoc[MSG_SIZE + 1] = {
+			MSG_HEADER_IDENTIFIER_1, MSG_HEADER_IDENTIFIER_2, MSG_HEADER_SIZE_1, MSG_HEADER_SIZE_2, // Global information
+			MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4,  // UID of the STM32
+			MSG_TYPE_MAIN, // Message type
+			MAIN_MSG_INCENDIE_TVOC, // Sub message type
+			0x00, 0x02 // Length
+		}; // 12 first bytes
+
+		Tx_msg_tvoc[POS_DATA] = tvoc >> 8; // weight takes two bytes because it's a uint16_t value
+		Tx_msg_tvoc[POS_DATA + 1] = tvoc;
+
+		for(int i = POS_DATA + 2; i< MSG_SIZE; i++)
+			Tx_msg_tvoc[i] = 0x00;
+
+		Tx_msg_tvoc[MSG_SIZE] = '\n';
+
+		return HAL_UART_Transmit(uart,Tx_msg_tvoc,MSG_SIZE+1,200);
+}
+
+HAL_StatusTypeDef send_main_msg_tvoc_warning(uint8_t tvoc_warning,UART_HandleTypeDef * uart ){
+	uint8_t Tx_msg_tvoc_warning[MSG_SIZE + 1] = {
+		MSG_HEADER_IDENTIFIER_1, MSG_HEADER_IDENTIFIER_2, MSG_HEADER_SIZE_1, MSG_HEADER_SIZE_2, // Global information
+		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4,  // UID of the STM32
+		MSG_TYPE_MAIN, // Message type
+		MAIN_MSG_TVOC_WARNING, // Sub message type
+		0x00, 0x01 // Length
+	}; // 12 first bytes
+
+	Tx_msg_tvoc_warning[POS_DATA] = tvoc_warning;
+
+	for(int i = POS_DATA + 1; i< MSG_SIZE; i++)
+		Tx_msg_tvoc_warning[i] = 0x00;
+
+	Tx_msg_tvoc_warning[MSG_SIZE] = '\n';
+	return HAL_UART_Transmit(uart,Tx_msg_tvoc_warning,MSG_SIZE+1,200);
+}
+
+HAL_StatusTypeDef send_main_msg_co2_warning(uint8_t co2_warning,UART_HandleTypeDef * uart ){
+	uint8_t Tx_msg_co2_warning[MSG_SIZE + 1] = {
+		MSG_HEADER_IDENTIFIER_1, MSG_HEADER_IDENTIFIER_2, MSG_HEADER_SIZE_1, MSG_HEADER_SIZE_2, // Global information
+		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4,  // UID of the STM32
+		MSG_TYPE_MAIN, // Message type
+		MAIN_MSG_CO2_WARNING, // Sub message type
+		0x00, 0x01 // Length
+	}; // 12 first bytes
+
+	Tx_msg_co2_warning[POS_DATA] = co2_warning;
+
+	for(int i = POS_DATA + 1; i< MSG_SIZE; i++)
+		Tx_msg_co2_warning[i] = 0x00;
+
+	Tx_msg_co2_warning[MSG_SIZE] = '\n';
+	return HAL_UART_Transmit(uart,Tx_msg_co2_warning,MSG_SIZE+1,200);
+}
+
+HAL_StatusTypeDef send_main_msg_typology(uint8_t typology,UART_HandleTypeDef * uart ){
+	uint8_t Tx_msg_typology[MSG_SIZE + 1] = {
+		MSG_HEADER_IDENTIFIER_1, MSG_HEADER_IDENTIFIER_2, MSG_HEADER_SIZE_1, MSG_HEADER_SIZE_2, // Global information
+		MSG_HEADER_UID_1, MSG_HEADER_UID_2, MSG_HEADER_UID_3, MSG_HEADER_UID_4,  // UID of the STM32
+		MSG_TYPE_MAIN, // Message type
+		MAIN_MSG_TYPOLOGY, // Sub message type
+		0x00, 0x01 // Length
+	}; // 12 first bytes
+
+	Tx_msg_typology[POS_DATA] = typology;
+
+	for(int i = POS_DATA + 1; i< MSG_SIZE; i++)
+		Tx_msg_typology[i] = 0x00;
+
+	Tx_msg_typology[MSG_SIZE] = '\n';
+	return HAL_UART_Transmit(uart,Tx_msg_typology,MSG_SIZE+1,200);
 }
