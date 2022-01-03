@@ -1265,7 +1265,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			if(last_watchdog_time > i_timer7){ // Clock overflow
 				last_watchdog_time = 0;
 			}
-			if(i_timer7 - last_watchdog_time > 30*1000000){ // Watchdog 30s
+			if(i_timer7 - last_watchdog_time > 30*100000){ // Watchdog 30s
 				NVIC_SystemReset();
 			}
 		}

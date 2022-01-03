@@ -28,7 +28,7 @@ int check_msg_UID(uint8_t * rx_buff){
 	int is_receiver = rx_buff[POS_UID_1] == MSG_HEADER_UID_1 && rx_buff[POS_UID_2] == MSG_HEADER_UID_2
 			&& rx_buff[POS_UID_3] == MSG_HEADER_UID_3 && rx_buff[POS_UID_4] == MSG_HEADER_UID_4;
 
-	int is_broadcast = rx_buff[POS_UID_1] == MSG_HEADER_UID_1 && rx_buff[POS_UID_2] == MSG_HEADER_UID_BROADCAST
+	int is_broadcast = rx_buff[POS_UID_1] == MSG_HEADER_UID_1_BROADCAST && rx_buff[POS_UID_2] == MSG_HEADER_UID_BROADCAST
 			&& rx_buff[POS_UID_3] == MSG_HEADER_UID_BROADCAST && rx_buff[POS_UID_4] == MSG_HEADER_UID_BROADCAST;
 
 	return is_receiver || is_broadcast;
