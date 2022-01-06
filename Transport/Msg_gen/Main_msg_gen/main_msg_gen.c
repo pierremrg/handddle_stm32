@@ -16,7 +16,7 @@ HAL_StatusTypeDef send_main_msg_temp(double temp,UART_HandleTypeDef * uart ){
 		0x00, 0x02 // Length
 	}; // 12 first bytes
 
-	uint16_t temp16 = (uint16_t) temp * 100;
+	uint16_t temp16 = temp * 100;
 	Tx_msg_temp[12] = temp16 >> 8; // temp takes two bytes because it's a uint16_t value
 	Tx_msg_temp[13] = temp16;
 

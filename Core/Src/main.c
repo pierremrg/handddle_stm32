@@ -160,7 +160,7 @@ uint16_t relay_state = true;
 // Buzzer linked Variable
 int buzzer_state = 1; // TODO Define buzzer states
 int compteur_buzzer = 0, compteur_porte = 0;
-int CPT_CoolingDoorClosed = COOLING_T_DOOR_CLOSED; // En secondes
+int CPT_CoolingDoorClosed = COOLING_T_DOOR_CLOSED+2; // En secondes, le +2 pour avoir le temps voulu réel
 int fermeture_porte=0;
 int i_timer1 = 0;
 

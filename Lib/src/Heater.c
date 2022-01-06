@@ -143,17 +143,17 @@ int get_heater_temp()
 {
 	ADC_Select_CH9();
 //	//Steinhart-Hart coefficients
-//	float A = 0.0006318979274;
-//	float B = 0.000226285692;
-//	float C = 0.0000000766104297845452;
-//
-//	float ADC_1 = adc_value_HEATER_TEMP[0];
-//	float sensorVoltage = ADC_1 * VOLTAGE_SUPPLY / 4096;
-//	float R_CTN_Heater = (R22k * (sensorVoltage/VOLTAGE_SUPPLY)/ (1 - (sensorVoltage/VOLTAGE_SUPPLY)));
-//	float temperature_K = (1 / (A + B * log(R_CTN_Heater) + C * pow(log(R_CTN_Heater), 3)));
-//	temperature_C_heater = temperature_K - 273.15;
+	float A = 0.0006318979274;
+	float B = 0.000226285692;
+	float C = 0.0000000766104297845452;
 
-	temperature_C_heater = 1 / ((1/T0) + (1/Beta) * log( (R0/RT0) * (( 4096.0 / adc_value_HEATER_TEMP[0] ) - 1) )) - 273.15;
+	float ADC_1 = adc_value_HEATER_TEMP[0];
+	float sensorVoltage = ADC_1 * VOLTAGE_SUPPLY / 4096;
+	float R_CTN_Heater = (R22k * (sensorVoltage/VOLTAGE_SUPPLY)/ (1 - (sensorVoltage/VOLTAGE_SUPPLY)));
+	float temperature_K = (1 / (A + B * log(R_CTN_Heater) + C * pow(log(R_CTN_Heater), 3)));
+	temperature_C_heater = temperature_K - 273.15;
+
+//	temperature_C_heater = 1 / ((1/T0) + (1/Beta) * log( (R0/RT0) * (( 4096.0 / adc_value_HEATER_TEMP[0] ) - 1) )) - 273.15;
 
 
 	return temperature_C_heater;

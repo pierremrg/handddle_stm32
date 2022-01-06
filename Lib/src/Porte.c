@@ -93,11 +93,12 @@ void set_unlock(uint8_t desired_door_state)
 void door_cycle()
 {
 	int LATCH = get_latch_state();
-	int DOOR = get_door_state();
+//	int DOOR = get_door_state();
 
 	// CYCLE
-	if (LATCH == NOT_PRESENT || DOOR == OPEN) 		// If door is open
+	if (LATCH == NOT_PRESENT) 		// If door is open, On prend en compte que les latch
 	{
+		CPT_CoolingDoorClosed = COOLING_T_DOOR_CLOSED; // Val COOLING_T_DOOR_CLOSED
 		HAL_Delay(50);
 		prevLight = light;
 		set_lights(WHITE_DOOR_OPEN);
@@ -121,7 +122,7 @@ void door_cycle()
 			set_cooling(cooling);
 		}
 	}
-	else if((LATCH == PRESENT || DOOR == CLOSED)){
+	else if((LATCH == PRESENT)){ // On prend en compte que les latch
 		// Stop Timer & buzzer
 		stop_buzzer();
 		if(compteur_porte != 0) // variable incrémentée quand la porte est ouverte => detecte la fermeture
@@ -136,11 +137,11 @@ void door_cycle()
 					HAL_Delay(50); //Pour ne pas créer de bug
 					set_cooling(cooling_40);
 					fermeture_porte=1; // si = 1, CPT_CoolingDoorClosed va se decrementee de 1 toutes les secondes
-				} else // CPT_CoolingDoorClosed = 0, donc on a attendu X secondes apres fermeture de la porte
+				} else if(CPT_CoolingDoorClosed == 0) // CPT_CoolingDoorClosed = 0, donc on a attendu X secondes apres fermeture de la porte
 				{ // on reinit toutes les variables
 					HAL_Delay(50); // pour ne pas créer de bug
-					set_cooling(stop);
-					CPT_CoolingDoorClosed = COOLING_T_DOOR_CLOSED; // Val COOLING_T_DOOR_CLOSED
+					if (fermeture_porte == 1) set_cooling(stop); // va arreter le cooling au premier passage dans la condition
+//					CPT_CoolingDoorClosed = COOLING_T_DOOR_CLOSED; // Val COOLING_T_DOOR_CLOSED
 					compteur_porte = 0;
 					fermeture_porte=0; // si = 0, CPT_CoolingDoorClosed ne decremente pas
 				}
