@@ -171,7 +171,7 @@ void Error_Handler(void);
 #define OPEN 0
 
 // temps ou le cooling va rester apres fermeture de la porte (en seconde)
-#define COOLING_T_DOOR_CLOSED 10 //Faire +2 sur le temps souhaité
+#define COOLING_T_DOOR_CLOSED 180
 
 
 void update_last_watchdog_time();
