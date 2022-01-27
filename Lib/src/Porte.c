@@ -109,18 +109,18 @@ void door_cycle()
 		set_unlock(CLOSED); //Lock
 
 		HAL_Delay(50);
-		if(MSG_HEADER_UID_1 == TYPE_MACHINE)
-		{
-			//STOP
-			prevDesiredTemp = desired_temperature;
-			prevHeaterActif = heater_actif;
-			prevDutyCCooling = dutycycle_cooling;
-
-			heater_actif = 0;
-			set_cooling(0); //Force l'arret
-		} else{
-			set_cooling(cooling);
-		}
+//		if(MSG_HEADER_UID_1 == TYPE_MACHINE)
+//		{
+//			//STOP
+//			prevDesiredTemp = desired_temperature;
+//			prevHeaterActif = heater_actif;
+//			prevDutyCCooling = dutycycle_cooling;
+//
+//			heater_actif = 0;
+//			set_cooling(0); //Force l'arret
+//		} else{
+//			set_cooling(cooling);
+//		}
 	}
 	else if((LATCH == PRESENT)){ // On prend en compte que les latch
 		// Stop Timer & buzzer

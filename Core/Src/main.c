@@ -314,10 +314,6 @@ int main(void)
 	MAX = tabEXEMPLE[0]; //extern
 	MIN = tabEXEMPLE[0]; // extern
 
-	HAL_GPIO_WritePin(POLLUTION_RST_GPIO_Port, POLLUTION_RST_Pin, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(POLLUTION_SLEEPMODE_GPIO_Port, POLLUTION_SLEEPMODE_Pin, GPIO_PIN_SET);
-
-
   /* USER CODE END 2 */
 
   /* Infinite loop */
