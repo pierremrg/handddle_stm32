@@ -12,6 +12,12 @@
 #define TEMP_AMBIANTE 22
 #define TEMP_MAX 70
 
+#define ON  1
+#define OFF 0
+
+#define Relay_ON  0
+#define Relay_OFF 1
+
 
 extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim3;
@@ -105,13 +111,11 @@ void parser_cmd_on_off(uint8_t * rx_buff,UART_HandleTypeDef * uart){
 }
 
 void parser_cmd_door(uint8_t *rx_buff, UART_HandleTypeDef * uart){
-	req_opening_door = rx_buff[POS_DATA];
-	set_unlock(req_opening_door);
-}
-
-void parser_cmd_forcing_door(uint8_t *rx_buff, UART_HandleTypeDef * uart){
-	cmd_door_state = rx_buff[POS_DATA];
-	set_unlock(cmd_door_state);
+	if(MSG_HEADER_UID_1 == TYPE_MACHINE_TOIT || MSG_HEADER_UID_1 == TYPE_POST_TREATMENT)
+	{
+		req_opening_door = rx_buff[POS_DATA];
+		set_unlock(req_opening_door);
+	}
 }
 
 void parser_cmd_temp(uint8_t *rx_buff,UART_HandleTypeDef * uart){
@@ -150,14 +154,17 @@ void parser_cmd_air_extract(uint8_t * rx_buff,UART_HandleTypeDef * uart){
 
 void parser_cmd_relay(uint8_t * rx_buff,UART_HandleTypeDef * uart){
 	// Calling the function that will use the payload for the door command
-	if(rx_buff[POS_DATA] == SYSTEM_ACTIVE)
+	if((SYSTEM_ACTIVE == ON) && (MSG_HEADER_UID_1 != TYPE_MP) && (rx_buff[POS_DATA] == Relay_OFF))
 	{
 		relay++;
 		if(relay == CONFIRM_SHUTDOWN){
-			CMD_Relay = rx_buff[POS_DATA];
+			set_shutdown_printer(rx_buff[POS_DATA]);
 			relay = 0 ;
 		}
-	} else CMD_Relay = rx_buff[POS_DATA];
+	} else if((MSG_HEADER_UID_1 != TYPE_MP) && (rx_buff[POS_DATA] == Relay_ON)){
+		set_shutdown_printer(rx_buff[POS_DATA]);
+		relay = 0;
+	}
 }
 
 void parser_cmd_tare(uint8_t * rx_buff,UART_HandleTypeDef * uart){
@@ -191,10 +198,6 @@ void parser_cmd(uint8_t * rx_buff, UART_HandleTypeDef * uart){
 			break;
 		case CMD_DOOR:
 			parser_cmd_door(rx_buff, uart);
-			send_cmd_ack(uart);
-			break;
-		case CMD_FORCING_DOOR:
-			parser_cmd_forcing_door(rx_buff, uart);
 			send_cmd_ack(uart);
 			break;
 		case CMD_TEMP:

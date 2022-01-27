@@ -7,16 +7,16 @@ extern UART_HandleTypeDef huart2;
 
 extern uint16_t relay_state;
 
-void set_shutdown_printer(int *ptr_ON_off)
+void set_shutdown_printer(int ON_off)
 {
-	if( *ptr_ON_off == 1)
+	if( ON_off == 1)
 	{
-		HAL_GPIO_WritePin(GPIOC, RELAY_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(RELAY_GPIO_Port, RELAY_Pin, GPIO_PIN_SET);
 		relay_state = 1;
 	}
 	else
 	{
-		HAL_GPIO_WritePin(GPIOC, RELAY_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(RELAY_GPIO_Port, RELAY_Pin, GPIO_PIN_RESET);
 		relay_state = 0;
 	}
 }

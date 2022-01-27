@@ -160,7 +160,7 @@ uint16_t relay_state = true;
 // Buzzer linked Variable
 int buzzer_state = 1; // TODO Define buzzer states
 int compteur_buzzer = 0, compteur_porte = 0;
-int CPT_CoolingDoorClosed = COOLING_T_DOOR_CLOSED+2; // En secondes, le +2 pour avoir le temps voulu réel
+int CPT_CoolingDoorClosed = COOLING_T_DOOR_CLOSED; // //Faire +2 sur le temps souhaité pour avoir le temps réel
 int fermeture_porte=0;
 int i_timer1 = 0;
 
@@ -182,14 +182,6 @@ int desired_temperature = 22;
 float desired_temperature_manual = 0;
 float moy_temperature = 0;
 float moy_humidity = 0;
-
-/* Pollution Variables */
-uint16_t pm10[1] = {0}; // TODO Why array?
-uint16_t pm25[1] = {0};
-uint16_t pm100[1] = {0};
-uint16_t pm10_th_limit = 1000;
-uint16_t pm25_th_limit = 1000;
-uint16_t pm100_th_limit = 1000;
 
 // Current variables
 int current_breakdown = 0;
@@ -290,7 +282,7 @@ int main(void)
 	set_cooling(pwm_stop);
 
 	//White color as default
-	if(MSG_HEADER_UID_1 == TYPE_MACHINE) light = WHITE_DOOR_OPEN;
+	if((MSG_HEADER_UID_1 == TYPE_MACHINE_RACK) || (MSG_HEADER_UID_1 == TYPE_MACHINE_TOIT)) light = WHITE_DOOR_OPEN;
 	else if(MSG_HEADER_UID_1 == TYPE_POST_TREATMENT) light = WHITE_PT;
 	p_light = light;
 	set_lights(light);
@@ -322,20 +314,9 @@ int main(void)
   {
 	  if(system_is_active == SYSTEM_ACTIVE && MSG_HEADER_UID_1 != TYPE_MP)
 	  {
-		  door_cycle();
+		  if(MSG_HEADER_UID_1 == TYPE_MACHINE_TOIT || MSG_HEADER_UID_1 == TYPE_POST_TREATMENT) door_cycle();
 		  asservissement(desired_temperature);// Asservissement chauffage
 		  HAL_Delay(50);
-
-		  if(CMD_Relay == 1) //Lors de la production série, il faudra changer cette ligne pour if(CMD_Relay == 0)
-		  {
-			  int activation_relay = 1 ;
-			  set_shutdown_printer(&activation_relay);
-		  }
-		  else
-		  {
-			  int activation_relay = 0 ;
-			  set_shutdown_printer(&activation_relay);
-		  }
 	}
 
     /* USER CODE END WHILE */
@@ -1080,10 +1061,10 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, TEST_COMMAND_PORTE_Pin|POLLUTION_RST_Pin|HEATER_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, TEST_COMMAND_PORTE_Pin|HEATER_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, POLLUTION_SLEEPMODE_Pin|RELAY_Pin|CMD_PORTE_Pin|ELN_FAN_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOC, RELAY_Pin|CMD_PORTE_Pin|ELN_FAN_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : B1_Pin */
   GPIO_InitStruct.Pin = B1_Pin;
@@ -1109,19 +1090,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : TEST_COMMAND_PORTE_Pin POLLUTION_RST_Pin HEATER_Pin */
-  GPIO_InitStruct.Pin = TEST_COMMAND_PORTE_Pin|POLLUTION_RST_Pin|HEATER_Pin;
+  /*Configure GPIO pins : TEST_COMMAND_PORTE_Pin HEATER_Pin */
+  GPIO_InitStruct.Pin = TEST_COMMAND_PORTE_Pin|HEATER_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : POLLUTION_SLEEPMODE_Pin CMD_PORTE_Pin ELN_FAN_Pin */
-  GPIO_InitStruct.Pin = POLLUTION_SLEEPMODE_Pin|CMD_PORTE_Pin|ELN_FAN_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   /*Configure GPIO pin : RELAY_Pin */
   GPIO_InitStruct.Pin = RELAY_Pin;
@@ -1135,6 +1109,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(FILTRATION_TACHY_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : CMD_PORTE_Pin ELN_FAN_Pin */
+  GPIO_InitStruct.Pin = CMD_PORTE_Pin|ELN_FAN_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
 }
 
@@ -1158,20 +1139,20 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 				if(fermeture_porte) CPT_CoolingDoorClosed--;
 			}
 
-			if(MSG_HEADER_UID_1 == TYPE_MACHINE)
+			if((MSG_HEADER_UID_1 == TYPE_MACHINE_TOIT) && (MSG_HEADER_UID_1 == TYPE_MACHINE_RACK))
 			{
-				if ((compteur_buzzer >= MAX_OPENING_TIME_M)) set_buzzer();
+				if ((compteur_buzzer == MAX_OPENING_TIME_M)) set_buzzer();
 
-				if(compteur_buzzer == HIGH_STATE_TIME_BUZZER_M)
+				else if(compteur_buzzer == HIGH_STATE_TIME_BUZZER_M)
 				{
 					stop_buzzer();
 					compteur_buzzer = LOW_STATE_TIME_BUZZER_M;
 				}
 			} else if(MSG_HEADER_UID_1 == TYPE_POST_TREATMENT)
 			{
-				if ((compteur_buzzer >= MAX_OPENING_TIME_PT)) set_buzzer();
+				if ((compteur_buzzer == MAX_OPENING_TIME_PT)) set_buzzer();
 
-				if(compteur_buzzer == HIGH_STATE_TIME_BUZZER_PT)
+				else if(compteur_buzzer == HIGH_STATE_TIME_BUZZER_PT)
 				{
 					stop_buzzer();
 					compteur_buzzer = LOW_STATE_TIME_BUZZER_PT;
@@ -1201,14 +1182,17 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			get_temp_humi_SHT40();
 
 			// if pressure changes, send
-			c_Pressure = get_pression();
-			if((c_Pressure - p_Pressure) > DELTA_Pressure || (p_Pressure - c_Pressure) > DELTA_Pressure)
+			if(MSG_HEADER_UID_1 == TYPE_MACHINE_TOIT || MSG_HEADER_UID_1 == TYPE_POST_TREATMENT)
 			{
-				send_pression();
-			}
+				c_Pressure = get_pression();
+				if((c_Pressure - p_Pressure) > DELTA_Pressure || (p_Pressure - c_Pressure) > DELTA_Pressure)
+				{
+					send_pression();
+				}
 
-			// Update datas
-			p_Pressure = c_Pressure;
+				// Update datas
+				p_Pressure = c_Pressure;
+			}
 
 			// Send datas
 
@@ -1220,17 +1204,11 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 				send_co2();
 				send_tvoc();
 			}
-//			send_pollution_pm1_0();
-//			send_pollution_pm2_5();
-//			send_pollution_pm10();
 			send_TVOC_CO2_treatments();
 			send_typology();
 			send_door_state();
 			get_ELN_temp();
 			send_ELN_temp();
-		}
-		if(i_timer7 % 100000 == 0){
-			get_pollution();
 		}
 		if(i_timer7 % 5000 == 0) // Each 10µs * 5000 -> 50ms
 		{
@@ -1241,7 +1219,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
 			get_heater_temp();
 		}
-		if((i_timer7 % 5 == 0) && (MSG_HEADER_UID_1 == TYPE_MACHINE)) // each 10µs * 5 = 50µs
+		if((i_timer7 % 5 == 0) && ((MSG_HEADER_UID_1 == TYPE_MACHINE_RACK) || (MSG_HEADER_UID_1 == TYPE_MACHINE_TOIT))) // each 10µs * 5 = 50µs
 		{
 			getElectricCurrentConsumption();
 		}

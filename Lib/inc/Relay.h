@@ -5,7 +5,7 @@
   * @brief  This function is used to power the printer.
   * @param	Binary to set or shutdown the printer
   */
-void set_shutdown_printer(int *ptr_ON_off);
+void set_shutdown_printer(int ON_off);
 
 /**
   * @brief  This function is used to send the state of the relay

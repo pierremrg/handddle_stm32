@@ -1,0 +1,6 @@
+main.c:333:6:SystemClock_Config	88	static,ignoring_inline_asm
+main.c:229:5:main	120	static,ignoring_inline_asm
+main.c:1129:6:HAL_TIM_PeriodElapsedCallback	24	static,ignoring_inline_asm
+main.c:1247:6:update_last_watchdog_time	0	static
+main.c:1254:6:HAL_UART_RxCpltCallback	16	static
+main.c:1270:6:Error_Handler	0	static,ignoring_inline_asm

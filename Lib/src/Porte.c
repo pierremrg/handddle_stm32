@@ -34,7 +34,7 @@ const int stop = 0, cooling = 100, cooling_40 = 40;
 int prevDesiredTemp, prevHeaterActif, dutycycle_cooling, light;
 int desired_temperature, heater_actif, prevDutyCCooling, prevLight = WHITE_PT;
 
-
+uint8_t i_porte=1;
 
 
 int get_door_state()
@@ -93,12 +93,10 @@ void set_unlock(uint8_t desired_door_state)
 void door_cycle()
 {
 	int LATCH = get_latch_state();
-//	int DOOR = get_door_state();
 
 	// CYCLE
-	if (LATCH == NOT_PRESENT) 		// If door is open, On prend en compte que les latch
+	if (LATCH == NOT_PRESENT) 		// If door is open, on prend en compte que les latch
 	{
-		CPT_CoolingDoorClosed = COOLING_T_DOOR_CLOSED; // Val COOLING_T_DOOR_CLOSED
 		HAL_Delay(50);
 		prevLight = light;
 		set_lights(WHITE_DOOR_OPEN);
@@ -107,23 +105,30 @@ void door_cycle()
 			HAL_TIM_Base_Start_IT(&htim1);
 		}
 		set_unlock(CLOSED); //Lock
+		CPT_CoolingDoorClosed = COOLING_T_DOOR_CLOSED; // Val COOLING_T_DOOR_CLOSED
 
 		HAL_Delay(50);
-//		if(MSG_HEADER_UID_1 == TYPE_MACHINE)
-//		{
-//			//STOP
-//			prevDesiredTemp = desired_temperature;
-//			prevHeaterActif = heater_actif;
-//			prevDutyCCooling = dutycycle_cooling;
-//
-//			heater_actif = 0;
-//			set_cooling(0); //Force l'arret
-//		} else{
-//			set_cooling(cooling);
-//		}
+		if(MSG_HEADER_UID_1 == TYPE_MACHINE_TOIT || MSG_HEADER_UID_1 == TYPE_MACHINE_RACK || MSG_HEADER_UID_1 == TYPE_POST_TREATMENT)
+		{
+			//STOP
+			prevDesiredTemp = desired_temperature;
+			prevDutyCCooling = dutycycle_cooling;
+
+			if (i_porte == 1)
+			{
+				i_porte = 0;
+				prevHeaterActif = heater_actif;
+			}
+
+			heater_actif = 0;
+			set_cooling(0); //Force l'arret
+		} else{
+			set_cooling(cooling);
+		}
 	}
-	else if((LATCH == PRESENT)){ // On prend en compte que les latch
+	else if(LATCH == PRESENT){// If door is closed, On prend en compte que les latch
 		// Stop Timer & buzzer
+		i_porte = 1;
 		stop_buzzer();
 		if(compteur_porte != 0) // variable incrémentée quand la porte est ouverte => detecte la fermeture
 		{
@@ -132,18 +137,25 @@ void door_cycle()
 			{
 				if(CPT_CoolingDoorClosed > 0) // var qui va etre decrementée jusqua 0
 				{
-					light = WHITE_PT;
-					set_lights(light);
+					set_lights(WHITE_PT);
 					HAL_Delay(50); //Pour ne pas créer de bug
 					set_cooling(cooling_40);
 					fermeture_porte=1; // si = 1, CPT_CoolingDoorClosed va se decrementee de 1 toutes les secondes
-				} else if(CPT_CoolingDoorClosed == 0) // CPT_CoolingDoorClosed = 0, donc on a attendu X secondes apres fermeture de la porte
+				} else if(CPT_CoolingDoorClosed == 0) //, donc on a attendu X secondes apres fermeture de la porte
 				{ // on reinit toutes les variables
 					HAL_Delay(50); // pour ne pas créer de bug
-					if (fermeture_porte == 1) set_cooling(stop); // va arreter le cooling au premier passage dans la condition
-//					CPT_CoolingDoorClosed = COOLING_T_DOOR_CLOSED; // Val COOLING_T_DOOR_CLOSED
-					compteur_porte = 0;
+					if (fermeture_porte == 1){
+						set_cooling(stop);// va arreter le cooling au premier passage dans la condition
+						compteur_porte = 0;
+					}
 					fermeture_porte=0; // si = 0, CPT_CoolingDoorClosed ne decremente pas
+
+					if (prevLight != 0)
+					{
+						light = prevLight;
+						set_lights(light);
+						prevLight = 0;
+					}
 				}
 			} else {
 				compteur_porte = 0;
@@ -160,13 +172,13 @@ void door_cycle()
 			}
 		} else
 		{
-			if((prevDesiredTemp != 0) && (desired_temperature != 22)) //22°C => definit comme temp amb dans main.c
+			if((prevDesiredTemp != 0) && (prevHeaterActif == 1)) //22°C => definit comme temp amb dans main.c
 			{
 				heater_actif = 1;
 				desired_temperature = prevDesiredTemp;
 				asservissement(desired_temperature);
 				prevDesiredTemp = 0;
-			} else if (prevDutyCCooling != 0)
+			} else if ((prevDutyCCooling != 0) && (prevHeaterActif == 0))
 			{
 				dutycycle_cooling = prevDutyCCooling;
 				set_cooling(dutycycle_cooling);

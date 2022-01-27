@@ -117,8 +117,6 @@ void Error_Handler(void);
 #define SHTC3_SCL2_GPIO_Port GPIOB
 #define HEATER_TACHY_Pin GPIO_PIN_6
 #define HEATER_TACHY_GPIO_Port GPIOC
-#define POLLUTION_SLEEPMODE_Pin GPIO_PIN_7
-#define POLLUTION_SLEEPMODE_GPIO_Port GPIOC
 #define HEATER_PWM_Pin GPIO_PIN_8
 #define HEATER_PWM_GPIO_Port GPIOC
 #define RELAY_Pin GPIO_PIN_9
@@ -141,8 +139,6 @@ void Error_Handler(void);
 #define SHTC3_SDA2_GPIO_Port GPIOB
 #define SHTC3_SDA1_Pin GPIO_PIN_4
 #define SHTC3_SDA1_GPIO_Port GPIOB
-#define POLLUTION_RST_Pin GPIO_PIN_5
-#define POLLUTION_RST_GPIO_Port GPIOB
 #define BUZZER_Pin GPIO_PIN_6
 #define BUZZER_GPIO_Port GPIOB
 #define FILTRATION_FAN_Pin GPIO_PIN_7

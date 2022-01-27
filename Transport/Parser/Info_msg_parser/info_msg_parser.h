@@ -25,11 +25,6 @@
  */
 #define INFO_MANUAL_MODE_FILTRATION 0x03
 
-/** @def INFO_POLLUTION_THRESHOLD
- *  @brief Info ID for the manual or automatic mode, iformation message
- */
-#define INFO_POLLUTION_THRESHOLD 0x04
-
 /** @def INFO_DOOR_STATE
  *  @brief Info ID for the manual or automatic mode, iformation message
  */

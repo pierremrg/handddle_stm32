@@ -1,0 +1,204 @@
+Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
+ ../Core/Inc/stm32f4xx_hal_conf.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h \
+ ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h \
+ ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f446xx.h \
+ ../Drivers/CMSIS/Include/core_cm4.h \
+ ../Drivers/CMSIS/Include/cmsis_version.h \
+ ../Drivers/CMSIS/Include/cmsis_compiler.h \
+ ../Drivers/CMSIS/Include/cmsis_gcc.h \
+ ../Drivers/CMSIS/Include/mpu_armv7.h \
+ ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc_ex.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio_ex.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_exti.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma_ex.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_adc.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc_ex.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c_ex.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
+ ../Core/Inc/../../Lib/inc/Buzzer.h ../Core/Inc/../../Lib/inc/Temp_humi.h \
+ ../Core/Inc/../../Lib/inc/Cooling.h ../Core/Inc/../../Lib/inc/Current.h \
+ ../Core/Inc/../../Lib/inc/Heater.h ../Core/Inc/../../Lib/inc/Lights.h \
+ ../Core/Inc/../../Lib/inc/Pollution.h \
+ ../Core/Inc/../../Lib/inc/../../Core/Inc/main.h \
+ ../Core/Inc/../../Lib/inc/Porte.h ../Core/Inc/../../Lib/inc/Pression.h \
+ ../Core/Inc/../../Lib/inc/States.h ../Core/Inc/../../Lib/inc/Relay.h \
+ ../Core/Inc/../../Lib/inc/Test.h ../Core/Inc/../../Lib/inc/security.h \
+ ../Core/Inc/../../Transport/include/transport.h \
+ ../Core/Inc/../../Transport/include/../../Core/Inc/main.h \
+ ../Core/Inc/../../Transport/uid.h ../Core/Src/../Inc/main.h \
+ ../Core/Src/../../Transport/Parser/parser.h \
+ ../Core/Src/../../Transport/Parser/../uid.h \
+ ../Core/Src/../../Transport/Parser/../include/transport.h \
+ ../Core/Src/../../Transport/Parser/../include/../../Core/Inc/main.h \
+ ../Core/Src/../../Lib/inc/ELN_temperature.h \
+ ../Core/Src/../../Lib/inc/Microphone.h ../Core/Src/../../Lib/inc/Demo.h \
+ ../Core/Src/../../Lib/inc/Current.h ../Core/Src/../../Lib/inc/Fire.h \
+ ../Core/Src/../../Lib/inc/../../Core/Inc/main.h \
+ ../Core/Src/../../Lib/inc/Temp_humi.h \
+ ../Core/Src/../../Lib/inc/Typology.h \
+ ../Core/Src/../../Transport/Msg_gen/Main_msg_gen/main_msg_gen.h \
+ ../Core/Src/../../Transport/Msg_gen/Main_msg_gen/../../include/transport.h \
+ ../Core/Src/../../Transport/Msg_gen/Main_msg_gen/../../include/../../Core/Inc/main.h \
+ ../Core/Src/../../Transport/Parser/Cmd_msg_parser/cmd_msg_parser.h \
+ ../Core/Src/../../Transport/Parser/Cmd_msg_parser/../../include/transport.h \
+ ../Core/Src/../../Transport/Parser/Cmd_msg_parser/../../include/../../Core/Inc/main.h \
+ ../Core/Src/../../Lib/inc/Weight.h
+
+../Core/Inc/main.h:
+
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
+
+../Core/Inc/stm32f4xx_hal_conf.h:
+
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h:
+
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h:
+
+../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h:
+
+../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f446xx.h:
+
+../Drivers/CMSIS/Include/core_cm4.h:
+
+../Drivers/CMSIS/Include/cmsis_version.h:
+
+../Drivers/CMSIS/Include/cmsis_compiler.h:
+
+../Drivers/CMSIS/Include/cmsis_gcc.h:
+
+../Drivers/CMSIS/Include/mpu_armv7.h:
+
+../Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h:
+
+../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h:
+
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc_ex.h:
+
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h:
+
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio_ex.h:
+
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_exti.h:
+
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h:
+
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma_ex.h:
+
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h:
+
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc.h:
+
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_adc.h:
+
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc_ex.h:
+
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h:
+
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h:
+
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h:
+
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c.h:
+
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c_ex.h:
+
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h:
+
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h:
+
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h:
+
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h:
+
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:
+
+../Core/Inc/../../Lib/inc/Buzzer.h:
+
+../Core/Inc/../../Lib/inc/Temp_humi.h:
+
+../Core/Inc/../../Lib/inc/Cooling.h:
+
+../Core/Inc/../../Lib/inc/Current.h:
+
+../Core/Inc/../../Lib/inc/Heater.h:
+
+../Core/Inc/../../Lib/inc/Lights.h:
+
+../Core/Inc/../../Lib/inc/Pollution.h:
+
+../Core/Inc/../../Lib/inc/../../Core/Inc/main.h:
+
+../Core/Inc/../../Lib/inc/Porte.h:
+
+../Core/Inc/../../Lib/inc/Pression.h:
+
+../Core/Inc/../../Lib/inc/States.h:
+
+../Core/Inc/../../Lib/inc/Relay.h:
+
+../Core/Inc/../../Lib/inc/Test.h:
+
+../Core/Inc/../../Lib/inc/security.h:
+
+../Core/Inc/../../Transport/include/transport.h:
+
+../Core/Inc/../../Transport/include/../../Core/Inc/main.h:
+
+../Core/Inc/../../Transport/uid.h:
+
+../Core/Src/../Inc/main.h:
+
+../Core/Src/../../Transport/Parser/parser.h:
+
+../Core/Src/../../Transport/Parser/../uid.h:
+
+../Core/Src/../../Transport/Parser/../include/transport.h:
+
+../Core/Src/../../Transport/Parser/../include/../../Core/Inc/main.h:
+
+../Core/Src/../../Lib/inc/ELN_temperature.h:
+
+../Core/Src/../../Lib/inc/Microphone.h:
+
+../Core/Src/../../Lib/inc/Demo.h:
+
+../Core/Src/../../Lib/inc/Current.h:
+
+../Core/Src/../../Lib/inc/Fire.h:
+
+../Core/Src/../../Lib/inc/../../Core/Inc/main.h:
+
+../Core/Src/../../Lib/inc/Temp_humi.h:
+
+../Core/Src/../../Lib/inc/Typology.h:
+
+../Core/Src/../../Transport/Msg_gen/Main_msg_gen/main_msg_gen.h:
+
+../Core/Src/../../Transport/Msg_gen/Main_msg_gen/../../include/transport.h:
+
+../Core/Src/../../Transport/Msg_gen/Main_msg_gen/../../include/../../Core/Inc/main.h:
+
+../Core/Src/../../Transport/Parser/Cmd_msg_parser/cmd_msg_parser.h:
+
+../Core/Src/../../Transport/Parser/Cmd_msg_parser/../../include/transport.h:
+
+../Core/Src/../../Transport/Parser/Cmd_msg_parser/../../include/../../Core/Inc/main.h:
+
+../Core/Src/../../Lib/inc/Weight.h:
