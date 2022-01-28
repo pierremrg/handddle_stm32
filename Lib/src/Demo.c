@@ -205,7 +205,7 @@ void process_demo()
 
 		for(int i = 0 ; i < 1 ; i++)
 		{
-			test_light = ORANGE_BLINKY_DEFAULT;
+
 			set_lights(test_light);
 			/* BUZZER TEST */
 			send_heater_temp();

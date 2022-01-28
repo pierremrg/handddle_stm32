@@ -287,6 +287,9 @@ int main(void)
 	p_light = light;
 	set_lights(light);
 
+	//For heater
+	if(MSG_HEADER_UID_1 == TYPE_MACHINE_RACK) heater_actif = 0;
+
 	// DOOR lock
 	set_unlock(status);
 	DOOR_Previous_State = get_door_state();
@@ -302,6 +305,8 @@ int main(void)
 		while(1);
 	} //else success of init
 
+	if(MSG_HEADER_UID_1 == TYPE_MACHINE_RACK) heater_actif = 0;
+
 	//Current
 	MAX = tabEXEMPLE[0]; //extern
 	MIN = tabEXEMPLE[0]; // extern
@@ -314,9 +319,9 @@ int main(void)
   {
 	  if(system_is_active == SYSTEM_ACTIVE && MSG_HEADER_UID_1 != TYPE_MP)
 	  {
-		  if(MSG_HEADER_UID_1 == TYPE_MACHINE_TOIT || MSG_HEADER_UID_1 == TYPE_POST_TREATMENT) door_cycle();
-		  asservissement(desired_temperature);// Asservissement chauffage
-		  HAL_Delay(50);
+//		  if(MSG_HEADER_UID_1 == TYPE_MACHINE_TOIT || MSG_HEADER_UID_1 == TYPE_POST_TREATMENT) door_cycle();
+//		  asservissement(desired_temperature);// Asservissement chauffage
+//		  HAL_Delay(50);
 	}
 
     /* USER CODE END WHILE */
@@ -1139,7 +1144,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 				if(fermeture_porte) CPT_CoolingDoorClosed--;
 			}
 
-			if((MSG_HEADER_UID_1 == TYPE_MACHINE_TOIT) && (MSG_HEADER_UID_1 == TYPE_MACHINE_RACK))
+			if((MSG_HEADER_UID_1 == TYPE_MACHINE_TOIT) || (MSG_HEADER_UID_1 == TYPE_MACHINE_RACK))
 			{
 				if ((compteur_buzzer == MAX_OPENING_TIME_M)) set_buzzer();
 
@@ -1173,6 +1178,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	{
 		if((i_timer7 % 100000 == 0) && (MSG_HEADER_UID_1 != TYPE_MP)) // Each 10µs * 100'000 -> 1s
 		{
+			  if(MSG_HEADER_UID_1 == TYPE_MACHINE_TOIT || MSG_HEADER_UID_1 == TYPE_POST_TREATMENT) door_cycle();
+			  asservissement(desired_temperature);// Asservissement chauffage
+
 			// (condition) ? {code for YES} : {code for NO}
 			if(p_light != light){
 				send_lights(light);
@@ -1204,6 +1212,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 				send_co2();
 				send_tvoc();
 			}
+			CO2_treatment();
+			TVOC_treatment();
 			send_TVOC_CO2_treatments();
 			send_typology();
 			send_door_state();
@@ -1274,7 +1284,7 @@ void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
-  __disable_irq();
+//  __disable_irq();
   while (1)
   {
   }

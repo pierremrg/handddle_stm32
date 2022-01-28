@@ -126,6 +126,7 @@ void parser_cmd_temp(uint8_t *rx_buff,UART_HandleTypeDef * uart){
 //		desired_temperature = 0;
 	} else // Activation du chauffage
 	{
+		cooling_stop();
 		desired_temperature = rx_buff[POS_DATA];
 		heater_actif = 1;
 	}
@@ -147,8 +148,8 @@ void parser_cmd_printing_state(uint8_t * rx_buff,UART_HandleTypeDef * uart){
 
 void parser_cmd_air_extract(uint8_t * rx_buff,UART_HandleTypeDef * uart){
 	// Calling the function that will use the payload for the door command
-	dutycycle_cooling = rx_buff[POS_DATA];
 	heater_actif = 0;
+	dutycycle_cooling = rx_buff[POS_DATA];
 	set_cooling(dutycycle_cooling);
 }
 
