@@ -121,7 +121,7 @@ void door_cycle()
 			}
 
 			heater_actif = 0;
-			set_cooling(0); //Force l'arret
+			set_cooling(100); //Force l'arret
 		} else{
 			set_cooling(cooling);
 		}
@@ -145,7 +145,7 @@ void door_cycle()
 				{ // on reinit toutes les variables
 					HAL_Delay(50); // pour ne pas créer de bug
 					if (fermeture_porte == 1){
-						set_cooling(stop);// va arreter le cooling au premier passage dans la condition
+						set_cooling(cooling_40);
 						compteur_porte = 0;
 					}
 					fermeture_porte=0; // si = 0, CPT_CoolingDoorClosed ne decremente pas
@@ -168,7 +168,7 @@ void door_cycle()
 					prevLight = 0;
 				}
 				HAL_Delay(100); //Pour ne pas créer de bug
-				set_cooling(stop);
+				set_cooling(cooling_40);
 			}
 		} else
 		{

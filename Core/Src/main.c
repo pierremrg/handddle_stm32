@@ -279,7 +279,7 @@ int main(void)
 	int pwm_stop = 0;
 	set_heater_pwm(pwm_stop);
 	set_heater(pwm_stop);
-	set_cooling(pwm_stop);
+//	set_cooling(100);
 
 	//White color as default
 	if((MSG_HEADER_UID_1 == TYPE_MACHINE_RACK) || (MSG_HEADER_UID_1 == TYPE_MACHINE_TOIT)) light = WHITE_DOOR_OPEN;
@@ -1212,8 +1212,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 				send_co2();
 				send_tvoc();
 			}
-			CO2_treatment();
-			TVOC_treatment();
+//			CO2_treatment();
+//			TVOC_treatment();
 			send_TVOC_CO2_treatments();
 			send_typology();
 			send_door_state();
