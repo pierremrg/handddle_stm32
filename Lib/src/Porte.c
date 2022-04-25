@@ -121,7 +121,7 @@ void door_cycle()
 			}
 
 			heater_actif = 0;
-			set_cooling(100); //Force l'arret
+			set_cooling(0); //Force l'arret A CHANGE ! PT = 100 sinon 0
 		} else{
 			set_cooling(cooling);
 		}
@@ -168,7 +168,7 @@ void door_cycle()
 					prevLight = 0;
 				}
 				HAL_Delay(100); //Pour ne pas créer de bug
-				set_cooling(cooling_40);
+				set_cooling(0); //A CHANGE ! PT = 100 sinon 0
 			}
 		} else
 		{
